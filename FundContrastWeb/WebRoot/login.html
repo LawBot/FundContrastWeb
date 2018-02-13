@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control" content="no-cache,no-siteapp"><!-- 禁止百度转码显示 -->	
+	<meta name="format-detection" content="telephone=no,email=no" /><!-- 数字将不被当作手机号拔号 -->
+	<meta name="robots" content="index,follow"><!-- 文件将被检索，且页面上的链接可以被查询 -->
+	<meta name="apple-mobile-web-app-capable" content="yes" /><!-- 隐藏地址栏，全屏显示 -->
+	<meta name="apple-touch-fullscreen" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><!-- 定义safari顶端状态条样式：default:白色，black:黑色，black-translucent：半透明 -->
+	<meta name="apple-mobile-web-app-title" content="标题名称"><!-- 添加到IOS主屏后的标题 -->
+	<meta name="HandheldFriendly" content="true"><!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+	<meta name="screen-orientation" content="portrait"><!-- uc强制竖屏 -->
+	<meta name="x5-orientation" content="portrait"><!-- QQ强制竖屏 -->
+	<meta name="msapplication-tap-highlight" content="no"><!-- windows phone 点击无高光 -->
+	<meta name="keywords" content="关键字"> 
+	<meta name="description" content="描述">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+	<title>Login</title>
+	<!--网站添加至ios桌面时的图标-->
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="table_ico57.png"><!-- iPhone 和 iTouch，默认 57x57 像素，必须有 -->
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="table_ico72.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="table_ico114.png"><!-- Retina iPhone 和 Retina iTouch，114x114 像素，可以没有，但推荐有 -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="table_ico144.png"><!-- Retina iPad，144x144 像素，可以没有，但推荐有 --><!-- iOS 图标 end -->
+	<link rel="stylesheet" type="text/css" href="./css/reset.css">
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="./css/login_registe.css">
+	<link rel="stylesheet" type="text/css" href="./css/common.css">
+	<link rel="stylesheet" type="text/css" href="./css/validate.css">
+	<!--<script type="text/javascript" src="./js/zepto.js"></script>-->
+	<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+	<!--<script type="text/javascript" src="./js/zepto.fx.js"></script>-->
+	<script type="text/javascript" src="./js/alertmsg_mobile.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="container">
+			<div class="log-reg-title">
+				<h4>Sign in</h4>
+				<img class="icon-remove" src="./images/icon/close_large.png">
+			</div>
+			<div class="log-reg-form">
+				<form id="loginform" class="" onsubmit="return checkLoginForm()">
+					<div class="input-group name">
+						<input type="text" placeholder="UserName/Email" name="loginUsername"  id="login_username" onfocus="this.focused=true;this.select();" onmouseup="if(this.focused){this.focused=false;return false;}">
+						<div class="clear-text" id="clear-text" ><i class="icon-remove-sign"></i></div>
+					</div>
+					<div class="input-group pwd">
+						<input type="password" placeholder="Password"  name="loginPassword" id="login_password" onfocus="this.focused=true;this.select();" onmouseup="if(this.focused){this.focused=false;return false;}">
+						<div class="clear-text"><i class="icon-remove-sign"></i></div>
+					</div>
+					<div class="btn-submit mt-40"><input id="login-btn" onclick="checkLoginForm()" type="button" value="Sign In" class="zbtn zbtn-primary zbtn-full zbtn-lg"/></div>
+				</form>
+				<div class="center mt-10 forgot-pwd"><a href="">Forgot Your Password?</a></div>
+				<div class="center mt-30 not-member">Not a member? <a href="./registe.html">Creat an account</a></div>
+			</div>
+			<div class="log-reg-bottom center mt-90">
+				<p>Sign in with your social account</p>
+				<div><img src="./images/facebook.png"> &nbsp;<img src="./images/twitter-copy.png"> &nbsp;<img src="./images/google_icon.png"></div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript" src="./js/login_registe.js"></script>
+<script type="text/javascript" src="./util/js/common/common.js"></script>
+<script type="text/javascript" src="./util/js/login.js"></script>
+
+<script type="text/javascript">
+	/* function checkLoginForm(){
+		
+	} */
+</script>
+</body>
+</html>

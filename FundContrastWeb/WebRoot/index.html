@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control" content="no-cache,no-siteapp"><!-- 禁止百度转码显示 -->	
+	<meta name="format-detection" content="telephone=no,email=no" /><!-- 数字将不被当作手机号拔号 -->
+	<meta name="robots" content="index,follow"><!-- 文件将被检索，且页面上的链接可以被查询 -->
+	<meta name="apple-mobile-web-app-capable" content="yes" /><!-- 隐藏地址栏，全屏显示 -->
+	<meta name="apple-touch-fullscreen" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><!-- 定义safari顶端状态条样式：default:白色，black:黑色，black-translucent：半透明 -->
+	<meta name="apple-mobile-web-app-title" content="标题名称"><!-- 添加到IOS主屏后的标题 -->
+	<meta name="HandheldFriendly" content="true"><!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+	<meta name="screen-orientation" content="portrait"><!-- uc强制竖屏 -->
+	<meta name="x5-orientation" content="portrait"><!-- QQ强制竖屏 -->
+	<meta name="msapplication-tap-highlight" content="no"><!-- windows phone 点击无高光 -->
+	<meta name="keywords" content="关键字"> 
+	<meta name="description" content="描述">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+	<title>Home</title>
+	<!--网站添加至ios桌面时的图标-->
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="table_ico57.png"><!-- iPhone 和 iTouch，默认 57x57 像素，必须有 -->
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="table_ico72.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="table_ico114.png"><!-- Retina iPhone 和 Retina iTouch，114x114 像素，可以没有，但推荐有 -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="table_ico144.png"><!-- Retina iPad，144x144 像素，可以没有，但推荐有 --><!-- iOS 图标 end -->
+	<link rel="stylesheet" type="text/css" href="./css/reset.css">
+	
+	<link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="./css/swiper.css">
+	<link rel="stylesheet" type="text/css" href="./css/common.css">
+	<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="./js/swiper.min.js"></script>
+	<style type="text/css">
+	body{background: #f2f2f2;}
+	#header{padding: 10px 10px 0 10px;}
+	#header,.main-banner,.special,.categories,.below-5,.best-sellers,.recommen,.adv1{background: #fff;}
+	.main-banner,.special,.categories,.below-5,.best-sellers,.recommen,.adv1{padding: 10px 0;}
+	#header .search-box{padding: 10px 0;}
+	#header .search-box i{color: #ccc;}
+	#header .search-box i.person-info{display: inline-block;vertical-align: middle;text-align: center;width: 25px;height: 25px;background: url(./images/icon/Left_menu_icon@2x.png) no-repeat;background-size: 20px;}
+	#header .search-input{background-color: #F3F3F3;padding: 8px 10px; display: inline-block;width: 88%;border-radius: 4px;}
+	#header .search-input input{border: none;background: transparent;width: 80%;}
+	.main-banner .swiper-container .swiper-slide img,.below-5 .swiper-slide img,.best-sellers .swiper-slide img,.recommen .swiper-slide img{width: 100%;}
+	.special ul li{width: 25%;float: left;text-align: center;}
+	.special ul li img{width: 45px;}
+	.special ul li a{color: #a9a9a9;display: block;text-decoration: none;font-style: normal;}
+	.h4-tit{border-bottom: 1px solid #ececec;padding: 5px 0 10px 0;color: #333;margin-bottom: 20px;text-align: center;margin-top: 0;font-weight: normal;}
+	.h4-tit span{}
+	.categories a{color: #333;}
+	.swiper-slide{text-align: center;}
+	.categories .swiper-slide div.text{line-height: 15px;margin-top: 8px;}
+	.below-5 h4{}
+	.below-5 .adv-img img{width: 100%;}
+	.below-5 .swiper-slide .name,.best-sellers .name,.recommen .name,.pro-list .name{color: #908E8E;line-height: 15px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+	.below-5 .swiper-slide p.price,.best-sellers p.price,.recommen .price,.pro-list .price{color: #666;}
+	.best-tab .swiper-slide,.recommen .swiper-slide{border-bottom: 1px solid #ececec;padding: 6px 3px;}
+	.best-tab .swiper-slide.act,.recommen .swiper-slide.act{border:1px solid #ececec;border-bottom: none;box-shadow: 2px 1px 8px 0px #ccc;}
+	.best-sellers .h4-tit,.recommen .h4-tit{border: none;margin-bottom: 5px;}
+	.best-tab .swiper-slide .tab,.recommen .swiper-slide .tab{overflow: hidden;}
+	.just h4{position: relative;margin: 10px 0 0 0;}
+	.just h4 span{}
+	.just .container{padding: 0;padding-right: 10px;}
+	.just .pro-list li{margin-bottom: 10px;padding: 0;padding-left: 10px;}
+	.just .pro-list li .box{background: #fff;padding-bottom: 10px;}
+	.just .pro-list li img{max-width: 100%;}
+	.just .pro-list .name{margin-top: 5px;padding: 0 10px;text-align: center;}
+	.just .pro-list .price{padding: 3px 10px;text-align: center;color: #233;}
+	
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div id="header">
+			<div class="container">
+				<div class="search-box">
+					<form action="./search_result.html">
+						<i class="person-info"></i> &nbsp;&nbsp;<span class="search-input"><i class="icon-search"></i> <input type="search" placeholder="search"></span>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="main-banner mb-10">
+			<div class="container1">
+				<div class="swiper-container container-banner">
+	                <div class="swiper-wrapper">
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/adv/banner.png"></a></div>  
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/adv/banner.png"></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/adv/banner.png"></a></div>  
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/adv/banner.png"></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/adv/banner.png"></a></div>
+	                </div>
+	                <div class="banner-list"></div>
+	                <div class="swiper-pagination swiper-pagination-banner"></div>
+	                
+	            </div>
+            </div>
+		</div>
+		<div class="special mb-10">
+			<div class="container">
+				<ul class="clearfix">
+					<li><a href="">
+							<div><img src="./images/icon/Flash-Deals.png"></div>
+							<div>Flash Deals</div>
+						</a></li>
+					<li><a href="">
+							<div><img src="./images/icon/Daily-Deals.png"></div>
+							<div>Daily Deals</div>
+						</a></li>
+					<li><a href="">
+							<div><img src="./images/icon/Top-Sellers.png"></div>
+							<div>Top Sellers</div>
+						</a></li>
+					<li><a href="">
+							<div><img src="./images/icon/Points-Mall.png"></div>
+							<div>Store</div>
+						</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="categories mb-10">
+			<div class="container">
+				<h4 class="h4-tit"><span>--</span> Categories <span>--</span></h4>
+				<div class="swiper-container container-banner">
+	                <div class="swiper-wrapper">
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/electronics.png"><div class="text">Consumer Electronics</div></a></div>  
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/cate2.png"><div class="text">Home & Garden</div></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/cate3.png"><div class="text">Sports & Network</div></a></div>  
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/cate4.png"><div class="text">Electrical Equipmen</div></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/electronics.png"><div class="text">Electronic Compone</div></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/cate2.png"><div class="text">Luggage & Bags</div></a></div>
+	                    <div class="swiper-slide pull" style="float: left;"><a href="" target="_blank"><img src="./images/cate3.png"><div class="text">Toys & Hobbies</div></a></div>
+	                </div>
+	                <div class="banner-list"></div>
+	                
+	            </div>
+			</div>
+		</div>
+		<div class="below-5 mb-10">
+			<div class="container">
+				<h4 class="h4-tit"><span>--</span> Below $5 Gadgets <span>--</span></h4>
+				<div class="adv-img mb-10"><img src="./images/adv/$5-adv.png"></div>
+				<div class="swiper-container container-banner">
+	                <div class="swiper-wrapper">
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="./detail.html">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>  
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                </div>
+	                <div class="banner-list"></div>
+	                
+	            </div>
+            </div>
+		</div>
+		<div class="best-sellers mb-10">
+			<div class="container">
+				<h4 class="h4-tit"><span>--</span> Best Sellers <span>--</span></h4>
+				<div class="best-tab mb-20">
+					<div class="swiper-container container-banner">
+		                <div class="swiper-wrapper">
+		                    <div class="swiper-slide pull act" style="float: left;">
+		                    	<div class="tab">Mobile Phone</div>
+		                    </div>  
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">Mobile Accessewds</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category3</div>
+		                    </div>
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category4</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category5</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category6</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category7</div>
+		                    </div> 
+		                </div>
+		                <div class="banner-list"></div>
+		                
+		            </div>
+				</div>
+				
+				<div class="swiper-container container-banner best-swiper">
+	                <div class="swiper-wrapper">
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>  
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                </div>
+	                <div class="banner-list"></div>
+	                
+	            </div>
+            </div>
+		</div>
+		<div class="adv1 mb-10">
+			<div class="container"><div><img src="./images/adv/pro-adv.png" width="100%;"></div></div>
+			
+		</div>
+		<div class="recommen">
+			<div class="container">
+				<h4 class="h4-tit">-- Recommendations --</h4>
+				<div class="recommen-tab mb-20">
+					<div class="swiper-container container-banner">
+		                <div class="swiper-wrapper">
+		                    <div class="swiper-slide pull act" style="float: left;">
+		                    	<div class="tab">Mobile Phone</div>
+		                    </div>  
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">Mobile Accessewds</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category3</div>
+		                    </div>
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category4</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category5</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category6</div>
+		                    </div> 
+		                    <div class="swiper-slide pull" style="float: left;">
+		                    	<div class="tab">category7</div>
+		                    </div> 
+		                </div>
+		                <div class="banner-list"></div>
+		                
+		            </div>
+				</div>
+				
+				<div class="swiper-container container-banner recommen-swiper">
+	                <div class="swiper-wrapper">
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>  
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div>
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro2.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                    <div class="swiper-slide pull" style="float: left;">
+	                    	<a href="" target="_blank">
+	                    		<img src="./images/pro/pro1.png">
+	                    		<div class="name mt-10">Consumer Electronics</div>
+	                    		<p class="price">$5.00</p>
+	                    	</a>
+	                    </div> 
+	                </div>
+	                <div class="banner-list"></div>
+	                
+	            </div>
+            </div>
+		</div>
+		
+		<div class="just">
+			<h4 class="h4-tit"><span></span>----- Just for you -----<span></span></h4>
+			<div class="container">
+				<div class="pro-list">
+					<ul class="clarfix">
+						<li class="col-md-3 col-sm-3 col-xs-6">
+							<div class="box">
+								<div><img src="./images/pro/pro1.png"></div>
+								<div class="name">dfdfdffdfdfddf</div>
+								<div class="price">$52.00</div>
+							</div>
+						</li>
+						<li class="col-md-3 col-sm-3 col-xs-6">
+							<div class="box">
+								<div><img src="./images/pro/pro2.png"></div>
+								<div class="name">dfdfdffdfdfddf</div>
+								<div class="price">$52.00</div>
+							</div>
+						</li>
+						<li class="col-md-3 col-sm-3 col-xs-6">
+							<div class="box">
+								<div><img src="./images/pro/pro2.png"></div>
+								<div class="name">dfdfdffdfdfddf</div>
+								<div class="price">$52.00</div>
+							</div>
+						</li>
+						<li class="col-md-3 col-sm-3 col-xs-6">
+							<div class="box">
+								<div><img src="./images/pro/pro1.png"></div>
+								<div class="name">dfdfdffdfdfddf</div>
+								<div class="price">$52.00</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="mask mask-account">
+		<div id="user-account">
+			<div class="user-info mb-10">
+				<div class="user-logo"><a href="./account.html"><img src="./images/Account_gray@3x.png"></a></div>
+				<p class="user-name">HFF_HFF</p>
+			</div>
+			<div class="left-menu-list">
+				<ul>
+					<li class="menu-home"><a href="./index.html">Home</a></li>
+					<li class="menu-cate"><a href="./categories.html">Categories</a></li>
+					<li class="menu-cart"><a href="">My Cart</a></li>
+					<li class="tit">Settings</li>
+					<li class="menu-language"><a href="">Lanuage</a></li>
+					<li class="tit">Account</li>
+					<li class="menu-orders"><a href="">My Orders</a></li>
+					<li class="menu-favorite"><a href="">My Favorite</a></li>
+					<li class="menu-messages"><a href="">Messages</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		
+		var swiper = new Swiper('.main-banner .container-banner', {
+                pagination: '.main-banner  .swiper-pagination-banner',                
+                slidesPerView: 1,
+                paginationClickable: true,
+                spaceBetween: 30,
+                loop: true,
+                autoplay:3000
+            });
+		var swiper1 = new Swiper('.categories .container-banner', {
+                pagination: '',
+                slidesPerView: 4,
+                paginationClickable: false,
+                spaceBetween: 30,
+                loop: false,
+                autoplay:false
+            });
+		var swiper2 = new Swiper('.below-5 .container-banner', {
+                pagination: '',
+                slidesPerView: 2.5,
+                paginationClickable: false,
+                spaceBetween: 30,
+                loop: false,
+                autoplay:false
+            });
+		var swiper3 = new Swiper('.best-swiper', {
+                pagination: '',
+                slidesPerView: 2.5,
+                paginationClickable: false,
+                spaceBetween: 30,
+                loop: false,
+                autoplay:false
+            });
+		var swiper4 = new Swiper('.best-tab .swiper-container', {
+                pagination: '',
+                slidesPerView: 2.5,
+                paginationClickable: false,
+                spaceBetween: 0,
+                loop: false,
+                autoplay:false
+            });
+		var swiper5 = new Swiper('.recommen-swiper', {
+                pagination: '',
+                slidesPerView: 2.5,
+                paginationClickable: false,
+                spaceBetween: 30,
+                loop: false,
+                autoplay:false
+            });
+		var swiper6 = new Swiper('.recommen-tab .swiper-container', {
+                pagination: '',
+                slidesPerView: 2.5,
+                paginationClickable: false,
+                spaceBetween: 0,
+                loop: false,
+                autoplay:false
+            });
+		$('.best-tab .swiper-slide,.recommen-tab .swiper-slide').click(function(){
+			$(this).addClass('act').siblings().removeClass('act');
+			})
+		$('#header .search-input input').mousedown(function(){
+			location.href="./search.html";
+		})
+	</script>
+	<script type="text/javascript" src="./js/common.js"></script>
+</body>
+</html>

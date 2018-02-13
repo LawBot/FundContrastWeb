@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="true" version="3.0">
+   
+  <welcome-file-list>
+  	<welcome-file>index.html</welcome-file>
+  </welcome-file-list> 
+  <context-param>
+    <description>Spring 配置文件加载</description>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:config/spring/applicationContext.xml </param-value>
+  </context-param>
+  <listener>
+    <description>Spring 上下文监听</description>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>    
+            org.springframework.web.context.request.RequestContextListener    
+        </listener-class>
+  </listener>
+  <filter>
+    <description>Spring编码过滤器</description>
+    <filter-name>Character Encoding Filter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <description>指定字符编码编码</description>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <description>是否强制要求响应包编码与请求包相同，false表示如果响应包设置了自己编码则不强制修改</description>
+      <param-name>forceEncoding</param-name>
+      <param-value>false</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>Character Encoding Filter</filter-name>
+    <servlet-name>spring-mvc</servlet-name>
+  </filter-mapping>
+  
+  
+  <!-- <filter>
+    <filter-name>GoodsDetailFilter</filter-name>
+    <filter-class>com.jinyuanht.dd4.filter.DD4RquestFilter</filter-class>
+  </filter>
+  <filter-mapping>
+	    <filter-name>GoodsDetailFilter</filter-name>
+	    <url-pattern>/goods/*</url-pattern>
+	    <url-pattern>*.php</url-pattern>
+	    <url-pattern>/member/send_message.html</url-pattern>
+  </filter-mapping> -->
+  
+  <servlet>
+    <description>SpringMVC 配置</description>
+    <servlet-name>spring-mvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:config/spring/applicationContext-mvc.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>spring-mvc</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>-1</session-timeout>
+  </session-config><!--
+  <error-page>
+  <error-code>404</error-code>
+  <location>/not_exist.html</location>
+ </error-page>
+--></web-app>

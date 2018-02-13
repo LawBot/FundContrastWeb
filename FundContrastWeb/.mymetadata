@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="FundContrastWeb"
+  id="myeclipse.1509605938806"
+  context-root="/FundContrastWeb"
+  j2ee-spec="5.0"
+  archive="FundContrastWeb.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

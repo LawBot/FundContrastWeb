@@ -1,0 +1,16 @@
+.log-reg-title{position: relative;margin-bottom: 20px;}
+.log-reg-title h4{font-size: 1.6rem;text-align: center;padding: 15px 0;border-bottom: 1px solid #ececec;margin-top: 0;}
+.log-reg-title img.icon-remove{position: absolute;left: 15px;top: 18px;z-index: 2;font-size: 1.8rem;width: 15px;}
+.log-reg-form .input-group{width: 100%;position: relative;border-bottom: 1px solid #DADADA;}
+.log-reg-form .input-group input{border: none;width: 90%;padding: 13px;}
+.log-reg-form .input-group .clear-text{position: absolute;right: 13px;top: 12px;z-index: 2;display: none;font-size: 2rem;
+width: 35px;text-align: center;}
+.log-reg-form .input-group .clear-text i{color: #C1C1C1;}
+.btn-submit input{display: block;width: 100%;max-width:320px;margin:0 auto;color: #fff;background-color: #f38d00;text-align: center;padding: 10px 0;
+text-decoration: none;border-radius: 20px;font-size: 1.6rem;border: none;}
+.btn-submit input[disabled]{background-color: #FDD59E;}
+.forgot-pwd a{color: #8A8989;text-decoration: underline;}
+.not-member{color: #8A8989;}
+.not-member a{color: #f38d00;}
+.agreed a{color: #f38d00;}
+.log-reg-bottom img{width: 60px;}

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/aop                  
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/task
+		   http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		   http://www.springframework.org/schema/mvc
+   		   http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	
+	<!-- 固定写法 -->
+    <context:annotation-config />
+    <!-- 固定写法 -->  
+    <context:component-scan base-package="cn.com.xiaofabo.tylaw.fundcontrast.*">  
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    
+    <!-- 这样根目录下面的resource的文件(.css,.js等)就不会被spring的DispatchServlet进行过滤
+    <mvc:resources location="/plugin/" mapping="/plugin/**"/>  
+     -->  
+	<!-- 处理json格式转换 -->
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">    
+	    <property name="supportedMediaTypes">    
+	        <list>    
+	            <value>application/json;charset=UTF-8</value>
+	            <value>text/html;charset=UTF-8</value>  
+	       </list>    
+	    </property>  
+	</bean>
+	<!-- MVC完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+		 <property name="messageConverters">  
+		  <list>  
+		  	<ref bean="mappingJacksonHttpMessageConverter"/>
+		  </list>  
+		 </property>
+	</bean>
+
+
+	<!-- jsp视图解析器 -->   
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+	 	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>   
+	 	<property name="prefix" value="/"/>   
+	 	<property name="suffix" value=".html"/>
+	 	<property name="order" value="2"/>   
+	</bean>
+	
+	<!-- 配置freeMarker的模板路径 -->  
+    <!-- <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+        <property name="templateLoaderPath" value="WEB-INF/ftl/" />  
+        <property name="defaultEncoding" value="UTF-8" />  
+    </bean>  
+    freemarker视图解析器  
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">  
+        <property name="suffix" value=".ftl" />  
+        <property name="contentType" value="text/html;charset=UTF-8" />  
+        此变量值为pageContext.request, 页面使用方法：rc.contextPath  
+        <property name="requestContextAttribute" value="rc" />  
+    </bean>  -->
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+        <property name="maxUploadSize" value="102400000" />
+        <property name="resolveLazily" value="true" />
+        <property name="defaultEncoding" value="utf-8"/>
+	</bean>
+	
+		<!-- 装配拦截器 -->  
+	<!-- <mvc:interceptors>  
+	    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean>  
+	       <mvc:interceptor>
+		        <mvc:mapping path="/**" />
+		        <bean class="com.jinyuanht.dd4.interceptor.RequestInterceptor">
+		            <property name="excludedUrls">
+		                <list>
+		                    <value>/login</value>
+		                    <value>/toLogin</value>
+		                    <value>/static/</value>
+		                    <value>/switchLanguage</value>
+		                    <value>/error.html</value>
+		                    <value>/order/getNotifyResult.do</value>
+		                </list>
+		            </property>
+		        </bean>
+		    </mvc:interceptor>
+	</mvc:interceptors> -->
+	
+</beans>

@@ -1,0 +1,10 @@
+.alertMsg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:1051;background: rgba(249, 249, 249, 0.47);}
+.msg-cont{width:280px;position:absolute;left:50%;top:0;margin-left:-140px;z-index:1052;;
+}
+.msg-cont .msg-box{background:#5F5E5E;color: #fff;text-align: center;border-radius: 10px;}
+.msg-cont .msg-tit{padding:10px;position:relative;padding-left:15px;border-bottom:1px solid #ccc;display: none;}
+.msg-cont .msg-body{padding:15px;}
+.msg-cont .msg-body p{line-height:26px;margin-bottom:10px;}
+.msg-cont .ok{text-align:center;}
+.msg-cont .ok span{display:inline-block;padding:5px 20px;background:#fff;color:#333333;text-decoration: none;border-radius:3px;
+cursor:pointer;}
