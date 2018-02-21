@@ -1,0 +1,442 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>{LawBot}</title>
+      <style>
+         body {
+         background-color: rgba(0, 0, 0, .8);
+         }
+         .main {
+         /*
+         * 	position: fixed;
+         top: 60px;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         */
+         padding-top: 1em;
+         padding-bottom: 12em;
+         background-image: url(images/bg.png);
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+         color: white;
+         }
+         .wrap {
+         margin: 0 auto;
+         max-width: 1096px;
+         margin-top: 12%;
+         text-align: center;
+         }
+         .search {
+         }
+         .searchBtn{
+         margin-top: 1%;
+         }
+         .download{
+         margin-top: 5%;
+         }
+         .file {
+         width: 700px;
+         line-height: 48px;
+         height: 48px;
+         text-indent: 10px;
+         }
+         .btn {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         color: #fff;
+         padding: 0 23px;
+         margin-left: 13px;
+         cursor: pointer;
+         }
+         .btn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .downloadBtn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 60px;
+         width: 170px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .circle1 {
+         margin-top: 8%;
+         }
+         .circle2 {
+         margin-top: 2%;
+         }
+         .item {
+         display: inline-block;
+         width: 117px;
+         height: 45px;
+         padding-top: 12px;
+         margin: 0px 16px 0px 11px;
+         }
+         .c1 { background-color: #a2c6f2; }
+         .c2 { background-color: #02d1a9; }
+         .c3 { background-color: #01d6de; }
+         .c4 { background-color: #01a8df; }
+         .c5 { background-color: #0180cf; }
+         .c6 { opacity: 0; }
+         .c_grey{ background-color:#808080; }
+         .item a {
+         color: #fff;
+         text-decoration: none;
+         width: 150px;
+         height: 150px;
+         }
+         .item a span {
+         font-size: 15px;
+         }
+         #selectBtn {
+         cursor: pointer;
+         }
+         #updateBtn {
+         }
+         #updateBtnAktiv {
+
+         }
+         #downloadBtn {
+
+         }
+      </style>
+   </head>
+   <body>
+      <style>
+         * {
+         padding: 0;
+         margin: 0;
+         border: 0;
+         font-family: Microsoft YaHei, Helvitica, Verdana, Arial, san-serif;
+         -webkit-tap-highlight-color: transparent;
+         -webkit-box-sizing: border-box;
+         -moz-box-sizing: border-box;
+         -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+         box-sizing: border-box;
+         font-size: 16px;
+         }
+         p {
+         margin: 0; padding: 0;
+         }
+         ul li {
+         list-style: none;
+         }
+         #head {
+         background-color: #3b4348;
+         height: 60px;
+         }
+         .head_box {
+         margin: 0 auto;
+         max-width: 1096px;
+         height: 60px;
+         }
+         .logo {
+         display: inline-block;
+         font-size: 26px;
+         color: #fff;
+         cursor: pointer;
+         font-family: monospace;
+         line-height: 30px;
+         font-weight: 600;
+         }
+         .nav {
+         display: inline-block;
+         float: right;
+         }
+         .nav_title {
+         display: inline-block;
+         cursor: pointer;
+         }
+         .nav_title a {
+         color: #c1cad1;
+         text-decoration: none;
+         display: inline-block;
+         line-height: 60px;
+         padding: 0px 15px;
+         }
+         .nav_title a:hover {
+         color: #fff;
+         }
+         .menu {
+         position: absolute;
+         left: -2px;
+         top: 60px;
+         width: 116px;
+         display: none;
+         z-index: 99999;
+         }
+         .menu_title {
+         background-color: #3b4348;
+         color: #c1cad1;
+         border-bottom: 1px solid #555;
+         text-align: center;
+         }
+         .menu_title a {
+         text-decoration: none;
+         color: #c1cad1;
+         padding: 0;
+         line-height: 35px;
+         }
+         .menu_title a:hover {
+         color: #fff;
+         }
+         .tslss {
+         }
+         .tslss.last {
+         border-bottom: 0;
+         border-bottom-left-radius: 4px;
+         border-bottom-right-radius: 4px;
+         }
+         .cld {
+         font-size: 14px;
+         }
+         #experience {
+         position: relative;
+         }
+         .mystyle {
+		
+		width: 250px;
+		
+		height: 250px;
+		
+		position: relative;
+		
+		cursor: pointer;
+		
+		outline: medium none;
+		
+		filter: alpha(opacity=0);
+		
+		-moz-opacity: 0;
+		
+		opacity: 0;
+		
+		top: -80%;
+		
+		left: 10px;
+		
+		}
+      </style>
+      <div id="head">
+         <div class="head_box">
+            <div class="logo" onclick="window.location.href=&#39;index.html&#39;">
+               {LawBot}
+               <p>小法博智能系统</p>
+            </div>
+            <ul class="nav">
+               <li class="nav_title"><a href="https://" id="foundCompareId" style="color: rgb(255, 255, 255);"><span>基金条文对照</span></a></li>
+               <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li>
+               <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html"" id="aboutId"><span>关于我们</span></a></li>
+            </ul>
+         </div>
+      </div>
+      <script src="./files/jquery-2.1.1.min.js.Download"></script>
+         <script>
+
+         $("#experience").mouseleave(function() {
+         $('.menu').hide(200);
+         }).mouseover(function() {
+         $('.menu').show(200);
+         });
+
+         $(".menu").mouseleave(function() {
+         $(this).hide(200);
+         }).mouseover(function() {
+         $(this).show(200);
+         });
+
+         var v5_chat_attrs	= "toolbar=0,scrollbars=0,location=0,menubar=0,resizable=1,top=" + (window.screen.availHeight - (window.screen.availHeight/2+275+40)) + ",left=" + (window.screen.availWidth - (window.screen.availWidth/2+365+20)) + ",width=730,height=550";
+         function openChat(){
+         window.open('http://chat.v5kf.com/desk/kehu.html?site_id=123898', '_blank', v5_chat_attrs);
+         // win.resizeTo(800,600);
+         // win.moveTo(100,100);
+         }
+
+         </script>
+      <div class="main">
+         <div class="wrap">
+            <div class="search">
+               <div>
+                  <input type="text" id="file" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
+                  
+                  </div>
+                  <div class = "searchBtn">
+                  <form id="fileDataForm" action="uploadFile.do" enctype="multipart/form-data" method="post">
+                  <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
+                  <input type="hidden" name="uploadName" id="uploadName">
+                  <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
+                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
+                  <div class="btn" id="updateBtn"  onclick = "updateFile();">上传文件</div>
+                   </form>
+               </div>
+            </div>
+            <div class="circle1">
+               <ul>
+                  <li class="item a" id="foundType"><span>基金类型</span></a></li>
+                  <li class="item c_grey" id="btn_stockType"><a><span>股票型</span></a></li>
+                  <li class="item c_grey" id="btn_exponentType"><a><span>指数型</span></a></li>
+                  <li class="item c_grey" id="btn_bondType"><a><span>债卷型</span></a></li>
+                  <li class="item c_grey" id="btn_currencyMarket"><a><span>货币市场</span></a></li>
+               </ul>
+               </div>
+               <div class="circle2">
+               <ul>
+                  <li class="item a" id="issuer"><span>发行单位</span></a></li>
+                  <li class="item c_grey" id="btn_gongyin"><a><span>工银瑞信</span></a></li>
+                  <li class="item c_grey" id="btn_huaxia"><a><span>华夏基金</span></a></li>
+                  <li class="item c_grey" id="btn_jiutai"><a><span>九泰基金</span></a></li>
+                  <li class="item c6" id="btn_jiutai"><a><span> 不顯示占位</span></a></li>
+               </ul>
+            </div>
+            <div class="download">
+               <div>
+               	  <form action="download.do" id="downloadForm">
+                        <input type="hidden" name="fileName" id="fileName">
+                        <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
+                        <div class="btn" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</div>
+                   </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <style>
+         #footer {
+         padding-top: 60px;
+         background-color: #3b4348;
+         color: #fff;
+         }
+         .fUl {
+         margin: 0 auto;
+         max-width: 1096px;
+         }
+         .f_item {
+         display: inline-flex;
+         padding-left: 30px;
+         margin-bottom: 50px;
+         width: 20%;
+         }
+         .h_item {
+         font-size: 18px;
+         margin-bottom: 20px;
+         }
+         .fhI {
+         margin-bottom: 6px;
+         font-size: 14px;
+         }
+         .fhI a {
+         color: #fff;
+         font-size: 14px;
+         text-decoration: none;
+         }
+         .copyright {
+         font-size: 12px;
+         }
+         .logoText a{
+         font-size: 30px;
+         font-family: monospace;text-decoration: none;color: #fff;
+         }
+         .bl {
+         border-left: 1px solid #272e31;
+         }
+      </style>
+ <div id="footer">
+	<ul class="fUl">
+		<li class="f_item" style="width:35%;"> 
+  
+			<ul>
+				<li class="h_item logoText"><a href="index.html">{LawBot}</a></li>
+				<li style="font-size:16px;margin-bottom:8px;margin-top: -17px;">法律人工智能系统</li>
+				<li><img src="images/qcode.png" width="100" height="100"></li>
+				<li><span class="copyright">Copyright ©2016 ailaw.com. ALL Rights Reserved</span></li>
+				<li style="margin-top: -3px;"><span class="copyright">粤ICP备05005391号</span></li>
+			</ul>
+		</li>
+		<li class="f_item bl">
+			<ul>
+				<li class="h_item">核心系统</li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/ajfx.html">AI案件分析</a></li>
+				<li class="fhI"><a href="javascript: openChat();">法律Chatbot</a></li>
+				<!-- <li class="fhI"><a href="lab.html">法律实验室</a></li> -->
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/adju.html">AI裁决书</a></li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/product.html">产品列表</a></li>
+			</ul>
+		</li>
+		<li class="f_item bl">
+			<ul>
+				<li class="h_item">检索系统</li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/casetype.html">案件类型</a></li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/law.html">律师/律所</a></li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/court.html">法官/法院</a></li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/compar.html">对比统计</a></li>
+			</ul>
+		</li>
+		<li class="f_item bl">
+			<ul>
+				<li class="h_item">关于</li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">关于我们</a></li>
+				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">联系我们</a></li>
+				<li class="fhI">legallab@hotmail.com</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+      <script type="text/javascript">
+      function openFileDialog()
+      {
+      document.getElementById("targetFile1").click();
+      }
+
+      function fileSelected(input){
+      var fileName = input.files[0].name;
+      var file = $("#targetFile1").val();
+	  var pos=file.lastIndexOf("\\");
+      document.getElementById('file').value = file.substring(pos+1);
+      checkFileName(fileName);
+      }
+
+      function checkFileName(input){
+
+      document.getElementById('updateBtn').removeAttribute('disabled');
+      document.getElementById('updateBtn').setAttribute('class','btn');
+      }
+      function fileNameChanged(){
+      var str = document.getElementById('file').value;
+      if(str.length <= 3)
+      document.getElementById('updateBtn').setAttribute('class','btn_grey');
+      document.getElementById('updateBtn').setAttribute('disabled','disabled');
+      }
+      function updateFile(){
+    	  $("#uploadName").val($("#file").val());
+      	 $("#fileDataForm").submit();
+
+      }
+      
+      function downloadClicked (){  
+    	  var file = $("#targetFile1").val();
+    	  var pos=file.lastIndexOf("\\");
+    	  $("#fileName").val($("#file").val());
+    	  $("#downloadForm").submit();
+           
+      } 
+
+      </script>
+   </body>
+</html>
+

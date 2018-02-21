@@ -2,6 +2,7 @@ package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,17 +30,18 @@ public class FileController {
      * @param request
      * @return
      */
-    @RequestMapping(value="/upload")
-    public String upload(HttpServletRequest request){
+    @RequestMapping(value="/uploadFile")
+    public String uploadFile(HttpServletRequest request){
         init(request);
         try {
             fileUtil.upload(request);
-            request.setAttribute("msg", "ok111111");
+            request.setAttribute("uploadName", request.getParameter("uploadName"));
             request.setAttribute("map", getMap());
+            return "index";
         } catch (Exception e) {
             e.printStackTrace();
+            return "index";
         }
-        return "success";
     }
     
     @RequestMapping(value="/doCompare")
@@ -86,25 +88,30 @@ public class FileController {
      * 下载
      * @param request
      * @param response
+     * @throws UnsupportedEncodingException 
      */
     @RequestMapping(value="/download")
     @ResponseBody
-    public String download(HttpServletRequest request, HttpServletResponse response){
+    public void download(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+    	String fileName=new String((request.getParameter("fileName")).getBytes("iso-8859-1"),"utf-8");
+		String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
+        System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
+        String path = request.getSession().getServletContext().getRealPath("/");
+        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path);
+        System.out.println("Result: " + errorCode);
         init(request);
         try {
             String downloadfFileName = "条文对照表.docx";
 //            downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
 //            String fileName = downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
-            String fileName = downloadfFileName;
             String userAgent = request.getHeader("User-Agent").toLowerCase();
-            byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? fileName.getBytes() : fileName.getBytes("UTF-8");
-            fileName = new String(bytes, "ISO-8859-1");
-            response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", fileName));
+            byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? downloadfFileName.getBytes() : downloadfFileName.getBytes("UTF-8");
+            downloadfFileName = new String(bytes, "ISO-8859-1");
+            response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", downloadfFileName));
             fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx", response.getOutputStream());
-            return "0";
         } catch (IOException e) {
             e.printStackTrace();
-            return "1";
+//            return "1";
         }
     }
 

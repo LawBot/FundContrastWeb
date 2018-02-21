@@ -29,7 +29,7 @@ public class FileUtil {
 	 * @param request
 	 * @throws IOException
 	 */
-	public String upload(HttpServletRequest request) throws IOException{
+	public void upload(HttpServletRequest request) throws IOException{
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = mRequest.getFileMap();
 //        File file = new File(FILEDIR);
@@ -44,7 +44,6 @@ public class FileUtil {
 				write(mFile.getInputStream(), new FileOutputStream(initPath(mFile.getOriginalFilename())));
 			}
 		}
-		return "success";
 	}
 
 //    private static String initFilePath(String name) {
