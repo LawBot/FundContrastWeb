@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author 陈光曦
+ * @author Guangxi Chen
  */
 public class DocPart implements Comparable<DocPart> {
 
@@ -96,7 +96,7 @@ public class DocPart implements Comparable<DocPart> {
         this.childPart = childPart;
     }
 
-    //是否是叶子节点
+    //鏄惁鏄彾瀛愯妭鐐�
     public boolean hasPart() {
         if (childPart == null) {
             return false;
@@ -113,9 +113,9 @@ public class DocPart implements Comparable<DocPart> {
         toReturn.append("Title: ").append(title).append("\n");
         toReturn.append("Text: ").append(text).append("\n");
         if (childPart != null) {
-            childPart.forEach((part) -> {
-                toReturn.append(part.toString());
-            });
+        	for(int i = 0; i < childPart.size(); ++i) {
+        		toReturn.append(childPart.get(i).toString());
+        	}
         }
         return toReturn.toString();
     }
