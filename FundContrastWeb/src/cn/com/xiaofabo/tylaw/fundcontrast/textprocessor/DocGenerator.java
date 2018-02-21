@@ -41,55 +41,87 @@ public class DocGenerator {
             + "我公司在撰写《基金合同》时对《指引》部分条款进行了增加、删除或修改，"
             + "现将具体情况详细说明如下。";
 
+//    public static int STATUS_SUCCESS = 0;
+    
+    public static int STATUS_SUCCESS_GYRX_STOCK = 10;
+    public static int STATUS_SUCCESS_GYRX_INDEX = 11;
+    public static int STATUS_SUCCESS_GYRX_BOND = 12;
+    public static int STATUS_SUCCESS_GYRX_CURRENCY = 13;
+    
+    public static int STATUS_SUCCESS_HXJJ_STOCK = 20;
+    public static int STATUS_SUCCESS_HXJJ_INDEX = 21;
+    public static int STATUS_SUCCESS_HXJJ_BOND = 22;
+    public static int STATUS_SUCCESS_HXJJ_CURRENCY = 23;
+    
+    public static int STATUS_SUCCESS_JTJJ_STOCK = 30;
+    public static int STATUS_SUCCESS_JTJJ_INDEX = 31;
+    public static int STATUS_SUCCESS_JTJJ_BOND = 32;
+    public static int STATUS_SUCCESS_JTJJ_CURRENCY = 33;
+    
+    public static int STATUS_ERROR_UNKNOWN = -1;
+    public static int STATUS_ERROR_FUND_TYPE_UNKNOWN = -2;
+    public static int STATUS_ERROR_FUND_EST_UNKNOWN = -3;
+    public static int STATUS_ERROR_INPUT_CANNOT_READ = -10;
+    public static int STATUS_ERROR_INPUT_IO_ERROR = -11;
+    public static int STATUS_ERROR_OUTPUT_CANNOT_GENERATE = -20;
+    public static int STATUS_ERROR_OUTPUT_IO_ERROR = -21;
+    public static int STATUS_ERROR_TEMPLATE_NOT_FOUND = -30;
+    public static int STATUS_ERROR_TEMPLATE_IO_ERROR = -31;
     /**
-     * @return error code for generation process 0: no error; -1: unknown error;
-     * 1: Fund type not recognized; 2: Fund establisher not recognized; 10:
-     * Input file cannot be read (unknown reason); 11: Input file cannot be
-     * read: IO error; 20: Output file cannot be generated (unknown reason);
-     * 21: Output file cannot be generated: IO error;
-     * -10: Cannot find template file; -11: Input template file IO error;
+     * @return 
      * @param inputSampleDocPath
      * @param outputDocPath
      * @return
      */
-    public static int generate(String inputSampleDocPath, String outputDocPath,String path) {
+    public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir) {
+    	int statusCode = 0;
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
             sampleDocProcessor.readText(inputSampleDocPath);
         } catch (IOException e) {
             /// Read input sample document IO error
-            return 11;
+            return STATUS_ERROR_INPUT_IO_ERROR;
         }
 
         FundDoc sampleDoc = sampleDocProcessor.process();
 
         if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
-            return 1;
+            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
         }
-        if (sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_UNKNOWN)) {
-            return 2;
+        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)) {
+        	statusCode += 10;
+        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)) {
+        	statusCode += 20;
+        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)) {
+        	statusCode += 30;
+        }else {
+            return STATUS_ERROR_FUND_EST_UNKNOWN;
         }
 
         String templateDocPath;
         switch (sampleDoc.getType()) {
             case 0:
-                templateDocPath = path+"/"+DataUtils.STANDARD_TYPE_STOCK_C;
+            	statusCode += 0;
+                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_STOCK_C;
                 break;
             case 1:
-                templateDocPath = path+DataUtils.STANDARD_TYPE_INDEX;
+            	statusCode += 1;
+                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_INDEX;
                 break;
             case 2:
-                templateDocPath = path+"/"+DataUtils.STANDARD_TYPE_BOND;
+            	statusCode += 2;
+                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_BOND;
                 break;
             case 3:
-                templateDocPath = path+"/"+DataUtils.STANDARD_TYPE_MONETARY;
+            	statusCode += 3;
+                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_MONETARY;
                 break;
             default:
                 templateDocPath = "";
         }
 
         if (templateDocPath.isEmpty()) {
-            return -10;
+            return STATUS_ERROR_TEMPLATE_NOT_FOUND;
         }
 
         DocProcessor templateDocProcessor = new DocProcessor(templateDocPath);
@@ -97,7 +129,7 @@ public class DocGenerator {
             templateDocProcessor.readText(templateDocPath);
         } catch (IOException e) {
             /// Read input sample document IO error
-            return -11;
+            return STATUS_ERROR_TEMPLATE_IO_ERROR;
         }
         FundDoc templateDoc = templateDocProcessor.process();
 
@@ -130,17 +162,17 @@ public class DocGenerator {
         CompareUtils compareUtils = new CompareUtils();
         try {
             patchDtoList = compareUtils.getPatchDtoList(templateDocPath, inputSampleDocPath);
-        } catch (Exception e1) {
-            return -1;
+        } catch (Exception e) {
+            return STATUS_ERROR_UNKNOWN;
         }
 
         try {
             genDoc.generate(outputFileTitle, leadingText, patchDtoList, outputDocPath);
         } catch (IOException e) {
             e.printStackTrace();
-            return 21;
+            return STATUS_ERROR_OUTPUT_IO_ERROR;
         }
 
-        return 0;
+        return statusCode;
     }
 }
