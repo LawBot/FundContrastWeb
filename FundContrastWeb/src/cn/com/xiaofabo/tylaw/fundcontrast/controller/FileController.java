@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,16 +32,31 @@ public class FileController {
      * @return
      */
     @RequestMapping(value="/uploadFile")
-    public String uploadFile(HttpServletRequest request){
+    public ModelAndView uploadFile(HttpServletRequest request,ModelMap map){
         init(request);
         try {
             fileUtil.upload(request);
             request.setAttribute("uploadName", request.getParameter("uploadName"));
             request.setAttribute("map", getMap());
-            return "index";
+            
+            //对比
+            String fileName=request.getParameter("uploadName");
+			String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
+	        System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
+	        String path = request.getSession().getServletContext().getRealPath("/");
+	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path);
+	        System.out.println("Result: " + errorCode);
+	        map.put("errorCode", errorCode+"");
+	        init(request);
+	        ModelAndView modelAndView = new ModelAndView("index");
+	        modelAndView.addObject("errorCode",errorCode+"");
+	        request.setAttribute("errorCode", errorCode+"");
+            return modelAndView;
         } catch (Exception e) {
             e.printStackTrace();
-            return "index";
+            ModelAndView modelAndView = new ModelAndView("index");
+            modelAndView.addObject("errorCode","-1");
+            return modelAndView;
         }
     }
     
@@ -93,14 +109,7 @@ public class FileController {
     @RequestMapping(value="/download")
     @ResponseBody
     public void download(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
-    	String fileName=new String((request.getParameter("fileName")).getBytes("iso-8859-1"),"utf-8");
-		String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
-        System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
-        String path = request.getSession().getServletContext().getRealPath("/");
-        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path);
-        System.out.println("Result: " + errorCode);
-        init(request);
-        try {
+    	try {
             String downloadfFileName = "条文对照表.docx";
 //            downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
 //            String fileName = downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
@@ -109,7 +118,7 @@ public class FileController {
             downloadfFileName = new String(bytes, "ISO-8859-1");
             response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", downloadfFileName));
             fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx", response.getOutputStream());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 //            return "1";
         }

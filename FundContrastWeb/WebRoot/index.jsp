@@ -248,6 +248,8 @@
          </div>
       </div>
       <script src="./files/jquery-2.1.1.min.js.Download"></script>
+      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> 
+	  <script src="http://malsup.github.io/jquery.form.js"></script>
          <script>
 
          $("#experience").mouseleave(function() {
@@ -274,16 +276,15 @@
          <div class="wrap">
             <div class="search">
                <div>
-                  <input type="text" id="file" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
-                  
+                  <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}${errorCode }">
                   </div>
                   <div class = "searchBtn">
-                  <form id="fileDataForm" action="uploadFile.do" enctype="multipart/form-data" method="post">
+                  <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
                   <input type="hidden" name="uploadName" id="uploadName">
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
                   <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
-                  <div class="btn" id="updateBtn"  onclick = "updateFile();">上传文件</div>
+                  <div class="btn c_grey" id="updateBtn" >上传文件</div>
                    </form>
                </div>
             </div>
@@ -310,7 +311,7 @@
                	  <form action="download.do" id="downloadForm">
                         <input type="hidden" name="fileName" id="fileName">
                         <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
-                        <div class="btn" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</div>
+                        <div class="btn c_grey" id="downloadBtn">下载对照表</div>
                    </form>
                </div>
             </div>
@@ -409,6 +410,7 @@
 	  var pos=file.lastIndexOf("\\");
       document.getElementById('file').value = file.substring(pos+1);
       checkFileName(fileName);
+      $("#updateBtn").attr("onclick","updateFile();");
       }
 
       function checkFileName(input){
@@ -423,10 +425,48 @@
       document.getElementById('updateBtn').setAttribute('disabled','disabled');
       }
       function updateFile(){
+    	  if($("#targetFile1").val()==""){
+    		  alert("请选择一个文件上传");
+    		  $("#downloadBtn").removeAttr("onclick");//上传文件失败移除下载点击效果
+    		  return;
+    	  }
     	  $("#uploadName").val($("#file").val());
       	 $("#fileDataForm").submit();
 
       }
+      
+      $(function(){     
+          var options = {   
+              type: 'POST',  
+              url: 'uploadFile.do',  
+              success:showResponse,    
+              error : function(xhr, status, err) {              
+                  alert("操作失败");  
+              }  
+          };   
+          $("#fileDataForm").submit(function(){   
+              $(this).ajaxSubmit(options);   
+              return false;   //防止表单自动提交  
+          });  
+  });  
+    
+   
+  function showResponse(responseText, statusText, xhr, $form){      
+      if(statusText == "success"){  
+    	  alert(responseText);
+    	  alert('${errorCode}');
+          /** 
+          * 请求成功后的操作 
+          */  
+          alert("上传成功");  
+          document.getElementById('downloadBtn').removeAttribute('disabled');
+          document.getElementById('downloadBtn').setAttribute('class','btn');
+          $("#downloadBtn").attr("onclick","downloadClicked();");//上传文件成功添加点击事件
+      } else {  
+    	  $("#downloadBtn").remove("onclick");
+          alert("上传失败");  
+      }     
+  }  
       
       function downloadClicked (){  
     	  var file = $("#targetFile1").val();
