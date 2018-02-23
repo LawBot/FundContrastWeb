@@ -453,8 +453,6 @@
    
   function showResponse(responseText, statusText, xhr, $form){      
       if(statusText == "success"){  
-    	  alert(responseText);
-    	  alert('${errorCode}');
           /** 
           * 请求成功后的操作 
           */  
