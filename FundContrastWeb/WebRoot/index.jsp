@@ -276,7 +276,7 @@
          <div class="wrap">
             <div class="search">
                <div>
-                  <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}${errorCode }">
+                  <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
                   </div>
                   <div class = "searchBtn">
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
@@ -303,7 +303,7 @@
                   <li class="item c_grey" id="btn_gongyin"><a><span>工银瑞信</span></a></li>
                   <li class="item c_grey" id="btn_huaxia"><a><span>华夏基金</span></a></li>
                   <li class="item c_grey" id="btn_jiutai"><a><span>九泰基金</span></a></li>
-                  <li class="item c6" id="btn_jiutai"><a><span> 不顯示占位</span></a></li>
+                  <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
                </ul>
             </div>
             <div class="download">
@@ -456,7 +456,71 @@
           /** 
           * 请求成功后的操作 
           */  
-          alert("上传成功");  
+          document.getElementById('btn_gongyin').className='item c_grey';
+          document.getElementById('btn_huaxia').className='item c_grey';
+          document.getElementById('btn_jiutai').className='item c_grey';
+          document.getElementById('btn_stockType').className='item c_grey';
+          document.getElementById('btn_exponentType').className='item c_grey';
+          document.getElementById('btn_bondType').className='item c_grey';
+          document.getElementById('btn_currencyMarket').className='item c_grey';
+          
+          
+          if (responseText>0) {
+        	  alert("上传成功");  
+        	  if(responseText == 10){
+        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+        		  document.getElementById('btn_stockType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 11){
+        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 12){
+        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+        		  document.getElementById('btn_bondType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 13){
+        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+        	  }
+        	  
+        	  if(responseText == 20){
+        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+        		  document.getElementById('btn_stockType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 21){
+        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 22){
+        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+        		  document.getElementById('btn_bondType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 23){
+        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+        	  }
+        	  
+        	  if(responseText == 30){
+        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+        		  document.getElementById('btn_stockType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 31){
+        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 32){
+        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+        		  document.getElementById('btn_bondType').setAttribute('class','btn');
+        	  }
+        	  if(responseText == 33){
+        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+        	  }
+		  }else {
+			  alert("上传失败");
+		  }
+          
           document.getElementById('downloadBtn').removeAttribute('disabled');
           document.getElementById('downloadBtn').setAttribute('class','btn');
           $("#downloadBtn").attr("onclick","downloadClicked();");//上传文件成功添加点击事件

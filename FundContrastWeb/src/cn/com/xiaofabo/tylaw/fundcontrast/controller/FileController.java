@@ -32,7 +32,8 @@ public class FileController {
      * @return
      */
     @RequestMapping(value="/uploadFile")
-    public ModelAndView uploadFile(HttpServletRequest request,ModelMap map){
+    @ResponseBody
+    public int uploadFile(HttpServletRequest request,ModelMap map){
         init(request);
         try {
             fileUtil.upload(request);
@@ -51,12 +52,12 @@ public class FileController {
 	        ModelAndView modelAndView = new ModelAndView("index");
 	        modelAndView.addObject("errorCode",errorCode+"");
 	        request.setAttribute("errorCode", errorCode+"");
-            return modelAndView;
+            return errorCode;
         } catch (Exception e) {
             e.printStackTrace();
             ModelAndView modelAndView = new ModelAndView("index");
             modelAndView.addObject("errorCode","-1");
-            return modelAndView;
+            return -1;
         }
     }
     
