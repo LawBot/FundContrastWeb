@@ -54,12 +54,17 @@ public class GenerateCompareDoc {
     public static final int EFFECT_ADD_BOLD_UNDERLINE = 2;
     public static final int EFFECT_DELETE_STRIKE = 0;
 
-    public static final String TABLE_HEADER_BGCOLOR = "808080";
+    public static final String TABLE_HEADER_BGCOLOR = "C5C5C5";
 
     public static final BigInteger TABLE_COLUMN_1_WIDTH = BigInteger.valueOf(1133L);    /// ~2.0cm
     public static final BigInteger TABLE_COLUMN_2_WIDTH = BigInteger.valueOf(4820L);    /// ~8.5cm
     public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4253L);    /// ~7.5cm
     public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(2551L);    /// ~4.5cm
+    
+    public static final int TABLE_CELL_MARGIN_TOP = 100;
+    public static final int TABLE_CELL_MARGIN_LEFT = 100;
+    public static final int TABLE_CELL_MARGIN_BOTTOM = 100;
+    public static final int TABLE_CELL_MARGIN_RIGHT = 100;
 
     public static final String TABLE_COLUMN_1_TEXT = "章节";
     public static final String TABLE_COLUMN_2_TEXT = "《指引》条款";
@@ -89,6 +94,7 @@ public class GenerateCompareDoc {
 
         /// Generate contrast table
         XWPFTable table = document.createTable(nRow, 4);
+        table.setCellMargins(TABLE_CELL_MARGIN_TOP, TABLE_CELL_MARGIN_LEFT, TABLE_CELL_MARGIN_BOTTOM, TABLE_CELL_MARGIN_RIGHT);
         CTTblWidth width = table.getCTTbl().addNewTblPr().addNewTblW();
         width.setType(STTblWidth.DXA);
         width.setW(TABLE_WIDTH);
@@ -370,8 +376,10 @@ public class GenerateCompareDoc {
         XWPFRun run = paragraph.createRun();
         run.setFontSize(12);
         run.setBold(true);
-        run.setText(title + "\n" + "修改对照表");
+        run.setText(title);
         run.addBreak();
+        run.addBreak();
+        run.setText("修改对照表");
         run.addBreak();
         run.addBreak();
     }
