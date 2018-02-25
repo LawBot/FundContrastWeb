@@ -55,6 +55,7 @@ public class GenerateCompareDoc {
 	public static final int EFFECT_ADD_UNDERLINE = 1;
 	public static final int EFFECT_ADD_BOLD_UNDERLINE = 2;
 	public static final int EFFECT_DELETE_STRIKE = 0;
+	public static final int EFFECT_DELETE_BOLD_STRIKE = 1;
 
 	public static final String TABLE_HEADER_BGCOLOR = "C5C5C5";
 
@@ -229,7 +230,7 @@ public class GenerateCompareDoc {
 
 				String deleteText = contrastItem.getOrignalText();
 				XWPFRun run = paragraph.createRun();
-				deleteEffect(run, EFFECT_DELETE_STRIKE);
+				deleteEffect(run, EFFECT_DELETE_BOLD_STRIKE);
 				run.setText(deleteText);
 			}
 
@@ -298,7 +299,7 @@ public class GenerateCompareDoc {
 
 						String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
 						if (set.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_STRIKE);
+							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
 						}
 						letterRun.setText(currentLetter);
 
@@ -314,7 +315,7 @@ public class GenerateCompareDoc {
 						}
 						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
 						if (set.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_STRIKE);
+							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
 						}
 						letterRun.setText(currentLetter);
 					}
@@ -358,7 +359,7 @@ public class GenerateCompareDoc {
 						}
 						String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
 						if (deleteSet.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_STRIKE);
+							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
 						}
 						letterRun.setText(currentLetter);
 					}
@@ -502,6 +503,10 @@ public class GenerateCompareDoc {
 		switch (style) {
 		case EFFECT_DELETE_STRIKE:
 			run.setStrikeThrough(true);
+			break;
+		case EFFECT_DELETE_BOLD_STRIKE:
+			run.setStrikeThrough(true);
+			run.setBold(true);
 			break;
 		default:
 			break;
