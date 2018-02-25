@@ -15,6 +15,7 @@ public class PatchDto implements Comparable<PatchDto> {
     private String changeType;//(add:新增 delete:删减 change:更改)
     private String partId;
     private List<Integer> partIndex;
+    private List<Integer> samplePartIndex;
     private String chapterTitle;
 
     public String getPartId() {
@@ -103,6 +104,14 @@ public class PatchDto implements Comparable<PatchDto> {
 
     public void setPartIndex(List<Integer> partIndex) {
         this.partIndex = partIndex;
+    }
+    
+    public List<Integer> getSamplePartIndex(){
+    	return samplePartIndex;
+    }
+    
+    public void setSamplePartIndex(List<Integer> samplePartIndex) {
+    	this.samplePartIndex = samplePartIndex;
     }
 
     public String getChapterTitle() {

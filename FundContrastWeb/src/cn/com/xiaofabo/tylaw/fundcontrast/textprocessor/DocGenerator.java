@@ -167,7 +167,7 @@ public class DocGenerator {
         }
 
         try {
-            genDoc.generate(outputFileTitle, leadingText, patchDtoList, outputDocPath);
+            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath);
         } catch (IOException e) {
             e.printStackTrace();
             return STATUS_ERROR_OUTPUT_IO_ERROR;
