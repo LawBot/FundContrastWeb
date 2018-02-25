@@ -286,7 +286,7 @@ public class GenerateCompareDoc {
 
 				/// Only delete data. No add data.
 				if (rdt.getDeleteData() != null && rdt.getAddData() == null) {
-					Set set = rdt.getDeleteData().keySet();
+					Set deleteSet = rdt.getDeleteData().keySet();
 
 					XWPFParagraph paragraph = c1Cell.addParagraph();
 					paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -298,7 +298,7 @@ public class GenerateCompareDoc {
 						}
 
 						String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
-						if (set.contains(j)) {
+						if (deleteSet.contains(j)) {
 							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
 						}
 						letterRun.setText(currentLetter);
@@ -314,7 +314,7 @@ public class GenerateCompareDoc {
 							continue;
 						}
 						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
-						if (set.contains(j)) {
+						if (deleteSet.contains(j)) {
 							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
 						}
 						letterRun.setText(currentLetter);
@@ -323,7 +323,7 @@ public class GenerateCompareDoc {
 
 				// Only add. No delete.
 				if (rdt.getRevisedText() != null && rdt.getAddData() != null && rdt.getDeleteData() == null) {
-					Set set1 = rdt.getAddData().keySet();
+					Set addSet = rdt.getAddData().keySet();
 
 					XWPFParagraph paragraph = c1Cell.addParagraph();
 					paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -339,7 +339,7 @@ public class GenerateCompareDoc {
 							continue;
 						}
 						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
-						if (set1.contains(j)) {
+						if (addSet.contains(j)) {
 							addEffect(letterRun, EFFECT_ADD_BOLD_UNDERLINE);
 						}
 						letterRun.setText(currentLetter);
