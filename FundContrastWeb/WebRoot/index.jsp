@@ -249,7 +249,7 @@
       </div>
       <script src="./files/jquery-2.1.1.min.js.Download"></script>
       <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> 
-	  <script src="http://malsup.github.io/jquery.form.js"></script>
+	  <script src="./js/form.js"></script>
          <script>
 
          $("#experience").mouseleave(function() {
@@ -447,7 +447,7 @@
           $("#fileDataForm").submit(function(){   
               $(this).ajaxSubmit(options);   
               return false;   //防止表单自动提交  
-          });  
+          });
   });  
     
    
