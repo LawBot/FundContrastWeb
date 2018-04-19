@@ -22,11 +22,11 @@ public class DocProcessor extends TextProcessor {
     public FundDoc fundDoc;
     public String titleOfGenDoc = "";
     public String textOfGenDoc = "";
-    private List partIdentifiers;
+    private List<String> partIdentifiers;
 
     public DocProcessor(String docName) {
         this.fundDoc = new FundDoc(docName);
-        partIdentifiers = new LinkedList();
+        partIdentifiers = new LinkedList<String>();
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_0_TP);
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_1);
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_2);
@@ -39,10 +39,10 @@ public class DocProcessor extends TextProcessor {
         int lastPartLevel = -1;
         int lineIdx = 0;
         int partIndex = 0;
-        List textList = TextUtils.removeAllEmptyLines(super.getLines());
+        List<?> textList = TextUtils.removeAllEmptyLines(super.getLines());
         StringBuilder partText = new StringBuilder();
-        List<DocPart> tmpPartList = new LinkedList();
-        List<Integer> levelMatchList = new LinkedList();
+        List<DocPart> tmpPartList = new LinkedList<DocPart>();
+        List<Integer> levelMatchList = new LinkedList<Integer>();
         DocPart currentPart = new DocPart();
         boolean foundFirstIdentifier = false;
         StringBuilder contractNameComplete = new StringBuilder();
@@ -125,7 +125,7 @@ public class DocProcessor extends TextProcessor {
             }
             if (currentPartLevel == 0) {
                 /// Every time a new chapter starts, set a new matching scheme
-                levelMatchList = new LinkedList();
+                levelMatchList = new LinkedList<Integer>();
                 /// Actual level 0 is always matching part level 0
                 levelMatchList.add(0);
             } else {
@@ -149,7 +149,7 @@ public class DocProcessor extends TextProcessor {
                     currentPart.setIndex(index);
                     currentPart.setTitle(title);
 
-                    List<Integer> idxList = new LinkedList();
+                    List<Integer> idxList = new LinkedList<Integer>();
                     if (!tmpPartList.isEmpty()) {
                         idxList.addAll(tmpPartList.get(tmpPartList.size() - 1).getPartIndex());
                     }
@@ -180,7 +180,7 @@ public class DocProcessor extends TextProcessor {
                     if (actualLevel == 0) {
                         fundDoc.addPart(tmpPartList.get(0));
                         partIndex = tmpPartList.get(0).getPartIndex().get(0) + 1;
-                        tmpPartList = new LinkedList();
+                        tmpPartList = new LinkedList<DocPart>();
                     }
                     currentPart = new DocPart();
                     String title = TextUtils.getPartTitle(currentLine);
@@ -189,11 +189,11 @@ public class DocProcessor extends TextProcessor {
                     currentPart.setIndex(index);
                     currentPart.setTitle(title);
 
-                    List<Integer> idxList = new LinkedList();
+                    List<Integer> idxList = new LinkedList<Integer>();
                     if (actualLevel == 0) {
                         idxList.add(partIndex);
                     } else {
-                        List childParts = tmpPartList.get(tmpPartList.size() - 1).getChildPart();
+                        List<?> childParts = tmpPartList.get(tmpPartList.size() - 1).getChildPart();
                         DocPart part = (DocPart) childParts.get(childParts.size() - 1);
                         idxList.addAll(part.getPartIndex());
                         partIndex = idxList.get(idxList.size() - 1) + 1;
@@ -210,7 +210,7 @@ public class DocProcessor extends TextProcessor {
                     }
                     if (currentPartLevel == 0) {
                         fundDoc.addPart(tmpPartList.get(0));
-                        tmpPartList = new LinkedList();
+                        tmpPartList = new LinkedList<DocPart>();
                     } else {
                         DocPart parentDp = (DocPart) tmpPartList.get(currentLevel - 1);
                         parentDp.addPart(currentPart);
@@ -222,7 +222,7 @@ public class DocProcessor extends TextProcessor {
                     currentPart.setIndex(index);
                     currentPart.setTitle(title);
 
-                    List<Integer> idxList = new LinkedList();
+                    List<Integer> idxList = new LinkedList<Integer>();
                     if (!tmpPartList.isEmpty()) {
                         idxList.addAll(tmpPartList.get(tmpPartList.size() - 1).getPartIndex());
                         partIndex = idxList.get(idxList.size() - 1) + 1;
