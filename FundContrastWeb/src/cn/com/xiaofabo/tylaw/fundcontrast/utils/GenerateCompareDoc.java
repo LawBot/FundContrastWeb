@@ -85,6 +85,14 @@ public class GenerateCompareDoc {
 	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
 			FundDoc sampleDoc, String outputPath) throws IOException {
 		log.info("Create an empty document");
+		
+		/// Preprocess of the contrast list is necessary to combine certain entries
+		/// TODO: entries below certain part level should be combined as one list entry
+		for(int i = 0; i < contrastList.size(); ++i) {
+			PatchDto pdt = contrastList.get(i);
+			System.out.println(pdt.partIndexInStr());
+		}
+		
 		int nRow = contrastList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));

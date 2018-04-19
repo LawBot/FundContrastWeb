@@ -121,6 +121,20 @@ public class PatchDto implements Comparable<PatchDto> {
     public void setChapterTitle(String chapterTitle) {
         this.chapterTitle = chapterTitle;
     }
+    
+    public String partIndexInStr() {
+    	if(partIndex == null)
+    		return null;
+    	StringBuilder sb = new StringBuilder();
+    	for(int i = 0; i < partIndex.size(); ++i) {
+    		if(i != partIndex.size() - 1) {
+    			sb.append(partIndex.get(i)).append("-");
+    		}else {
+    			sb.append(partIndex.get(i));
+    		}
+    	}
+    	return sb.toString();
+    }
 
     @Override
     public int compareTo(PatchDto pdt) {
