@@ -86,17 +86,17 @@ public class GenerateCompareDoc {
 	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
 			FundDoc sampleDoc, String outputPath) throws IOException {
 		log.info("Create an empty document");
-		
+
 		List compactList = combineListEntries(contrastList);
-		for(int i = 0; i < compactList.size(); i++) {
-			List pdtList = (List<PatchDto>)compactList.get(i);
-			for(int j = 0; j < pdtList.size(); j++) {
-				PatchDto pdt = (PatchDto)pdtList.get(j);
+		for (int i = 0; i < compactList.size(); i++) {
+			List pdtList = (List<PatchDto>) compactList.get(i);
+			for (int j = 0; j < pdtList.size(); j++) {
+				PatchDto pdt = (PatchDto) pdtList.get(j);
 				System.out.print(pdt.partIndexInStr() + " ");
 			}
 			System.out.println("");
 		}
-		
+
 		int nRow = contrastList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));
@@ -545,70 +545,69 @@ public class GenerateCompareDoc {
 			break;
 		}
 	}
-	
+
 	private List combineListEntries(List<PatchDto> contrastList) {
 		List compactList = new LinkedList<List<PatchDto>>();
 		List prePartIdx = new LinkedList<Integer>();
 		List tmpList = new LinkedList<PatchDto>();
-		
+
 		prePartIdx.add(-1);
 		prePartIdx.add(-1);
-		
-		for(int i = 0; i < contrastList.size(); i++) {
+
+		for (int i = 0; i < contrastList.size(); i++) {
 			PatchDto pdt = contrastList.get(i);
 			List pdtIdx = pdt.getPartIndex();
-			if(pdtIdx.size() == 1 || prePartIdx.size() == 1) {
-				if(!tmpList.isEmpty()) {
+			if (pdtIdx.size() == 1 || prePartIdx.size() == 1) {
+				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
 				tmpList = new LinkedList<PatchDto>();
 				tmpList.add(pdt);
-				if(!tmpList.isEmpty()) {
+				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
 				tmpList = new LinkedList<PatchDto>();
-			}else {
-				int chapterIdx = (int)pdtIdx.get(0);
-				int subChapterIdx = (int)pdtIdx.get(1);
-				
-				int preChapterIdx = (int)prePartIdx.get(0);
-				int preSubChapterIdx = (int)prePartIdx.get(1);
-				
-				if(!isIdxListIdentical(prePartIdx, pdtIdx) 
-						&& chapterIdx == preChapterIdx 
+			} else {
+				int chapterIdx = (int) pdtIdx.get(0);
+				int subChapterIdx = (int) pdtIdx.get(1);
+
+				int preChapterIdx = (int) prePartIdx.get(0);
+				int preSubChapterIdx = (int) prePartIdx.get(1);
+
+				if (!isIdxListIdentical(prePartIdx, pdtIdx) && chapterIdx == preChapterIdx
 						&& subChapterIdx == preSubChapterIdx) {
 					tmpList.add(pdt);
-//					if(!tmpList.isEmpty()) {
-//						compactList.add(tmpList);
-//					}
-//					tmpList = new LinkedList<PatchDto>();
-				}else {
-					if(!tmpList.isEmpty()) {
+					// if(!tmpList.isEmpty()) {
+					// compactList.add(tmpList);
+					// }
+					// tmpList = new LinkedList<PatchDto>();
+				} else {
+					if (!tmpList.isEmpty()) {
 						compactList.add(tmpList);
 					}
 					tmpList = new LinkedList<PatchDto>();
 					tmpList.add(pdt);
 				}
-				
+
 				prePartIdx = pdtIdx;
 			}
-			if(i == contrastList.size() - 1) {
-				if(!tmpList.isEmpty()) {
+			if (i == contrastList.size() - 1) {
+				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
 			}
 		}
 		return compactList;
 	}
-	
+
 	private boolean isIdxListIdentical(List<Integer> list1, List<Integer> list2) {
-		if(list1.size() != list2.size()) {
+		if (list1.size() != list2.size()) {
 			return false;
 		}
-		for(int i = 0; i < list1.size(); ++i) {
-			int i1 = (int)list1.get(i);
-			int i2 = (int)list2.get(i);
-			if(i1 != i2) {
+		for (int i = 0; i < list1.size(); ++i) {
+			int i1 = (int) list1.get(i);
+			int i2 = (int) list2.get(i);
+			if (i1 != i2) {
 				return false;
 			}
 		}
