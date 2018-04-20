@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -87,12 +88,12 @@ public class GenerateCompareDoc {
 			FundDoc sampleDoc, String outputPath) throws IOException {
 		log.info("Create an empty document");
 
-		List compactList = combineListEntries(contrastList);
+		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
-			List pdtList = (List<PatchDto>) compactList.get(i);
+			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
-				System.out.print(pdt.partIndexInStr() + " ");
+				System.out.print(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ")__");
 			}
 			System.out.println("");
 		}
@@ -181,7 +182,7 @@ public class GenerateCompareDoc {
 				cell.removeParagraph(0);
 
 				/// In case the current part is at least 3rd level deep in the level structure
-				/// display also its parent text (only up to 2rd level)
+				/// display also its parent text (only up to 2nd level)
 				if (partIndex.size() >= 3) {
 					XWPFParagraph paragraph = cell.addParagraph();
 					paragraph.setAlignment(ParagraphAlignment.LEFT);
@@ -546,51 +547,41 @@ public class GenerateCompareDoc {
 		}
 	}
 
-	private List combineListEntries(List<PatchDto> contrastList) {
-		List compactList = new LinkedList<List<PatchDto>>();
-		List prePartIdx = new LinkedList<Integer>();
-		List tmpList = new LinkedList<PatchDto>();
+	private List<List<PatchDto>> combineListEntries(List<PatchDto> contrastList, int endLevel) {
+		List<List<PatchDto>> compactList = new LinkedList<List<PatchDto>>();
+		List<PatchDto> tmpList = new LinkedList<PatchDto>();
 
-		prePartIdx.add(-1);
-		prePartIdx.add(-1);
+		tmpList.add((PatchDto) contrastList.get(0));
 
-		for (int i = 0; i < contrastList.size(); i++) {
-			PatchDto pdt = contrastList.get(i);
-			List pdtIdx = pdt.getPartIndex();
-			if (pdtIdx.size() == 1 || prePartIdx.size() == 1) {
+		for (int i = 1; i < contrastList.size(); i++) {
+			PatchDto curPdt = contrastList.get(i);
+			PatchDto prePdt = contrastList.get(i - 1);
+
+			List<Integer> curPdtIdx = curPdt.getPartIndex();
+			List<Integer> prePdtIdx = prePdt.getPartIndex();
+
+			if (getIndexDepth(curPdtIdx) <= endLevel || isIdxListIdentical(curPdtIdx, prePdtIdx)) {
 				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
 				tmpList = new LinkedList<PatchDto>();
-				tmpList.add(pdt);
+				tmpList.add(curPdt);
 				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
 				tmpList = new LinkedList<PatchDto>();
 			} else {
-				int chapterIdx = (int) pdtIdx.get(0);
-				int subChapterIdx = (int) pdtIdx.get(1);
-
-				int preChapterIdx = (int) prePartIdx.get(0);
-				int preSubChapterIdx = (int) prePartIdx.get(1);
-
-				if (!isIdxListIdentical(prePartIdx, pdtIdx) && chapterIdx == preChapterIdx
-						&& subChapterIdx == preSubChapterIdx) {
-					tmpList.add(pdt);
-					// if(!tmpList.isEmpty()) {
-					// compactList.add(tmpList);
-					// }
-					// tmpList = new LinkedList<PatchDto>();
+				if (isIdxListIdentical(getParentIndex(curPdtIdx), getParentIndex(prePdtIdx))) {
+					tmpList.add(curPdt);
 				} else {
 					if (!tmpList.isEmpty()) {
 						compactList.add(tmpList);
 					}
 					tmpList = new LinkedList<PatchDto>();
-					tmpList.add(pdt);
+					tmpList.add(curPdt);
 				}
-
-				prePartIdx = pdtIdx;
 			}
+
 			if (i == contrastList.size() - 1) {
 				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
@@ -600,17 +591,36 @@ public class GenerateCompareDoc {
 		return compactList;
 	}
 
-	private boolean isIdxListIdentical(List<Integer> list1, List<Integer> list2) {
-		if (list1.size() != list2.size()) {
+	private boolean isIdxListIdentical(List<Integer> idxList1, List<Integer> idxList2) {
+		if (idxList1 == null || idxList2 == null) {
 			return false;
 		}
-		for (int i = 0; i < list1.size(); ++i) {
-			int i1 = (int) list1.get(i);
-			int i2 = (int) list2.get(i);
+		if (idxList1.size() != idxList2.size()) {
+			return false;
+		}
+		for (int i = 0; i < idxList1.size(); ++i) {
+			int i1 = (int) idxList1.get(i);
+			int i2 = (int) idxList2.get(i);
 			if (i1 != i2) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private List<Integer> getParentIndex(List<Integer> idxList) {
+		if (idxList.size() <= 1) {
+			return null;
+		} else {
+			return idxList.subList(0, idxList.size() - 1);
+		}
+	}
+
+	private int getIndexDepth(List<Integer> idxList) {
+		if (idxList == null || idxList.isEmpty()) {
+			return 0;
+		} else {
+			return idxList.size();
+		}
 	}
 }
