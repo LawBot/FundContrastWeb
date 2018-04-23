@@ -61,15 +61,21 @@ public class GenerateCompareDoc {
 
 	public static final String TABLE_HEADER_BGCOLOR = "C5C5C5";
 
+	/// 1.0cm ~= 567L
 	public static final BigInteger TABLE_COLUMN_1_WIDTH = BigInteger.valueOf(1133L); /// ~2.0cm
 	public static final BigInteger TABLE_COLUMN_2_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
-	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4253L); /// ~7.5cm
-	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(2551L); /// ~4.5cm
+	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~7.5cm
+	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~4.5cm
 
 	public static final int TABLE_CELL_MARGIN_TOP = 100;
 	public static final int TABLE_CELL_MARGIN_LEFT = 100;
 	public static final int TABLE_CELL_MARGIN_BOTTOM = 100;
 	public static final int TABLE_CELL_MARGIN_RIGHT = 100;
+
+	public static final int TABLE_COLUMN_1 = 0;
+	public static final int TABLE_COLUMN_2 = 1;
+	public static final int TABLE_COLUMN_3 = 2;
+	public static final int TABLE_COLUMN_4 = 3;
 
 	public static final String TABLE_COLUMN_1_TEXT = "章节";
 	public static final String TABLE_COLUMN_2_TEXT = "《指引》条款";
@@ -98,7 +104,8 @@ public class GenerateCompareDoc {
 			System.out.println("");
 		}
 
-		int nRow = contrastList.size() + 1;
+		// int nRow = contrastList.size() + 1;
+		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));
 
@@ -119,9 +126,9 @@ public class GenerateCompareDoc {
 		CTTblLayoutType type = table.getCTTbl().getTblPr().addNewTblLayout();
 		type.setType(STTblLayoutType.FIXED);
 
+		/// Generate table header
 		XWPFTableRow tableRowOne = table.getRow(0);
 		tableRowOne.setRepeatHeader(true);
-
 		for (int i = 0; i < 4; ++i) {
 			XWPFTableCell cell = tableRowOne.getCell(i);
 			cell.getCTTc().addNewTcPr().addNewShd().setFill(TABLE_HEADER_BGCOLOR);
@@ -155,244 +162,196 @@ public class GenerateCompareDoc {
 			run.setText(columnText);
 		}
 
-		for (int i = 0; i < contrastList.size(); ++i) {
-			PatchDto contrastItem = contrastList.get(i);
-			List<Integer> partIndex = contrastItem.getPartIndex();
-			List<Integer> samplePartIndex = contrastItem.getSamplePartIndex();
-			int chapterIndex = partIndex.get(0);
-			String changeType = contrastItem.getChangeType();
-
+		/// Generate table content
+		for (int i = 0; i < compactList.size(); ++i) {
+			List<PatchDto> compactListItem = compactList.get(i);
 			XWPFTableRow tableRow = table.getRow(i + 1);
+			PatchDto firstItem = compactListItem.get(0);
 
-			/// First column
-			String chapterTitle = contrastItem.getChapterTitle();
-			tableRow.getCell(0).removeParagraph(0);
-			XWPFParagraph p = tableRow.getCell(0).addParagraph();
-			XWPFRun r = p.createRun();
-			addEffect(r, EFFECT_ADD_BOLD);
-			r.setText(chapterTitle);
+			/// 1st column
+			String chapterTitle = compactListItem.get(0).getChapterTitle();
+			tableRow.getCell(TABLE_COLUMN_1).removeParagraph(0);
+			XWPFParagraph p1 = tableRow.getCell(TABLE_COLUMN_1).addParagraph();
+			XWPFRun r1 = p1.createRun();
+			addEffect(r1, EFFECT_ADD_BOLD);
+			r1.setText(chapterTitle);
 
-			/// Item is new in sample document, not template document
-			/// Categorized in "add"
-			if (changeType.equalsIgnoreCase("add")) {
-				/// Second column should be left blank
-
-				/// Third column should be set as added text
-				XWPFTableCell cell = tableRow.getCell(2);
-				cell.removeParagraph(0);
-
-				/// In case the current part is at least 3rd level deep in the level structure
-				/// display also its parent text (only up to 2nd level)
-				if (partIndex.size() >= 3) {
-					XWPFParagraph paragraph = cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					XWPFRun run = paragraph.createRun();
-					String parentTitle = "";
-					if (partIndex.size() >= 3) {
-						DocPart dp = (sampleDoc.getParts().get(partIndex.get(0))).getChildPart().get(partIndex.get(1));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.setText(parentTitle);
-					}
-					if (partIndex.size() >= 4) {
-						DocPart dp = (sampleDoc.getParts().get(partIndex.get(0))).getChildPart().get(partIndex.get(1))
-								.getChildPart().get(partIndex.get(2));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.addBreak();
-						run.setText(parentTitle);
-					}
+			/// 2nd column
+			XWPFTableCell cell2 = tableRow.getCell(TABLE_COLUMN_2);
+			cell2.removeParagraph(0);
+			XWPFParagraph p2 = cell2.addParagraph();
+			
+			/// If index depth >= 3, then parent title should be displayed
+			if (firstItem.getPartIndexDepth() > 2) {
+				/// Get title from 2nd level until 2nd last level and display
+				List<Integer> partIndex = firstItem.getPartIndex();
+				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
+					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
+					
+					XWPFRun r2 = p2.createRun();
+					r2.setText(templateDoc.getPartTitle(tmpIndex));
 				}
-
-				XWPFParagraph paragraph = cell.addParagraph();
-				paragraph.setAlignment(ParagraphAlignment.LEFT);
-
-				String addText = contrastItem.getRevisedDto().getRevisedText();
-				XWPFRun run = paragraph.createRun();
-				addEffect(run, EFFECT_ADD_BOLD_UNDERLINE);
-				run.setText(addText);
+			}
+			
+			/// 3rd column
+			XWPFTableCell cell3 = tableRow.getCell(TABLE_COLUMN_3);
+			cell3.removeParagraph(0);
+			XWPFParagraph p3 = cell3.addParagraph();
+			
+			/// If index depth >= 3, then parent title should be displayed
+			if (firstItem.getPartIndexDepth() > 2) {
+				/// Get title from 2nd level until 2nd last level and display
+				List<Integer> partIndex = firstItem.getPartIndex();
+				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
+					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
+					
+					XWPFRun r3 = p3.createRun();
+					r3.setText(sampleDoc.getPartTitle(tmpIndex));
+				}
 			}
 
-			if (changeType.equalsIgnoreCase("delete")) {
-				/// Second column should be set as deleted text (line through)
-				XWPFTableCell cell = tableRow.getCell(1);
-				cell.removeParagraph(0);
+			for (int itemIdx = 0; itemIdx < compactListItem.size(); ++itemIdx) {
+				PatchDto contrastItem = compactListItem.get(itemIdx);
+				List<Integer> partIndex = contrastItem.getPartIndex();
+				List<Integer> samplePartIndex = contrastItem.getSamplePartIndex();
+				String changeType = contrastItem.getChangeType();
 
-				/// In case the current part is at least 3rd level deep in the level structure
-				/// display also its parent text (only up to 2rd level)
-				if (partIndex.size() >= 3) {
-					XWPFParagraph paragraph = cell.addParagraph();
+				if (changeType.equalsIgnoreCase("delete")) {
+					/// Column 2
+					XWPFParagraph paragraph = cell2.addParagraph();
 					paragraph.setAlignment(ParagraphAlignment.LEFT);
+					String deleteText = contrastItem.getOrignalText();
 					XWPFRun run = paragraph.createRun();
-					String parentTitle = "";
-					if (partIndex.size() >= 3) {
-						DocPart dp = (templateDoc.getParts().get(partIndex.get(0))).getChildPart()
-								.get(partIndex.get(1));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.setText(parentTitle);
+					deleteEffect(run, EFFECT_DELETE_BOLD_STRIKE);
+					run.setText(deleteText);
+					run.addBreak();
+					/// Column 3
+					// Do nothing
+				}
+
+				if (changeType.equalsIgnoreCase("add")) {
+					/// Column 2
+					// Do nothing
+					
+					/// Column 3
+					XWPFParagraph paragraph = cell3.addParagraph();
+					paragraph.setAlignment(ParagraphAlignment.LEFT);
+	
+					String addText = contrastItem.getRevisedDto().getRevisedText();
+					XWPFRun run = paragraph.createRun();
+					addEffect(run, EFFECT_ADD_BOLD_UNDERLINE);
+					run.setText(addText);
+					run.addBreak();
+				}
+
+				if (changeType.equalsIgnoreCase("change")) {
+					RevisedDto rdt = contrastItem.getRevisedDto();
+					if (rdt == null) {
+						continue;
 					}
-					if (partIndex.size() >= 4) {
-						DocPart dp = (templateDoc.getParts().get(partIndex.get(0))).getChildPart().get(partIndex.get(1))
-								.getChildPart().get(partIndex.get(2));
-						parentTitle = dp.getIndex() + dp.getTitle();
+
+					/// Only delete. No add.
+					if (rdt.getDeleteData() != null && rdt.getAddData() == null) {
+						Set deleteSet = rdt.getDeleteData().keySet();
+	
+						XWPFParagraph c2Para = cell2.addParagraph();
+						c2Para.setAlignment(ParagraphAlignment.LEFT);
+						for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
+							XWPFRun letterRun = c2Para.createRun();
+							if (contrastItem.getOrignalText().charAt(j) == '\n') {
+								letterRun.addBreak();
+								continue;
+							}
+	
+							String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
+							if (deleteSet.contains(j)) {
+								deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
+							}
+							letterRun.setText(currentLetter);
+						}
+						c2Para.createRun().addBreak();
+	
+						XWPFParagraph c3Para = cell3.addParagraph();
+						c3Para.setAlignment(ParagraphAlignment.LEFT);
+						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
+							XWPFRun letterRun = c3Para.createRun();
+							if (rdt.getRevisedText().charAt(j) == '\n') {
+								letterRun.addBreak();
+								continue;
+							}
+							String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
+							if (deleteSet.contains(j)) {
+								deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
+							}
+							letterRun.setText(currentLetter);
+						}
+						c3Para.createRun().addBreak();
+					}
+					
+					/// Only add. No delete.
+					if (rdt.getRevisedText() != null && rdt.getAddData() != null && rdt.getDeleteData() == null) {
+						Set addSet = rdt.getAddData().keySet();
+	
+						XWPFParagraph c2Para = cell2.addParagraph();
+						c2Para.setAlignment(ParagraphAlignment.LEFT);
+						XWPFRun run = c2Para.createRun();
+						run.setText(contrastItem.getOrignalText());
 						run.addBreak();
-						run.setText(parentTitle);
+	
+						XWPFParagraph c3Para = cell3.addParagraph();
+						c3Para.setAlignment(ParagraphAlignment.LEFT);
+						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
+							XWPFRun letterRun = c3Para.createRun();
+							if (rdt.getRevisedText().charAt(j) == '\n') {
+								letterRun.addBreak();
+								continue;
+							}
+							String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
+							if (addSet.contains(j)) {
+								addEffect(letterRun, EFFECT_ADD_BOLD_UNDERLINE);
+							}
+							letterRun.setText(currentLetter);
+						}
+						c3Para.createRun().addBreak();
 					}
-				}
-
-				XWPFParagraph paragraph = cell.addParagraph();
-				paragraph.setAlignment(ParagraphAlignment.LEFT);
-
-				String deleteText = contrastItem.getOrignalText();
-				XWPFRun run = paragraph.createRun();
-				deleteEffect(run, EFFECT_DELETE_BOLD_STRIKE);
-				run.setText(deleteText);
-			}
-
-			if (changeType.equalsIgnoreCase("change")) {
-				RevisedDto rdt = contrastItem.getRevisedDto();
-				if (rdt == null) {
-					continue;
-				}
-
-				XWPFTableCell c1Cell = tableRow.getCell(1);
-				c1Cell.removeParagraph(0);
-				if (partIndex.size() >= 3) {
-					XWPFParagraph paragraph = c1Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					XWPFRun run = paragraph.createRun();
-					String parentTitle = "";
-					if (partIndex.size() >= 3) {
-						DocPart dp = (templateDoc.getParts().get(partIndex.get(0))).getChildPart()
-								.get(partIndex.get(1));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.setText(parentTitle);
-					}
-					if (partIndex.size() >= 4) {
-						DocPart dp = (templateDoc.getParts().get(partIndex.get(0))).getChildPart().get(partIndex.get(1))
-								.getChildPart().get(partIndex.get(2));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.addBreak();
-						run.setText(parentTitle);
-					}
-				}
-
-				XWPFTableCell c2Cell = tableRow.getCell(2);
-				c2Cell.removeParagraph(0);
-				if (samplePartIndex.size() >= 3) {
-					XWPFParagraph paragraph = c2Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					XWPFRun run = paragraph.createRun();
-					String parentTitle = "";
-					if (samplePartIndex.size() >= 3) {
-						DocPart dp = (sampleDoc.getParts().get(samplePartIndex.get(0))).getChildPart()
-								.get(samplePartIndex.get(1));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.setText(parentTitle);
-					}
-					if (samplePartIndex.size() >= 4) {
-						DocPart dp = (sampleDoc.getParts().get(samplePartIndex.get(0))).getChildPart()
-								.get(samplePartIndex.get(1)).getChildPart().get(samplePartIndex.get(2));
-						parentTitle = dp.getIndex() + dp.getTitle();
-						run.addBreak();
-						run.setText(parentTitle);
-					}
-				}
-
-				/// Only delete data. No add data.
-				if (rdt.getDeleteData() != null && rdt.getAddData() == null) {
-					Set deleteSet = rdt.getDeleteData().keySet();
-
-					XWPFParagraph paragraph = c1Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
-						XWPFRun letterRun = paragraph.createRun();
-						if (contrastItem.getOrignalText().charAt(j) == '\n') {
-							letterRun.addBreak();
-							continue;
+					
+					/// change: add + delete
+					if (rdt.getDeleteData() != null && rdt.getAddData() != null) {
+						Set deleteSet = rdt.getDeleteData().keySet();
+	
+						XWPFParagraph c2Para = cell2.addParagraph();
+						c2Para.setAlignment(ParagraphAlignment.LEFT);
+						for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
+							XWPFRun letterRun = c2Para.createRun();
+							if (contrastItem.getOrignalText().charAt(j) == '\n') {
+								letterRun.addBreak();
+								continue;
+							}
+							String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
+							if (deleteSet.contains(j)) {
+								deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
+							}
+							letterRun.setText(currentLetter);
 						}
-
-						String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
-						if (deleteSet.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
+						c2Para.createRun().addBreak();
+	
+						Set addSet = rdt.getAddData().keySet();
+	
+						XWPFParagraph c3Para = cell3.addParagraph();
+						c3Para.setAlignment(ParagraphAlignment.LEFT);
+						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
+							XWPFRun letterRun = c3Para.createRun();
+							if (rdt.getRevisedText().charAt(j) == '\n') {
+								letterRun.addBreak();
+								continue;
+							}
+							String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
+							if (addSet.contains(j)) {
+								addEffect(letterRun, EFFECT_ADD_BOLD_UNDERLINE);
+							}
+							letterRun.setText(currentLetter);
 						}
-						letterRun.setText(currentLetter);
-
-					}
-
-					XWPFParagraph paragraph1 = c2Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					for (int j = 0; j < rdt.getRevisedText().length(); j++) {
-						XWPFRun letterRun = paragraph1.createRun();
-						if (rdt.getRevisedText().charAt(j) == '\n') {
-							letterRun.addBreak();
-							continue;
-						}
-						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
-						if (deleteSet.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
-						}
-						letterRun.setText(currentLetter);
-					}
-				}
-
-				// Only add. No delete.
-				if (rdt.getRevisedText() != null && rdt.getAddData() != null && rdt.getDeleteData() == null) {
-					Set addSet = rdt.getAddData().keySet();
-
-					XWPFParagraph paragraph = c1Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					XWPFRun run = paragraph.createRun();
-					run.setText(contrastItem.getOrignalText());
-
-					XWPFParagraph paragraph1 = c2Cell.addParagraph();
-					paragraph1.setAlignment(ParagraphAlignment.LEFT);
-					for (int j = 0; j < rdt.getRevisedText().length(); j++) {
-						XWPFRun letterRun = paragraph1.createRun();
-						if (rdt.getRevisedText().charAt(j) == '\n') {
-							letterRun.addBreak();
-							continue;
-						}
-						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
-						if (addSet.contains(j)) {
-							addEffect(letterRun, EFFECT_ADD_BOLD_UNDERLINE);
-						}
-						letterRun.setText(currentLetter);
-					}
-				}
-				// change: add + delete
-				if (rdt.getDeleteData() != null && rdt.getAddData() != null) {
-					Set deleteSet = rdt.getDeleteData().keySet();
-
-					XWPFParagraph paragraph = c1Cell.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
-					for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
-						XWPFRun letterRun = paragraph.createRun();
-						if (contrastItem.getOrignalText().charAt(j) == '\n') {
-							letterRun.addBreak();
-							continue;
-						}
-						String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
-						if (deleteSet.contains(j)) {
-							deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
-						}
-						letterRun.setText(currentLetter);
-					}
-
-					Set addSet = rdt.getAddData().keySet();
-
-					XWPFParagraph paragraph1 = c2Cell.addParagraph();
-					paragraph1.setAlignment(ParagraphAlignment.LEFT);
-					for (int j = 0; j < rdt.getRevisedText().length(); j++) {
-						XWPFRun letterRun = paragraph1.createRun();
-						if (rdt.getRevisedText().charAt(j) == '\n') {
-							letterRun.addBreak();
-							continue;
-						}
-						String currentLetter = Character.toString(rdt.getRevisedText().charAt(j));
-						if (addSet.contains(j)) {
-							addEffect(letterRun, EFFECT_ADD_BOLD_UNDERLINE);
-						}
-						letterRun.setText(currentLetter);
-
+						c3Para.createRun().addBreak();
 					}
 				}
 			}

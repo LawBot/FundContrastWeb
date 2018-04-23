@@ -106,6 +106,13 @@ public class PatchDto implements Comparable<PatchDto> {
         this.partIndex = partIndex;
     }
     
+    public int getPartIndexDepth() {
+    	if(partIndex == null || partIndex.isEmpty()) {
+    		return 0;
+    	}
+    	return partIndex.size();
+    }
+    
     public List<Integer> getSamplePartIndex(){
     	return samplePartIndex;
     }
