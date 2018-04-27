@@ -16,8 +16,8 @@ public class DocPart implements Comparable<DocPart> {
     String title;
     String text;
     String index;
-    List<DocPart> childPart;
     String partCount;
+    List<DocPart> childPart;
     List<Integer> partId;
     List<Integer> partIndex;
 
