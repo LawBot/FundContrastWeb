@@ -99,12 +99,11 @@ public class GenerateCompareDoc {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
-				System.out.print(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ")__");
+				System.out.print(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
 			}
 			System.out.println("");
 		}
 
-		// int nRow = contrastList.size() + 1;
 		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));
@@ -180,16 +179,19 @@ public class GenerateCompareDoc {
 			XWPFTableCell cell2 = tableRow.getCell(TABLE_COLUMN_2);
 			cell2.removeParagraph(0);
 			XWPFParagraph p2 = cell2.addParagraph();
+			p2.setAlignment(ParagraphAlignment.LEFT);
 			
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
+				System.out.println("Here: " + firstItem.partIndexInStr());
 				List<Integer> partIndex = firstItem.getPartIndex();
 				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
 					
 					XWPFRun r2 = p2.createRun();
 					r2.setText(templateDoc.getPartTitle(tmpIndex));
+					r2.addBreak();
 				}
 			}
 			
@@ -197,6 +199,7 @@ public class GenerateCompareDoc {
 			XWPFTableCell cell3 = tableRow.getCell(TABLE_COLUMN_3);
 			cell3.removeParagraph(0);
 			XWPFParagraph p3 = cell3.addParagraph();
+			p3.setAlignment(ParagraphAlignment.LEFT);
 			
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
@@ -207,6 +210,7 @@ public class GenerateCompareDoc {
 					
 					XWPFRun r3 = p3.createRun();
 					r3.setText(sampleDoc.getPartTitle(tmpIndex));
+					r3.addBreak();
 				}
 			}
 
@@ -218,10 +222,10 @@ public class GenerateCompareDoc {
 
 				if (changeType.equalsIgnoreCase("delete")) {
 					/// Column 2
-					XWPFParagraph paragraph = cell2.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
+					XWPFParagraph paragraph2 = cell2.addParagraph();
+					paragraph2.setAlignment(ParagraphAlignment.LEFT);
 					String deleteText = contrastItem.getOrignalText();
-					XWPFRun run = paragraph.createRun();
+					XWPFRun run = paragraph2.createRun();
 					deleteEffect(run, EFFECT_DELETE_BOLD_STRIKE);
 					run.setText(deleteText);
 					run.addBreak();
@@ -234,11 +238,11 @@ public class GenerateCompareDoc {
 					// Do nothing
 					
 					/// Column 3
-					XWPFParagraph paragraph = cell3.addParagraph();
-					paragraph.setAlignment(ParagraphAlignment.LEFT);
+					XWPFParagraph paragraph3 = cell3.addParagraph();
+					paragraph3.setAlignment(ParagraphAlignment.LEFT);
 	
 					String addText = contrastItem.getRevisedDto().getRevisedText();
-					XWPFRun run = paragraph.createRun();
+					XWPFRun run = paragraph3.createRun();
 					addEffect(run, EFFECT_ADD_BOLD_UNDERLINE);
 					run.setText(addText);
 					run.addBreak();
