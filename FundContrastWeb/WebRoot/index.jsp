@@ -54,7 +54,7 @@
          color: #fff;
          padding: 0 23px;
          margin-left: 13px;
-         cursor: pointer;
+         
          }
          .btn_grey {
          background-color: #4b5760;
@@ -79,6 +79,9 @@
          margin-top: 8%;
          }
          .circle2 {
+         margin-top: 2%;
+         }
+         .circle3 {
          margin-top: 2%;
          }
          .item {
@@ -248,7 +251,7 @@
          </div>
       </div>
       <script src="./files/jquery-2.1.1.min.js.Download"></script>
-      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> 
+      <script src="./js/jquery-2.0.3.min.js"></script> 
 	  <script src="./js/form.js"></script>
          <script>
 
@@ -282,6 +285,8 @@
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
                   <input type="hidden" name="uploadName" id="uploadName">
+                  <input type="hidden" name="fundType" id="fundType"/> 
+                  <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
                   <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
                   <div class="btn c_grey" id="updateBtn" >上传文件</div>
@@ -289,27 +294,38 @@
                </div>
             </div>
             <div class="circle1">
-               <ul>
-                  <li class="item a" id="foundType"><span>基金类型</span></a></li>
-                  <li class="item c_grey" id="btn_stockType"><a><span>股票型</span></a></li>
-                  <li class="item c_grey" id="btn_exponentType"><a><span>指数型</span></a></li>
-                  <li class="item c_grey" id="btn_bondType"><a><span>债卷型</span></a></li>
-                  <li class="item c_grey" id="btn_currencyMarket"><a><span>货币市场</span></a></li>
-               </ul>
-               </div>
-               <div class="circle2">
-               <ul>
-                  <li class="item a" id="issuer"><span>发行单位</span></a></li>
-                  <li class="item c_grey" id="btn_gongyin"><a><span>工银瑞信</span></a></li>
-                  <li class="item c_grey" id="btn_huaxia"><a><span>华夏基金</span></a></li>
-                  <li class="item c_grey" id="btn_jiutai"><a><span>九泰基金</span></a></li>
-                  <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
-               </ul>
+            <ul>
+               <li class="item a" id="foundType"><a ><span>基金类型</span></a></li>
+               <li class="item c_grey" id="btn_stockType" onclick="clickJijin('btn_stockType');" data-id="0"><a id="1"><span id="2">股票型</span></a></li>
+               <li class="item c_grey" id="btn_exponentType" onclick="clickJijin('btn_exponentType');" data-id="1"><a><span>指数型</span></a></li>
+               <li class="item c_grey" id="btn_bondType" onclick="clickJijin('btn_bondType');" data-id="2"><a><span>债卷型</span></a></li>
+               <li class="item c_grey" id="btn_currencyMarket" onclick="clickJijin('btn_currencyMarket');" data-id="3"><a><span>货币市场</span></a></li>
+            </ul>
+            </div>
+            <div class="circle2">
+            <ul>
+               <li class="item a" id="issuer"><a><span>发行单位</span></a></li>
+               <li class="item c_grey" id="btn_gongyin" onclick="clickFaxing('btn_gongyin');" data-id="1"><a><span>工银瑞信</span></a></li>
+               <li class="item c_grey" id="btn_huaxia" onclick="clickFaxing('btn_huaxia');" data-id="2"><a><span>华夏基金</span></a></li>
+               <li class="item c_grey" id="btn_jiutai" onclick="clickFaxing('btn_jiutai');" data-id="3"><a><span>九泰基金</span></a></li>
+               <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
+            </ul>
+            <input type="hidden" id="jjSelect" >
+            <input type="hidden" id="fxSelect" >
+            </div>
+            <div class="circle3">
+            <ul>
+               <li class="item a" id="updateReason"><a><span>修改理由</span></a></li>
+               <li class="btn" id="reason_y" onclick="clickReason('1');"><a><span>有</span></a></li>
+               <li class="item  c_grey" id="reason_n" onclick="clickReason('0');"><a><span>无</span></a></li>
+               <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
+               <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
+            </ul>
             </div>
             <div class="download">
                <div>
                	  <form action="download.do" id="downloadForm">
-                        <input type="hidden" name="fileName" id="fileName">
+                        <input type="hidden" name="fileName" id="fileName"/>
                         <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
                         <div class="btn c_grey" id="downloadBtn">下载对照表</div>
                    </form>
@@ -431,6 +447,8 @@
     		  return;
     	  }
     	  $("#uploadName").val($("#file").val());
+    	  //基金类型
+    	  $("#fundType").val($(".circle2").find(".btn").eq(0).attr('data-id')+$(".circle1").find(".btn").eq(0).attr('data-id'));
       	 $("#fileDataForm").submit();
 
       }
@@ -464,59 +482,70 @@
           document.getElementById('btn_bondType').className='item c_grey';
           document.getElementById('btn_currencyMarket').className='item c_grey';
           
+          document.getElementById('btn_gongyin').removeAttribute('onclick');
           
           if (responseText>0) {
+        	  if($("#reasonColumn").val()=='0'){
+        		 $("#reason_n").attr('class','btn');
+         		 $("#reason_y").attr('class','item c_grey');
+        	  }
+        	  
         	  alert("上传成功");  
-        	  if(responseText == 10){
-        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-        		  document.getElementById('btn_stockType').setAttribute('class','btn');
+        	  if($("#fundType").val()==null || $("#fundType").val()=="" || $("#fundType").val()=="NaN"){
+        		  $("#fundType").val(responseText);
+        	  }else{
+        		  responseText = $("#fundType").val();
         	  }
-        	  if(responseText == 11){
-        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 12){
-        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-        		  document.getElementById('btn_bondType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 13){
-        		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-        	  }
-        	  
-        	  if(responseText == 20){
-        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-        		  document.getElementById('btn_stockType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 21){
-        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 22){
-        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-        		  document.getElementById('btn_bondType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 23){
-        		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-        	  }
-        	  
-        	  if(responseText == 30){
-        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-        		  document.getElementById('btn_stockType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 31){
-        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-        		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 32){
-        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-        		  document.getElementById('btn_bondType').setAttribute('class','btn');
-        	  }
-        	  if(responseText == 33){
-        		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-        		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-        	  }
+        		  if(responseText == 10){
+            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+            		  document.getElementById('btn_stockType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 11){
+            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 12){
+            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+            		  document.getElementById('btn_bondType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 13){
+            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
+            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+            	  }
+            	  
+            	  if(responseText == 20){
+            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+            		  document.getElementById('btn_stockType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 21){
+            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 22){
+            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+            		  document.getElementById('btn_bondType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 23){
+            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
+            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+            	  }
+            	  
+            	  if(responseText == 30){
+            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+            		  document.getElementById('btn_stockType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 31){
+            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 32){
+            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+            		  document.getElementById('btn_bondType').setAttribute('class','btn');
+            	  }
+            	  if(responseText == 33){
+            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
+            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
+            	  }
 		  }else {
 			  alert("上传失败");
 		  }
@@ -531,12 +560,62 @@
   }  
       
       function downloadClicked (){  
+    	  
     	  var file = $("#targetFile1").val();
     	  var pos=file.lastIndexOf("\\");
     	  $("#fileName").val($("#file").val());
-    	  $("#downloadForm").submit();
+    	  //alert($("#jjSelect").val() +$("#fxSelect").val());
+    	 
+    	  
+    	  /*  $("#downloadForm").submit(); */
            
       } 
+      
+      
+     /*  $(".wrap .circle1 li").click(function() {
+    	  alert($("this").attr('id'));
+			$("this").removeClass("c_grey");
+    	  
+	  })  */
+	  
+	   function clickJijin(id){
+		   /* $(".circle1 li").each(function(){
+			   alert($("this").html());
+		   }) */
+		// alert($("#"+id).removeClass("c_grey"));
+		   $("#"+id).parent().find(".item").addClass('c_grey');
+		  // $("#"+id).parent().find(".a").attr('class','btn');
+		   //$("#"+id).parent().find(".a").eq(0).removeClass('btn');
+		   $("#"+id).parent().find(".a").removeClass('c_grey');
+		   $("#"+id).removeClass("c_grey");
+		   $("#"+id).parent().find(".btn").attr('class','item c_grey');
+		   $("#"+id).attr('class','btn');
+		   $("#jjSelect").val($("#"+id).attr('data-id'));
+      } 
+     
+     function clickFaxing(id){
+    	   $("#"+id).parent().find(".item").addClass('c_grey');
+		 // $("#"+id).parent().find(".a").attr('class','btn');
+		   //$("#"+id).parent().find(".a").eq(0).removeClass('btn');
+		   $("#"+id).parent().find(".a").removeClass('c_grey');
+		   $("#"+id).removeClass("c_grey");
+		   $("#"+id).parent().find(".btn").attr('class','item c_grey');
+		   $("#"+id).attr('class','btn');
+		   $("#fxSelect").val($("#"+id).attr('data-id'));
+    	 
+     }
+     
+     function clickReason(reasonColumn){
+    	 if(reasonColumn == '1'){
+    		 $("#reason_y").attr('class','btn');
+    		 $("#reason_n").attr('class','item c_grey');
+    	 }else{
+    		 $("#reason_n").attr('class','btn');
+    		 $("#reason_y").attr('class','item c_grey');
+    	 }
+    	 
+    	 $("#reasonColumn").val(reasonColumn);
+     }
 
       </script>
    </body>

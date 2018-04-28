@@ -45,7 +45,11 @@ public class FileController {
 			String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
 	        System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
 	        String path = request.getSession().getServletContext().getRealPath("/");
-	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path);
+	        String fundType = request.getParameter("fundType");
+	        String reasonColumn = request.getParameter("reasonColumn");
+	        System.out.println(request.getParameter("fundType"));
+	        System.out.println(request.getParameter("reasonColumn"));
+	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
 	        System.out.println("Result: " + errorCode);
 	        map.put("errorCode", errorCode+"");
 	        init(request);
@@ -61,20 +65,20 @@ public class FileController {
         }
     }
     
-    @RequestMapping(value="/doCompare")
-    @ResponseBody
-    public void compare(HttpServletRequest request){
-    	try {
-    		String fileName=new String((request.getParameter("fileName")).getBytes("iso-8859-1"),"utf-8");
-    		String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
-            System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
-            String path = request.getServletContext().getContextPath();
-            int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",request.getSession().getServletContext().getRealPath("/"));
-            System.out.println("Result: " + errorCode);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-    }
+//    @RequestMapping(value="/doCompare")
+//    @ResponseBody
+//    public void compare(HttpServletRequest request){
+//    	try {
+//    		String fileName=new String((request.getParameter("fileName")).getBytes("iso-8859-1"),"utf-8");
+//    		String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
+//            System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
+//            String path = request.getServletContext().getContextPath();
+//            int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",request.getSession().getServletContext().getRealPath("/"));
+//            System.out.println("Result: " + errorCode);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//    }
 
     /**
      * 页面跳转

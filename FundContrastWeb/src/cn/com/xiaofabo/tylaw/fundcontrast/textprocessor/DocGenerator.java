@@ -73,7 +73,7 @@ public class DocGenerator {
      * @param outputDocPath
      * @return
      */
-    public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir) throws Exception {
+    public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir,String fundType, String reasonColumn) throws Exception {
     	int statusCode = 0;
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
