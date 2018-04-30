@@ -51,9 +51,10 @@
          display: inline-block;
          line-height: 48px;
          height: 48px;
+         width: 117px;
          color: #fff;
          padding: 0 23px;
-         margin-left: 13px;
+         margin: 0px 16px 0px 11px;
          
          }
          .btn_grey {
@@ -111,12 +112,15 @@
          cursor: pointer;
          }
          #updateBtn {
+         	cursor: pointer;
          }
          #updateBtnAktiv {
 
          }
          #downloadBtn {
-
+			cursor: pointer;
+			width: 130px;
+			background-color: #4b5760;
          }
       </style>
    </head>
