@@ -7,124 +7,45 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <title>{LawBot}</title>
       <style>
-         body {
-         background-color: rgba(0, 0, 0, .8);
+         #footer {
+         padding-top: 60px;
+         background-color: #3b4348;
+         color: #fff;
          }
-         .main {
-         /*
-         * 	position: fixed;
-         top: 60px;
-         right: 0;
-         bottom: 0;
-         left: 0;
-         */
-         padding-top: 1em;
-         padding-bottom: 12em;
-         background-image: url(images/bg.png);
-         background-size: cover;
-         background-position: center;
-         background-repeat: no-repeat;
-         color: white;
-         }
-         .wrap {
+         .fUl {
          margin: 0 auto;
          max-width: 1096px;
-         margin-top: 12%;
-         text-align: center;
          }
-         .search {
+         .f_item {
+         display: inline-flex;
+         padding-left: 30px;
+         margin-bottom: 50px;
+         width: 20%;
          }
-         .searchBtn{
-         margin-top: 1%;
+         .h_item {
+         font-size: 18px;
+         margin-bottom: 20px;
          }
-         .download{
-         margin-top: 5%;
+         .fhI {
+         margin-bottom: 6px;
+         font-size: 14px;
          }
-         .file {
-         width: 700px;
-         line-height: 48px;
-         height: 48px;
-         text-indent: 10px;
-         }
-         .btn {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 48px;
-         width: 117px;
+         .fhI a {
          color: #fff;
-         padding: 0 23px;
-         margin: 0px 16px 0px 11px;
-         
-         }
-         .btn_grey {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 48px;
-         color: #808080;
-         padding: 0 23px;
-         margin-left: 13px;
-         }
-         .downloadBtn_grey {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 60px;
-         width: 170px;
-         color: #808080;
-         padding: 0 23px;
-         margin-left: 13px;
-         }
-         .circle1 {
-         margin-top: 8%;
-         }
-         .circle2 {
-         margin-top: 2%;
-         }
-         .circle3 {
-         margin-top: 2%;
-         }
-         .item {
-         display: inline-block;
-         width: 117px;
-         height: 45px;
-         padding-top: 12px;
-         margin: 0px 16px 0px 11px;
-         }
-         .c1 { background-color: #a2c6f2; }
-         .c2 { background-color: #02d1a9; }
-         .c3 { background-color: #01d6de; }
-         .c4 { background-color: #01a8df; }
-         .c5 { background-color: #0180cf; }
-         .c6 { opacity: 0; }
-         .c_grey{ background-color:#808080; }
-         .item a {
-         color: #fff;
+         font-size: 14px;
          text-decoration: none;
-         width: 150px;
-         height: 150px;
          }
-         .item a span {
-         font-size: 15px;
+         .copyright {
+         font-size: 12px;
          }
-         #selectBtn {
-         cursor: pointer;
+         .logoText a{
+         font-size: 30px;
+         font-family: monospace;text-decoration: none;color: #fff;
          }
-         #updateBtn {
-         	cursor: pointer;
-         }
-         #updateBtnAktiv {
-
-         }
-         #downloadBtn {
-			cursor: pointer;
-			width: 130px;
-			background-color: #4b5760;
+         .bl {
+         border-left: 1px solid #272e31;
          }
       </style>
-   </head>
-   <body>
       <style>
          * {
          padding: 0;
@@ -241,6 +162,127 @@
 		
 		}
       </style>
+      <style>
+         body {
+         background-color: rgba(0, 0, 0, .8);
+         }
+         .main {
+         /*
+         * 	position: fixed;
+         top: 60px;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         */
+         padding-top: 1em;
+         padding-bottom: 12em;
+         background-image: url(images/bg.png);
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+         color: white;
+         }
+         .wrap {
+         margin: 0 auto;
+         max-width: 1096px;
+         margin-top: 12%;
+         text-align: center;
+         }
+         .search {
+         }
+         .searchBtn{
+         margin-top: 1%;
+         }
+         .download{
+         margin-top: 5%;
+         }
+         .file {
+         width: 550px;
+         line-height: 48px;
+         height: 48px;
+         text-indent: 10px;
+         margin-left: 40px;
+         }
+         .btn {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         width: 117px;
+         color: #fff;
+         padding: 0 23px;
+         margin: 0px 16px 0px 11px;
+         
+         }
+         .btn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .downloadBtn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 60px;
+         width: 170px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .circle1 {
+         margin-top: 5%;
+         }
+         .circle2 {
+         margin-top: 2%;
+         }
+         .circle3 {
+         margin-top: 2%;
+         }
+         .item {
+         display: inline-block;
+         width: 117px;
+         height: 45px;
+         padding-top: 12px;
+         margin: 0px 16px 0px 11px;
+         cursor: pointer;
+         }
+         .c1 { background-color: #a2c6f2; }
+         .c2 { background-color: #02d1a9; }
+         .c3 { background-color: #01d6de; }
+         .c4 { background-color: #01a8df; }
+         .c5 { background-color: #0180cf; }
+         .c6 { opacity: 0; }
+         .c_grey{ background-color:#808080; }
+         .item a {
+         color: #fff;
+         text-decoration: none;
+         width: 150px;
+         height: 150px;
+         }
+         .item a span {
+         font-size: 15px;
+         }
+         #selectBtn {
+         cursor: pointer;
+         }
+         #updateBtn {
+         	cursor: pointer;
+         }
+         #updateBtnAktiv {
+
+         }
+         #downloadBtn {
+			cursor: pointer;
+			width: 130px;
+			background-color: #4b5760;
+         }
+      </style>
+   </head>
+   <body>
       <div id="head">
          <div class="head_box">
             <div class="logo" onclick="window.location.href=&#39;index.html&#39;">
@@ -250,7 +292,7 @@
             <ul class="nav">
                <li class="nav_title"><a href="https://" id="foundCompareId" style="color: rgb(255, 255, 255);"><span>基金条文对照</span></a></li>
                <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li>
-               <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html"" id="aboutId"><span>关于我们</span></a></li>
+               <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html" id="aboutId"><span>关于我们</span></a></li>
             </ul>
          </div>
       </div>
@@ -284,7 +326,7 @@
             <div class="search">
                <div>
                   <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
-                  </div>
+                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
                   <div class = "searchBtn">
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
@@ -292,36 +334,26 @@
                   <input type="hidden" name="fundType" id="fundType"/> 
                   <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
-                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
-                  <div class="btn c_grey" id="updateBtn" >上传文件</div>
+                  
                    </form>
                </div>
+                  </div>
+                  
             </div>
             <div class="circle1">
             <ul>
                <li class="item a" id="foundType"><a ><span>基金类型</span></a></li>
-               <li class="item c_grey" id="btn_stockType" onclick="clickJijin('btn_stockType');" data-id="0"><a id="1"><span id="2">股票型</span></a></li>
+               <li class="btn" id="btn_stockType" onclick="clickJijin('btn_stockType');" data-id="0"><a id="1"><span id="2">股票型</span></a></li>
                <li class="item c_grey" id="btn_exponentType" onclick="clickJijin('btn_exponentType');" data-id="1"><a><span>指数型</span></a></li>
                <li class="item c_grey" id="btn_bondType" onclick="clickJijin('btn_bondType');" data-id="2"><a><span>债卷型</span></a></li>
                <li class="item c_grey" id="btn_currencyMarket" onclick="clickJijin('btn_currencyMarket');" data-id="3"><a><span>货币市场</span></a></li>
             </ul>
             </div>
-            <div class="circle2">
-            <ul>
-               <li class="item a" id="issuer"><a><span>发行单位</span></a></li>
-               <li class="item c_grey" id="btn_gongyin" onclick="clickFaxing('btn_gongyin');" data-id="1"><a><span>工银瑞信</span></a></li>
-               <li class="item c_grey" id="btn_huaxia" onclick="clickFaxing('btn_huaxia');" data-id="2"><a><span>华夏基金</span></a></li>
-               <li class="item c_grey" id="btn_jiutai" onclick="clickFaxing('btn_jiutai');" data-id="3"><a><span>九泰基金</span></a></li>
-               <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
-            </ul>
-            <input type="hidden" id="jjSelect" >
-            <input type="hidden" id="fxSelect" >
-            </div>
             <div class="circle3">
             <ul>
                <li class="item a" id="updateReason"><a><span>修改理由</span></a></li>
                <li class="btn" id="reason_y" onclick="clickReason('1');"><a><span>有</span></a></li>
-               <li class="item  c_grey" id="reason_n" onclick="clickReason('0');"><a><span>无</span></a></li>
+               <li class="item c_grey" id="reason_n" onclick="clickReason('0');"><a><span>无</span></a></li>
                <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
                <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
             </ul>
@@ -337,46 +369,6 @@
             </div>
          </div>
       </div>
-      <style>
-         #footer {
-         padding-top: 60px;
-         background-color: #3b4348;
-         color: #fff;
-         }
-         .fUl {
-         margin: 0 auto;
-         max-width: 1096px;
-         }
-         .f_item {
-         display: inline-flex;
-         padding-left: 30px;
-         margin-bottom: 50px;
-         width: 20%;
-         }
-         .h_item {
-         font-size: 18px;
-         margin-bottom: 20px;
-         }
-         .fhI {
-         margin-bottom: 6px;
-         font-size: 14px;
-         }
-         .fhI a {
-         color: #fff;
-         font-size: 14px;
-         text-decoration: none;
-         }
-         .copyright {
-         font-size: 12px;
-         }
-         .logoText a{
-         font-size: 30px;
-         font-family: monospace;text-decoration: none;color: #fff;
-         }
-         .bl {
-         border-left: 1px solid #272e31;
-         }
-      </style>
  <div id="footer">
 	<ul class="fUl">
 		<li class="f_item" style="width:35%;"> 
@@ -413,7 +405,7 @@
 				<li class="h_item">关于</li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">关于我们</a></li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">联系我们</a></li>
-				<li class="fhI">legallab@hotmail.com</li>
+				<li class="fhI">xiaofabo@xiaofabo.com.cn</li>
 			</ul>
 		</li>
 	</ul>
