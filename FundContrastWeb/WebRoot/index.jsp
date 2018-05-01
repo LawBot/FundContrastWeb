@@ -337,6 +337,7 @@
                   
                    </form>
                </div>
+               <div class="btn c_grey" id="updateBtn" >上传文件</div>
                   </div>
                   
             </div>
@@ -444,7 +445,7 @@
     	  }
     	  $("#uploadName").val($("#file").val());
     	  //基金类型
-    	  $("#fundType").val($(".circle2").find(".btn").eq(0).attr('data-id')+$(".circle1").find(".btn").eq(0).attr('data-id'));
+    	  $("#fundType").val($(".circle1").find(".btn").eq(0).attr('data-id'));
       	 $("#fileDataForm").submit();
 
       }

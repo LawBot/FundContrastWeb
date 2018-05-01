@@ -47,8 +47,9 @@ public class FileController {
 	        String path = request.getSession().getServletContext().getRealPath("/");
 	        String fundType = request.getParameter("fundType");
 	        String reasonColumn = request.getParameter("reasonColumn");
-	        System.out.println(request.getParameter("fundType"));
-	        System.out.println(request.getParameter("reasonColumn"));
+	        System.out.println(path);
+	        System.out.println("Fund type: " + request.getParameter("fundType"));
+	        System.out.println("Reason Column: " + request.getParameter("reasonColumn"));
 	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
 	        System.out.println("Result: " + errorCode);
 	        map.put("errorCode", errorCode+"");

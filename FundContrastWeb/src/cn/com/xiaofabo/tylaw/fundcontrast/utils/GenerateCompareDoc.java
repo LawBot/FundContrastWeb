@@ -64,8 +64,12 @@ public class GenerateCompareDoc {
 	/// 1.0cm ~= 567L
 	public static final BigInteger TABLE_COLUMN_1_WIDTH = BigInteger.valueOf(1133L); /// ~2.0cm
 	public static final BigInteger TABLE_COLUMN_2_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
-	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~7.5cm
-	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~4.5cm
+	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
+	
+	public static final BigInteger TABLE_COLUMN_2_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
+	public static final BigInteger TABLE_COLUMN_3_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
+	
+	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~3.5cm
 
 	public static final int TABLE_CELL_MARGIN_TOP = 100;
 	public static final int TABLE_CELL_MARGIN_LEFT = 100;
@@ -91,7 +95,7 @@ public class GenerateCompareDoc {
 	String headerContent = "条文对照表测试文本";
 
 	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
-			FundDoc sampleDoc, String outputPath) throws IOException {
+			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 		log.info("Create an empty document");
 
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
@@ -116,7 +120,8 @@ public class GenerateCompareDoc {
 		generateLeadingText(document, leadingText);
 
 		/// Generate contrast table
-		XWPFTable table = document.createTable(nRow, 4);
+		int nColumn = 4 - (1 - reasonColumn);
+		XWPFTable table = document.createTable(nRow, nColumn);
 		table.setCellMargins(TABLE_CELL_MARGIN_TOP, TABLE_CELL_MARGIN_LEFT, TABLE_CELL_MARGIN_BOTTOM,
 				TABLE_CELL_MARGIN_RIGHT);
 		CTTblWidth width = table.getCTTbl().addNewTblPr().addNewTblW();
@@ -128,7 +133,7 @@ public class GenerateCompareDoc {
 		/// Generate table header
 		XWPFTableRow tableRowOne = table.getRow(0);
 		tableRowOne.setRepeatHeader(true);
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < nColumn; ++i) {
 			XWPFTableCell cell = tableRowOne.getCell(i);
 			cell.getCTTc().addNewTcPr().addNewShd().setFill(TABLE_HEADER_BGCOLOR);
 			BigInteger columnWidth = null;
@@ -184,7 +189,6 @@ public class GenerateCompareDoc {
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
-				System.out.println("Here: " + firstItem.partIndexInStr());
 				List<Integer> partIndex = firstItem.getPartIndex();
 				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx+1);

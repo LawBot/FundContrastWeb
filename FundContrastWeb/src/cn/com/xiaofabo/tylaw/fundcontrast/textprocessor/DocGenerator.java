@@ -75,6 +75,9 @@ public class DocGenerator {
      */
     public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir,String fundType, String reasonColumn) throws Exception {
     	int statusCode = 0;
+    	int fType = Integer.parseInt(fundType);
+    	int rColumn = Integer.parseInt(reasonColumn);
+    	
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
             sampleDocProcessor.readText(inputSampleDocPath);
@@ -85,21 +88,22 @@ public class DocGenerator {
 
         FundDoc sampleDoc = sampleDocProcessor.process();
 
-        if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
-            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
-        }
-        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)) {
-        	statusCode += 10;
-        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)) {
-        	statusCode += 20;
-        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)) {
-        	statusCode += 30;
-        }else {
-            return STATUS_ERROR_FUND_EST_UNKNOWN;
-        }
+//        if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
+//            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
+//        }
+//        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)) {
+//        	statusCode += 10;
+//        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)) {
+//        	statusCode += 20;
+//        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)) {
+//        	statusCode += 30;
+//        }else {
+//            return STATUS_ERROR_FUND_EST_UNKNOWN;
+//        }
 
         String templateDocPath;
-        switch (sampleDoc.getType()) {
+        
+        switch (fType) {
             case 0:
             	statusCode += 0;
                 templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_STOCK_C;
@@ -139,7 +143,7 @@ public class DocGenerator {
         leadingTextSB.append(sampleDoc.getContractName());
         leadingTextSB.append("募集申请材料之");
         leadingTextSB.append(outputFileTitle);
-        switch (sampleDoc.getType()) {
+        switch (fType) {
             case 0:
                 leadingTextSB.append(LEADING_TEXT_STOCK);
                 break;
@@ -167,7 +171,7 @@ public class DocGenerator {
         }
 
         try {
-            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath);
+            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath, rColumn);
         } catch (IOException e) {
             e.printStackTrace();
             return STATUS_ERROR_OUTPUT_IO_ERROR;
