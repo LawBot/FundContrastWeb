@@ -1,7 +1,6 @@
 package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
