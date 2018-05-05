@@ -1,6 +1,7 @@
 package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class FileController {
      */
     @RequestMapping(value="/uploadFile")
     @ResponseBody
-    public int uploadFile(HttpServletRequest request,ModelMap map){
+    public int uploadFile(HttpServletRequest request,ModelMap map, HttpServletResponse response){
         init(request);
         try {
             fileUtil.upload(request);
@@ -46,9 +47,8 @@ public class FileController {
 	        String path = request.getSession().getServletContext().getRealPath("/");
 	        String fundType = request.getParameter("fundType");
 	        String reasonColumn = request.getParameter("reasonColumn");
-	        System.out.println(path);
-	        System.out.println("Fund type: " + request.getParameter("fundType"));
-	        System.out.println("Reason Column: " + request.getParameter("reasonColumn"));
+	        System.out.println(request.getParameter("fundType"));
+	        System.out.println(request.getParameter("reasonColumn"));
 	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
 	        System.out.println("Result: " + errorCode);
 	        map.put("errorCode", errorCode+"");
@@ -57,6 +57,16 @@ public class FileController {
 	        modelAndView.addObject("errorCode",errorCode+"");
 	        request.setAttribute("errorCode", errorCode+"");
             return errorCode;
+	        
+	        
+//	        String downloadfFileName = "条文对照表.docx";
+//          downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
+//          String fileName = downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
+//          String userAgent = request.getHeader("User-Agent").toLowerCase();
+//          byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? downloadfFileName.getBytes() : downloadfFileName.getBytes("UTF-8");
+//          downloadfFileName = new String(bytes, "ISO-8859-1");
+//          response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", downloadfFileName));
+//          fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx", response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
             ModelAndView modelAndView = new ModelAndView("index");
@@ -113,7 +123,7 @@ public class FileController {
      */
     @RequestMapping(value="/download")
     @ResponseBody
-    public void download(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception{
     	try {
             String downloadfFileName = "条文对照表.docx";
 //            downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
