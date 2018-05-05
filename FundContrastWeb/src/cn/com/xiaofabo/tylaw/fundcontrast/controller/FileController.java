@@ -50,7 +50,7 @@ public class FileController {
 	        System.out.println(request.getParameter("fundType"));
 	        System.out.println(request.getParameter("reasonColumn"));
 	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
-	        System.out.println("Result: " + errorCode);
+	        System.out.println("DocGenerator.generate return code: " + errorCode);
 	        map.put("errorCode", errorCode+"");
 	        init(request);
 	        ModelAndView modelAndView = new ModelAndView("index");

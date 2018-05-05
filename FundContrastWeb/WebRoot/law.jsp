@@ -41,10 +41,11 @@
          margin-top: 5%;
          }
          .file {
-         width: 700px;
+         width: 550px;
          line-height: 48px;
          height: 48px;
          text-indent: 10px;
+         margin-left: 40px;
          }
          .btn {
          background-color: #4b5760;
@@ -55,7 +56,7 @@
          color: #fff;
          padding: 0 23px;
          margin: 0px 16px 0px 11px;
-         
+         cursor: pointer;
          }
          .btn_grey {
          background-color: #4b5760;
@@ -77,7 +78,7 @@
          margin-left: 13px;
          }
          .circle1 {
-         margin-top: 8%;
+         margin-top: 5%;
          }
          .circle2 {
          margin-top: 2%;
@@ -91,6 +92,7 @@
          height: 45px;
          padding-top: 12px;
          margin: 0px 16px 0px 11px;
+         cursor: pointer;
          }
          .c1 { background-color: #a2c6f2; }
          .c2 { background-color: #02d1a9; }
@@ -113,6 +115,7 @@
          }
          #updateBtn {
          	cursor: pointer;
+         	width: 130px;
          }
          #updateBtnAktiv {
 
@@ -284,7 +287,8 @@
             <div class="search">
                <div>
                   <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
-                  </div>
+                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
+                  
                   <div class = "searchBtn">
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
@@ -292,9 +296,10 @@
                   <input type="hidden" name="fundType" id="fundType"/> 
                   <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
-                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
-                  <div class="btn c_grey" id="updateBtn" >上传文件</div>
+                 
+                  
                    </form>
+                    </div>
                </div>
             </div>
             <div class="circle1">
@@ -321,6 +326,7 @@
                <div>
                	  <form action="download.do" id="downloadForm">
                         <input type="hidden" name="fileName" id="fileName"/>
+                        <div class="btn c_grey" id="updateBtn" >生成对照表</div>
                         <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
                    </form>
                </div>

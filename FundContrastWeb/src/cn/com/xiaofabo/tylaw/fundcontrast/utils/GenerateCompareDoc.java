@@ -98,15 +98,17 @@ public class GenerateCompareDoc {
 			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 		log.info("Create an empty document");
 
+		StringBuilder sb = new StringBuilder();
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
-				System.out.print(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
+				sb.append(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
 			}
-			System.out.println("");
+			sb.append("\n");
 		}
+		log.info(sb.toString());
 
 		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();

@@ -7,45 +7,127 @@
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <title>{LawBot}</title>
       <style>
-         #footer {
-         padding-top: 60px;
-         background-color: #3b4348;
-         color: #fff;
+         body {
+         background-color: rgba(0, 0, 0, .8);
          }
-         .fUl {
+         .main {
+         /*
+         * 	position: fixed;
+         top: 60px;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         */
+         padding-top: 1em;
+         padding-bottom: 12em;
+         background-image: url(images/bg.png);
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+         color: white;
+         }
+         .wrap {
          margin: 0 auto;
          max-width: 1096px;
+         margin-top: 12%;
+         text-align: center;
          }
-         .f_item {
-         display: inline-flex;
-         padding-left: 30px;
-         margin-bottom: 50px;
-         width: 20%;
+         .search {
          }
-         .h_item {
-         font-size: 18px;
-         margin-bottom: 20px;
+         .searchBtn{
+         margin-top: 1%;
          }
-         .fhI {
-         margin-bottom: 6px;
-         font-size: 14px;
+         .download{
+         margin-top: 5%;
          }
-         .fhI a {
+         .file {
+         width: 550px;
+         line-height: 48px;
+         height: 48px;
+         text-indent: 10px;
+         margin-left: 40px;
+         }
+         .btn {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         width: 117px;
          color: #fff;
-         font-size: 14px;
+         padding: 0 23px;
+         margin: 0px 16px 0px 11px;
+         cursor: pointer;
+         }
+         .btn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 48px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .downloadBtn_grey {
+         background-color: #4b5760;
+         display: inline-block;
+         line-height: 48px;
+         height: 60px;
+         width: 170px;
+         color: #808080;
+         padding: 0 23px;
+         margin-left: 13px;
+         }
+         .circle1 {
+         margin-top: 5%;
+         }
+         .circle2 {
+         margin-top: 2%;
+         }
+         .circle3 {
+         margin-top: 2%;
+         }
+         .item {
+         display: inline-block;
+         width: 117px;
+         height: 45px;
+         padding-top: 12px;
+         margin: 0px 16px 0px 11px;
+         cursor: pointer;
+         }
+         .c1 { background-color: #a2c6f2; }
+         .c2 { background-color: #02d1a9; }
+         .c3 { background-color: #01d6de; }
+         .c4 { background-color: #01a8df; }
+         .c5 { background-color: #0180cf; }
+         .c6 { opacity: 0; }
+         .c_grey{ background-color:#808080; }
+         .item a {
+         color: #fff;
          text-decoration: none;
+         width: 150px;
+         height: 150px;
          }
-         .copyright {
-         font-size: 12px;
+         .item a span {
+         font-size: 15px;
          }
-         .logoText a{
-         font-size: 30px;
-         font-family: monospace;text-decoration: none;color: #fff;
+         #selectBtn {
+         cursor: pointer;
          }
-         .bl {
-         border-left: 1px solid #272e31;
+         #updateBtn {
+         	cursor: pointer;
+         	width: 130px;
+         }
+         #updateBtnAktiv {
+
+         }
+         #downloadBtn {
+			cursor: pointer;
+			width: 130px;
+			background-color: #4b5760;
          }
       </style>
+   </head>
+   <body>
       <style>
          * {
          padding: 0;
@@ -162,127 +244,6 @@
 		
 		}
       </style>
-      <style>
-         body {
-         background-color: rgba(0, 0, 0, .8);
-         }
-         .main {
-         /*
-         * 	position: fixed;
-         top: 60px;
-         right: 0;
-         bottom: 0;
-         left: 0;
-         */
-         padding-top: 1em;
-         padding-bottom: 12em;
-         background-image: url(images/bg.png);
-         background-size: cover;
-         background-position: center;
-         background-repeat: no-repeat;
-         color: white;
-         }
-         .wrap {
-         margin: 0 auto;
-         max-width: 1096px;
-         margin-top: 12%;
-         text-align: center;
-         }
-         .search {
-         }
-         .searchBtn{
-         margin-top: 1%;
-         }
-         .download{
-         margin-top: 5%;
-         }
-         .file {
-         width: 550px;
-         line-height: 48px;
-         height: 48px;
-         text-indent: 10px;
-         margin-left: 40px;
-         }
-         .btn {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 48px;
-         width: 117px;
-         color: #fff;
-         padding: 0 23px;
-         margin: 0px 16px 0px 11px;
-         
-         }
-         .btn_grey {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 48px;
-         color: #808080;
-         padding: 0 23px;
-         margin-left: 13px;
-         }
-         .downloadBtn_grey {
-         background-color: #4b5760;
-         display: inline-block;
-         line-height: 48px;
-         height: 60px;
-         width: 170px;
-         color: #808080;
-         padding: 0 23px;
-         margin-left: 13px;
-         }
-         .circle1 {
-         margin-top: 5%;
-         }
-         .circle2 {
-         margin-top: 2%;
-         }
-         .circle3 {
-         margin-top: 2%;
-         }
-         .item {
-         display: inline-block;
-         width: 117px;
-         height: 45px;
-         padding-top: 12px;
-         margin: 0px 16px 0px 11px;
-         cursor: pointer;
-         }
-         .c1 { background-color: #a2c6f2; }
-         .c2 { background-color: #02d1a9; }
-         .c3 { background-color: #01d6de; }
-         .c4 { background-color: #01a8df; }
-         .c5 { background-color: #0180cf; }
-         .c6 { opacity: 0; }
-         .c_grey{ background-color:#808080; }
-         .item a {
-         color: #fff;
-         text-decoration: none;
-         width: 150px;
-         height: 150px;
-         }
-         .item a span {
-         font-size: 15px;
-         }
-         #selectBtn {
-         cursor: pointer;
-         }
-         #updateBtn {
-         	cursor: pointer;
-         }
-         #updateBtnAktiv {
-
-         }
-         #downloadBtn {
-			cursor: pointer;
-			width: 130px;
-			background-color: #4b5760;
-         }
-      </style>
-   </head>
-   <body>
       <div id="head">
          <div class="head_box">
             <div class="logo" onclick="window.location.href=&#39;index.html&#39;">
@@ -292,7 +253,7 @@
             <ul class="nav">
                <li class="nav_title"><a href="https://" id="foundCompareId" style="color: rgb(255, 255, 255);"><span>基金条文对照</span></a></li>
                <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li>
-               <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html" id="aboutId"><span>关于我们</span></a></li>
+               <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html"" id="aboutId"><span>关于我们</span></a></li>
             </ul>
          </div>
       </div>
@@ -327,6 +288,7 @@
                <div>
                   <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
                   <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
+                  
                   <div class = "searchBtn">
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
@@ -334,12 +296,11 @@
                   <input type="hidden" name="fundType" id="fundType"/> 
                   <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
+                 
                   
                    </form>
+                    </div>
                </div>
-               <!-- <div class="btn c_grey" id="updateBtn" >上传文件</div> -->
-                  </div>
-                  
             </div>
             <div class="circle1">
             <ul>
@@ -350,26 +311,68 @@
                <li class="item c_grey" id="btn_currencyMarket" onclick="clickJijin('btn_currencyMarket');" data-id="3"><a><span>货币市场</span></a></li>
             </ul>
             </div>
+            <input type="hidden" id="jjSelect" >
+            <input type="hidden" id="fxSelect" >
             <div class="circle3">
             <ul>
                <li class="item a" id="updateReason"><a><span>修改理由</span></a></li>
                <li class="btn" id="reason_y" onclick="clickReason('1');"><a><span>有</span></a></li>
-               <li class="item c_grey" id="reason_n" onclick="clickReason('0');"><a><span>无</span></a></li>
+               <li class="item  c_grey" id="reason_n" onclick="clickReason('0');"><a><span>无</span></a></li>
                <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
                <li class="item c6" id="btn_jiutai2"><a><span> 不顯示占位</span></a></li>
             </ul>
             </div>
-            <div class="download">
+             <div class="download">
                <div>
                	  <form action="download.do" id="downloadForm">
                         <input type="hidden" name="fileName" id="fileName"/>
+                        <div class="btn c_grey" id="updateBtn" >生成对照表</div>
                         <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
-                        <div class="btn c_grey" id="downloadBtn">下载对照表</div>
                    </form>
                </div>
             </div>
          </div>
       </div>
+      <style>
+         #footer {
+         padding-top: 60px;
+         background-color: #3b4348;
+         color: #fff;
+         }
+         .fUl {
+         margin: 0 auto;
+         max-width: 1096px;
+         }
+         .f_item {
+         display: inline-flex;
+         padding-left: 30px;
+         margin-bottom: 50px;
+         width: 20%;
+         }
+         .h_item {
+         font-size: 18px;
+         margin-bottom: 20px;
+         }
+         .fhI {
+         margin-bottom: 6px;
+         font-size: 14px;
+         }
+         .fhI a {
+         color: #fff;
+         font-size: 14px;
+         text-decoration: none;
+         }
+         .copyright {
+         font-size: 12px;
+         }
+         .logoText a{
+         font-size: 30px;
+         font-family: monospace;text-decoration: none;color: #fff;
+         }
+         .bl {
+         border-left: 1px solid #272e31;
+         }
+      </style>
  <div id="footer">
 	<ul class="fUl">
 		<li class="f_item" style="width:35%;"> 
@@ -406,7 +409,7 @@
 				<li class="h_item">关于</li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">关于我们</a></li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">联系我们</a></li>
-				<li class="fhI">xiaofabo@xiaofabo.com.cn</li>
+				<li class="fhI">legallab@hotmail.com</li>
 			</ul>
 		</li>
 	</ul>
@@ -471,85 +474,15 @@
           /** 
           * 请求成功后的操作 
           */  
-          document.getElementById('btn_gongyin').className='item c_grey';
-          document.getElementById('btn_huaxia').className='item c_grey';
-          document.getElementById('btn_jiutai').className='item c_grey';
-          document.getElementById('btn_stockType').className='item c_grey';
-          document.getElementById('btn_exponentType').className='item c_grey';
-          document.getElementById('btn_bondType').className='item c_grey';
-          document.getElementById('btn_currencyMarket').className='item c_grey';
+         
           
-          document.getElementById('btn_gongyin').removeAttribute('onclick');
+    
+        	 
+        	  //alert("上传成功");  
+        	  downloadClicked ();
+        
           
-          if (responseText>0) {
-        	  if($("#reasonColumn").val()=='0'){
-        		 $("#reason_n").attr('class','btn');
-         		 $("#reason_y").attr('class','item c_grey');
-        	  }
-        	  
-        	  alert("上传成功");  
-        	  if($("#fundType").val()==null || $("#fundType").val()=="" || $("#fundType").val()=="NaN"){
-        		  $("#fundType").val(responseText);
-        	  }else{
-        		  responseText = $("#fundType").val();
-        	  }
-        		  if(responseText == 10){
-            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-            		  document.getElementById('btn_stockType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 11){
-            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 12){
-            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-            		  document.getElementById('btn_bondType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 13){
-            		  document.getElementById('btn_gongyin').setAttribute('class','btn');
-            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-            	  }
-            	  
-            	  if(responseText == 20){
-            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-            		  document.getElementById('btn_stockType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 21){
-            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 22){
-            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-            		  document.getElementById('btn_bondType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 23){
-            		  document.getElementById('btn_huaxia').setAttribute('class','btn');
-            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-            	  }
-            	  
-            	  if(responseText == 30){
-            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-            		  document.getElementById('btn_stockType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 31){
-            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-            		  document.getElementById('btn_exponentType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 32){
-            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-            		  document.getElementById('btn_bondType').setAttribute('class','btn');
-            	  }
-            	  if(responseText == 33){
-            		  document.getElementById('btn_jiutai').setAttribute('class','btn');
-            		  document.getElementById('btn_currencyMarket').setAttribute('class','btn');
-            	  }
-		  }else {
-			  alert("上传失败");
-		  }
-          
-          document.getElementById('downloadBtn').removeAttribute('disabled');
-          document.getElementById('downloadBtn').setAttribute('class','btn');
-          $("#downloadBtn").attr("onclick","downloadClicked();");//上传文件成功添加点击事件
+         
       } else {  
     	  $("#downloadBtn").remove("onclick");
           alert("上传失败");  
@@ -564,7 +497,7 @@
     	  //alert($("#jjSelect").val() +$("#fxSelect").val());
     	 
     	  
-    	  /*  $("#downloadForm").submit(); */
+    	  $("#downloadForm").submit();
            
       } 
       
