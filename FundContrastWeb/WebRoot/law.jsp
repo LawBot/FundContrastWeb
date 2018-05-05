@@ -56,7 +56,6 @@
          color: #fff;
          padding: 0 23px;
          margin: 0px 16px 0px 11px;
-         cursor: pointer;
          }
          .btn_grey {
          background-color: #4b5760;
@@ -288,7 +287,6 @@
                <div>
                   <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
                   <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
-                  
                   <div class = "searchBtn">
                   <form id="fileDataForm" enctype="multipart/form-data" method="post">
                   <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
@@ -296,8 +294,6 @@
                   <input type="hidden" name="fundType" id="fundType"/> 
                   <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
                   <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
-                 
-                  
                    </form>
                     </div>
                </div>
