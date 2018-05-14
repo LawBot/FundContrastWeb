@@ -1,7 +1,6 @@
 package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,6 @@ public class FileController {
 
     @Autowired
     FileUtil fileUtil;
-
     /**
      * 上传
      * @param request
@@ -43,12 +42,17 @@ public class FileController {
             //对比
             String fileName=request.getParameter("uploadName");
 			String docPath= request.getSession().getServletContext().getRealPath("/") + "upload/document/"+fileName;
-	        System.out.println(this.getClass().getClassLoader().getResource("/").getPath()+"/guolv.txt");
+			
+	        System.out.println("Resource path: " + this.getClass().getClassLoader().getResource("/").getPath());
 	        String path = request.getSession().getServletContext().getRealPath("/");
 	        String fundType = request.getParameter("fundType");
 	        String reasonColumn = request.getParameter("reasonColumn");
-	        System.out.println(request.getParameter("fundType"));
-	        System.out.println(request.getParameter("reasonColumn"));
+	        
+//	        final Logger logger = LogManager.getLogger(FileController.class);
+//	        logger.info("User uploading file: " + fileName);
+//	        logger.info("User selected fund type: " + fundType);
+//	        logger.info("User selected reason column:" + reasonColumn);
+	        System.out.println("App path: " + path + "; Fund type: " + fundType + "; ReasonColumn: " + reasonColumn);
 	        int errorCode = DocGenerator.generate(docPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
 	        System.out.println("DocGenerator.generate return code: " + errorCode);
 	        map.put("errorCode", errorCode+"");

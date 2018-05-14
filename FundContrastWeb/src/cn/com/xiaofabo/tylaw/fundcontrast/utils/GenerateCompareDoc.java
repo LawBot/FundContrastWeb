@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -32,7 +29,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
-import cn.com.xiaofabo.tylaw.fundcontrast.entity.DocPart;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.FundDoc;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.PatchDto;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.RevisedDto;
@@ -91,13 +87,12 @@ public class GenerateCompareDoc {
 	/**
 	 * Defined Constants.
 	 */
-	private static Log log = LogFactory.getLog(GenerateCompareDoc.class);
 	String headerContent = "条文对照表测试文本";
 
 	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
 			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
-		log.info("Create an empty document");
 
+		System.out.println("Start contrast document generation");
 		StringBuilder sb = new StringBuilder();
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
@@ -108,7 +103,6 @@ public class GenerateCompareDoc {
 			}
 			sb.append("\n");
 		}
-		log.info(sb.toString());
 
 		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
@@ -372,6 +366,7 @@ public class GenerateCompareDoc {
 		document.write(out);
 		out.close();
 
+		System.out.println("Finish contrast document generation");
 		return 0;
 	}
 

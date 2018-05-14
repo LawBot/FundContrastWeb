@@ -78,6 +78,7 @@ public class DocGenerator {
     	int fType = Integer.parseInt(fundType);
     	int rColumn = Integer.parseInt(reasonColumn);
     	
+    	System.out.println("Start generating process");
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
             sampleDocProcessor.readText(inputSampleDocPath);
@@ -106,24 +107,25 @@ public class DocGenerator {
         switch (fType) {
             case 0:
             	statusCode += 0;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_STOCK_C;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_STOCK_C;
                 break;
             case 1:
             	statusCode += 1;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_INDEX;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_INDEX;
                 break;
             case 2:
             	statusCode += 2;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_BOND;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_BOND;
                 break;
             case 3:
             	statusCode += 3;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_MONETARY;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_MONETARY;
                 break;
             default:
                 templateDocPath = "";
         }
 
+        
         if (templateDocPath.isEmpty()) {
             return STATUS_ERROR_TEMPLATE_NOT_FOUND;
         }
@@ -136,6 +138,7 @@ public class DocGenerator {
             return STATUS_ERROR_TEMPLATE_IO_ERROR;
         }
         FundDoc templateDoc = templateDocProcessor.process();
+        
 
         String outputFileTitle = "《" + sampleDoc.getContractNameComplete() + "》";
         StringBuilder leadingTextSB = new StringBuilder();
@@ -160,11 +163,14 @@ public class DocGenerator {
                 break;
         }
         String leadingText = leadingTextSB.toString();
-
+        
         GenerateCompareDoc genDoc = new GenerateCompareDoc();
         List<PatchDto> patchDtoList;
         CompareUtils compareUtils = new CompareUtils();
+        
         try {
+        	System.out.println("TemplateDocPath: " + templateDocPath);
+        	System.out.println("InputSampleDocPath: " + inputSampleDocPath);
             patchDtoList = compareUtils.getPatchDtoList(templateDocPath, inputSampleDocPath);
         } catch (Exception e) {
             return STATUS_ERROR_UNKNOWN;
@@ -177,6 +183,7 @@ public class DocGenerator {
             return STATUS_ERROR_OUTPUT_IO_ERROR;
         }
 
+        System.out.println("Finish generating process");
         return statusCode;
     }
 }
