@@ -95,7 +95,6 @@ public class CompareUtils {
 		}
 
 		Iterator it = matchList.keySet().iterator();
-		System.out.println(matchList.keySet().size());
 		while (it.hasNext()) {
 			int templateIndex = (int) it.next();
 			int sampleIndex = (int) matchList.get(templateIndex);
@@ -241,7 +240,6 @@ public class CompareUtils {
 		}
 		
 		Iterator it = matchList.keySet().iterator();
-		System.out.println(matchList.keySet().size());
 		
 		while (it.hasNext()) {
 			int templateIndex = (int) it.next();
