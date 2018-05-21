@@ -75,6 +75,10 @@ public class DocGenerator {
      */
     public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir,String fundType, String reasonColumn) throws Exception {
     	int statusCode = 0;
+    	int fType = Integer.parseInt(fundType);
+    	int rColumn = Integer.parseInt(reasonColumn);
+    	
+    	System.out.println("Start generating process");
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
             sampleDocProcessor.readText(inputSampleDocPath);
@@ -85,41 +89,43 @@ public class DocGenerator {
 
         FundDoc sampleDoc = sampleDocProcessor.process();
 
-        if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
-            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
-        }
-        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)) {
-        	statusCode += 10;
-        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)) {
-        	statusCode += 20;
-        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)) {
-        	statusCode += 30;
-        }else {
-            return STATUS_ERROR_FUND_EST_UNKNOWN;
-        }
+//        if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
+//            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
+//        }
+//        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)) {
+//        	statusCode += 10;
+//        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)) {
+//        	statusCode += 20;
+//        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)) {
+//        	statusCode += 30;
+//        }else {
+//            return STATUS_ERROR_FUND_EST_UNKNOWN;
+//        }
 
         String templateDocPath;
-        switch (sampleDoc.getType()) {
+        
+        switch (fType) {
             case 0:
             	statusCode += 0;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_STOCK_C;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_STOCK_C;
                 break;
             case 1:
             	statusCode += 1;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_INDEX;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_INDEX;
                 break;
             case 2:
             	statusCode += 2;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_BOND;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_BOND;
                 break;
             case 3:
             	statusCode += 3;
-                templateDocPath = templatePathDir+"/"+DataUtils.STANDARD_TYPE_MONETARY;
+                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_MONETARY;
                 break;
             default:
                 templateDocPath = "";
         }
 
+        
         if (templateDocPath.isEmpty()) {
             return STATUS_ERROR_TEMPLATE_NOT_FOUND;
         }
@@ -132,6 +138,7 @@ public class DocGenerator {
             return STATUS_ERROR_TEMPLATE_IO_ERROR;
         }
         FundDoc templateDoc = templateDocProcessor.process();
+        
 
         String outputFileTitle = "《" + sampleDoc.getContractNameComplete() + "》";
         StringBuilder leadingTextSB = new StringBuilder();
@@ -139,7 +146,7 @@ public class DocGenerator {
         leadingTextSB.append(sampleDoc.getContractName());
         leadingTextSB.append("募集申请材料之");
         leadingTextSB.append(outputFileTitle);
-        switch (sampleDoc.getType()) {
+        switch (fType) {
             case 0:
                 leadingTextSB.append(LEADING_TEXT_STOCK);
                 break;
@@ -156,23 +163,27 @@ public class DocGenerator {
                 break;
         }
         String leadingText = leadingTextSB.toString();
-
+        
         GenerateCompareDoc genDoc = new GenerateCompareDoc();
         List<PatchDto> patchDtoList;
         CompareUtils compareUtils = new CompareUtils();
+        
         try {
+        	System.out.println("TemplateDocPath: " + templateDocPath);
+        	System.out.println("InputSampleDocPath: " + inputSampleDocPath);
             patchDtoList = compareUtils.getPatchDtoList(templateDocPath, inputSampleDocPath);
         } catch (Exception e) {
             return STATUS_ERROR_UNKNOWN;
         }
 
         try {
-            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath);
+            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath, rColumn);
         } catch (IOException e) {
             e.printStackTrace();
             return STATUS_ERROR_OUTPUT_IO_ERROR;
         }
 
+        System.out.println("Finish generating process");
         return statusCode;
     }
 }

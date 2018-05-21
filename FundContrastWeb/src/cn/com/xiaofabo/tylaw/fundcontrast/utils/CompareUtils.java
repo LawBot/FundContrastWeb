@@ -20,6 +20,8 @@ public class CompareUtils {
 	List<String> sortIdList = new ArrayList<>();
 
 	public List<PatchDto> getPatchDtoList(String templatePath, String samplePath) throws Exception {
+		System.out.println("Start getPatchDtoList");
+		
 		List<PatchDto> patchDtoList = new LinkedList();
 
 		DocProcessor templateProcessor = new DocProcessor(templatePath);
@@ -104,6 +106,7 @@ public class CompareUtils {
 			pdt.setPartId(samplePart.getPartCount());
 			pdt.setPartIndex(samplePart.getPartIndex());
 			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
+			
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, templatePart, samplePart);
 		}
@@ -112,18 +115,23 @@ public class CompareUtils {
 		return patchDtoList;
 	}
 
-	private void compareParts(List patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
+	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
 			DocPart samplePart) throws Exception {
 		String templateText = templatePart.getIndex() + templatePart.getPoint();
 		String sampleText = samplePart.getIndex() + samplePart.getPoint();
+		
 		/// Compare templateText and sampleText
 		/// In case they are different, patchDtoList.add
 		if (!templateText.equalsIgnoreCase(sampleText)) {
-
+			
+			DiffUtils.diffInline(templateText, sampleText);
+			
 			Patch<String> patch = DiffUtils.diffInline(templateText, sampleText);
+			
 			List<Delta<String>> deltaList = patch.getDeltas();
 			Map<Integer, Character> deleteMap = new HashMap();
 			Map<Integer, Character> addMap = new HashMap();
+			
 			for (Delta<String> delta : deltaList) {
 				if (delta.getType().equals(DeltaType.CHANGE)) {
 					for (int i = delta.getOriginal().getPosition(); i < delta.getOriginal().getPosition()
@@ -165,13 +173,14 @@ public class CompareUtils {
 			patchDtoList.add(pdt);
 		}
 
+		
 		if (!templatePart.hasPart() && !samplePart.hasPart()) {
 			return;
 		}
 
 		List templateTitles = new LinkedList();
 		List sampleTitles = new LinkedList();
-
+		
 		for (int i = 0; templatePart.hasPart() && i < templatePart.getChildPart().size(); ++i) {
 			String title = ((DocPart) templatePart.getChildPart().get(i)).getTitle();
 			templateTitles.add(title);
@@ -207,7 +216,7 @@ public class CompareUtils {
 			pdt.setRevisedDto(rdt);
 			patchDtoList.add(pdt);
 		}
-
+		
 		for (int i = 0; i < addList.size(); ++i) {
 			int chapterIndex = (int) addList.get(i);
 			PatchDto pdt = new PatchDto();
@@ -229,8 +238,9 @@ public class CompareUtils {
 			pdt.setChapterTitle(templateDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
 			patchDtoList.add(pdt);
 		}
-
+		
 		Iterator it = matchList.keySet().iterator();
+		
 		while (it.hasNext()) {
 			int templateIndex = (int) it.next();
 			int sampleIndex = (int) matchList.get(templateIndex);

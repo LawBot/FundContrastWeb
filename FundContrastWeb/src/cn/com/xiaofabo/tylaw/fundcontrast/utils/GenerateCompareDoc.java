@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -32,7 +29,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
-import cn.com.xiaofabo.tylaw.fundcontrast.entity.DocPart;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.FundDoc;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.PatchDto;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.RevisedDto;
@@ -64,8 +60,12 @@ public class GenerateCompareDoc {
 	/// 1.0cm ~= 567L
 	public static final BigInteger TABLE_COLUMN_1_WIDTH = BigInteger.valueOf(1133L); /// ~2.0cm
 	public static final BigInteger TABLE_COLUMN_2_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
-	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~7.5cm
-	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~4.5cm
+	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
+	
+	public static final BigInteger TABLE_COLUMN_2_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
+	public static final BigInteger TABLE_COLUMN_3_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
+	
+	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~3.5cm
 
 	public static final int TABLE_CELL_MARGIN_TOP = 100;
 	public static final int TABLE_CELL_MARGIN_LEFT = 100;
@@ -87,21 +87,21 @@ public class GenerateCompareDoc {
 	/**
 	 * Defined Constants.
 	 */
-	private static Log log = LogFactory.getLog(GenerateCompareDoc.class);
 	String headerContent = "条文对照表测试文本";
 
 	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
-			FundDoc sampleDoc, String outputPath) throws IOException {
-		log.info("Create an empty document");
+			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 
+		System.out.println("Start contrast document generation");
+		StringBuilder sb = new StringBuilder();
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
-				System.out.print(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
+				sb.append(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
 			}
-			System.out.println("");
+			sb.append("\n");
 		}
 
 		int nRow = compactList.size() + 1;
@@ -116,7 +116,8 @@ public class GenerateCompareDoc {
 		generateLeadingText(document, leadingText);
 
 		/// Generate contrast table
-		XWPFTable table = document.createTable(nRow, 4);
+		int nColumn = 4 - (1 - reasonColumn);
+		XWPFTable table = document.createTable(nRow, nColumn);
 		table.setCellMargins(TABLE_CELL_MARGIN_TOP, TABLE_CELL_MARGIN_LEFT, TABLE_CELL_MARGIN_BOTTOM,
 				TABLE_CELL_MARGIN_RIGHT);
 		CTTblWidth width = table.getCTTbl().addNewTblPr().addNewTblW();
@@ -128,7 +129,7 @@ public class GenerateCompareDoc {
 		/// Generate table header
 		XWPFTableRow tableRowOne = table.getRow(0);
 		tableRowOne.setRepeatHeader(true);
-		for (int i = 0; i < 4; ++i) {
+		for (int i = 0; i < nColumn; ++i) {
 			XWPFTableCell cell = tableRowOne.getCell(i);
 			cell.getCTTc().addNewTcPr().addNewShd().setFill(TABLE_HEADER_BGCOLOR);
 			BigInteger columnWidth = null;
@@ -184,7 +185,6 @@ public class GenerateCompareDoc {
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
-				System.out.println("Here: " + firstItem.partIndexInStr());
 				List<Integer> partIndex = firstItem.getPartIndex();
 				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
@@ -366,6 +366,7 @@ public class GenerateCompareDoc {
 		document.write(out);
 		out.close();
 
+		System.out.println("Finish contrast document generation");
 		return 0;
 	}
 

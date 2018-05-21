@@ -9,7 +9,6 @@ local.properties
 .settings/
 .loadpath
 *.class
-*.jar
 *.war
 *.ear
 *.db
