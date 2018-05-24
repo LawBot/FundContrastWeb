@@ -77,6 +77,8 @@ public class GenerateCompareDoc {
 	public static final int TABLE_COLUMN_3 = 2;
 	public static final int TABLE_COLUMN_4 = 3;
 
+	public static final String TABLE_TITLE_LINE_2_TEXT = "前后条文对照表";
+	
 	public static final String TABLE_COLUMN_1_TEXT = "章节";
 	public static final String TABLE_COLUMN_2_TEXT = "《指引》条款";
 	public static final String TABLE_COLUMN_3_TEXT = "《基金合同》条款";
@@ -94,7 +96,9 @@ public class GenerateCompareDoc {
 
 		System.out.println("Start contrast document generation");
 		StringBuilder sb = new StringBuilder();
-		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
+		
+		List<PatchDto> cleanList = cleanListEntries(contrastList);
+		List<List<PatchDto>> compactList = combineListEntries(cleanList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
@@ -104,6 +108,8 @@ public class GenerateCompareDoc {
 			sb.append("\n");
 		}
 
+		System.out.println("Different items in total: " + cleanList.size() + ".");
+		System.out.println("Lines generated: " + compactList.size() + ".");
 		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));
@@ -370,6 +376,15 @@ public class GenerateCompareDoc {
 		return 0;
 	}
 
+	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
+		List<PatchDto> cleanList = new LinkedList<PatchDto>();
+		for(int i = 0; i < contrastList.size(); ++i) {
+			PatchDto pdt = contrastList.get(i);
+			cleanList.add(pdt);
+		}
+		return cleanList;
+	}
+
 	/**
 	 * @param doc
 	 */
@@ -455,7 +470,7 @@ public class GenerateCompareDoc {
 		run.setText(title);
 		run.addBreak();
 		run.addBreak();
-		run.setText("修改对照表");
+		run.setText(TABLE_TITLE_LINE_2_TEXT);
 		run.addBreak();
 		run.addBreak();
 	}
