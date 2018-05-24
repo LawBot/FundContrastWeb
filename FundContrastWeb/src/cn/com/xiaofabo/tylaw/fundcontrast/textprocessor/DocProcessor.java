@@ -135,7 +135,7 @@ public class DocProcessor extends TextProcessor {
             }
 
             if (!foundIdentifier) {
-                partText.append(currentLine);
+                partText.append("\n").append(currentLine);
             } else {
                 if (lastPartLevel < currentPartLevel) {
                     if (!partText.toString().isEmpty()) {
