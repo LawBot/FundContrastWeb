@@ -22,6 +22,8 @@ public class TextUtils {
     public static String REGEX_IDENTIFIER_LEVEL_3 = "^\\d+[、|\\.|．]";
     public static String REGEX_IDENTIFIER_LEVEL_4 = "^[（|(]\\d+[）|)]";
     
+    public static String REGEX_PUNCTUATIONS = "[，。；、]";
+    
 
     public static List removeAllEmptyLines(List strList) {
         List toReturn = new LinkedList();
@@ -120,6 +122,11 @@ public class TextUtils {
             }
         }
         return title;
+    }
+    
+    /// Remove all known punctuations
+    public static String getPureText(String input) {
+    	return input.replaceAll(REGEX_PUNCTUATIONS, "");
     }
     
     public static String removeAllSpaces(String input) {

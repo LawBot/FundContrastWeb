@@ -129,7 +129,7 @@ public class CompareUtils {
 		
 		/// Compare templateText and sampleText
 		/// In case they are different, patchDtoList.add
-		if (!tPoint.equalsIgnoreCase(sPoint)) {
+		if (!TextUtils.getPureText(tPoint).equalsIgnoreCase(TextUtils.getPureText(sPoint))) {
 			
 			Patch<String> patch = DiffUtils.diffInline(tPoint, sPoint);
 			
