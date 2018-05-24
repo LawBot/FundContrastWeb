@@ -117,16 +117,21 @@ public class CompareUtils {
 
 	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
 			DocPart samplePart) throws Exception {
-		String templateText = templatePart.getIndex() + templatePart.getPoint();
-		String sampleText = samplePart.getIndex() + samplePart.getPoint();
+		
+		String tPoint = templatePart.getPoint();
+		String sPoint = samplePart.getPoint();
+		
+		String tIndex = templatePart.getIndex();
+		String sIndex = samplePart.getIndex();
+		
+		String tText = tIndex + tPoint;
+		String sText = sIndex + sPoint;
 		
 		/// Compare templateText and sampleText
 		/// In case they are different, patchDtoList.add
-		if (!templateText.equalsIgnoreCase(sampleText)) {
+		if (!tPoint.equalsIgnoreCase(sPoint)) {
 			
-			DiffUtils.diffInline(templateText, sampleText);
-			
-			Patch<String> patch = DiffUtils.diffInline(templateText, sampleText);
+			Patch<String> patch = DiffUtils.diffInline(tPoint, sPoint);
 			
 			List<Delta<String>> deltaList = patch.getDeltas();
 			Map<Integer, Character> deleteMap = new HashMap();
@@ -136,40 +141,40 @@ public class CompareUtils {
 				if (delta.getType().equals(DeltaType.CHANGE)) {
 					for (int i = delta.getOriginal().getPosition(); i < delta.getOriginal().getPosition()
 							+ delta.getOriginal().getLines().get(0).length(); i++) {
-						deleteMap.put(i, templateText.charAt(i));
+						deleteMap.put(i + tIndex.length(), tPoint.charAt(i));
 					}
 					for (int i = delta.getRevised().getPosition(); i < delta.getRevised().getPosition()
 							+ delta.getRevised().getLines().get(0).length(); i++) {
-						addMap.put(i, sampleText.charAt(i));
+						addMap.put(i + sIndex.length(), sPoint.charAt(i));
 					}
 				}
 				if (delta.getType().equals(DeltaType.DELETE)) {
 					for (int i = delta.getOriginal().getPosition(); i < delta.getOriginal().getPosition()
 							+ delta.getOriginal().getLines().get(0).length(); i++) {
-						deleteMap.put(i, templateText.charAt(i));
+						deleteMap.put(i + tIndex.length(), tPoint.charAt(i));
 					}
 				}
 				if (delta.getType().equals(DeltaType.INSERT)) {
 					for (int i = delta.getRevised().getPosition(); i < delta.getRevised().getPosition()
 							+ delta.getRevised().getLines().get(0).length(); i++) {
-						addMap.put(i, sampleText.charAt(i));
+						addMap.put(i + sIndex.length(), sPoint.charAt(i));
 					}
 				}
 			}
+			
 			RevisedDto revisedDto = new RevisedDto();
 			revisedDto.setAddData(addMap);
 			revisedDto.setDeleteData(deleteMap);
-			revisedDto.setRevisedText(sampleText);
+			revisedDto.setRevisedText(sText);
 			PatchDto pdt = new PatchDto();
 			pdt.setRevisedDto(revisedDto);
-			pdt.setOrignalText(templateText);
+			pdt.setOrignalText(tText);
 			pdt.setIndexType("orginal");
 			pdt.setChangeType("change");
 			pdt.setPartId(templatePart.getPartCount());
 			pdt.setPartIndex(templatePart.getPartIndex());
 			pdt.setSamplePartIndex(samplePart.getPartIndex());
 			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
-			pdt.setOrignalText(templateText);
 			patchDtoList.add(pdt);
 		}
 
