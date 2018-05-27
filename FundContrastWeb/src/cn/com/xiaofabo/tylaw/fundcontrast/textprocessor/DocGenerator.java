@@ -168,6 +168,16 @@ public class DocGenerator {
         List<PatchDto> patchDtoList;
         CompareUtils compareUtils = new CompareUtils();
         
+        String leadingHeader = "";
+        if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_GYRX)){
+        	leadingHeader = "工银瑞信基金申请注册公开募集的";
+        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_HXJJ)){
+        	leadingHeader = "华夏基金申请注册公开募集的";
+        }else if(sampleDoc.getEstablisher().equals(FundDoc.CONTRACT_ESTABLISHER_JTJJ)){
+        	leadingHeader = "九泰基金申请注册公开募集的";
+        }
+        String headerText = leadingHeader + sampleDoc.getContractName() + "的法律意见";
+        
         try {
         	System.out.println("TemplateDocPath: " + templateDocPath);
         	System.out.println("InputSampleDocPath: " + inputSampleDocPath);
@@ -177,7 +187,7 @@ public class DocGenerator {
         }
 
         try {
-            genDoc.generate(outputFileTitle, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath, rColumn);
+            genDoc.generate(outputFileTitle, headerText, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath, rColumn);
         } catch (IOException e) {
             e.printStackTrace();
             return STATUS_ERROR_OUTPUT_IO_ERROR;
