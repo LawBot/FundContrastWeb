@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -61,10 +62,10 @@ public class GenerateCompareDoc {
 	public static final BigInteger TABLE_COLUMN_1_WIDTH = BigInteger.valueOf(1133L); /// ~2.0cm
 	public static final BigInteger TABLE_COLUMN_2_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
 	public static final BigInteger TABLE_COLUMN_3_WIDTH = BigInteger.valueOf(4820L); /// ~8.5cm
-	
+
 	public static final BigInteger TABLE_COLUMN_2_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
 	public static final BigInteger TABLE_COLUMN_3_WIDTH_NO_REASON = BigInteger.valueOf(5670L); /// ~10cm
-	
+
 	public static final BigInteger TABLE_COLUMN_4_WIDTH = BigInteger.valueOf(1985L); /// ~3.5cm
 
 	public static final int TABLE_CELL_MARGIN_TOP = 100;
@@ -78,7 +79,7 @@ public class GenerateCompareDoc {
 	public static final int TABLE_COLUMN_4 = 3;
 
 	public static final String TABLE_TITLE_LINE_2_TEXT = "前后条文对照表";
-	
+
 	public static final String TABLE_COLUMN_1_TEXT = "章节";
 	public static final String TABLE_COLUMN_2_TEXT = "《指引》条款";
 	public static final String TABLE_COLUMN_3_TEXT = "《基金合同》条款";
@@ -96,9 +97,8 @@ public class GenerateCompareDoc {
 
 		System.out.println("Start contrast document generation");
 		StringBuilder sb = new StringBuilder();
-		
-		List<PatchDto> cleanList = cleanListEntries(contrastList);
-		List<List<PatchDto>> compactList = combineListEntries(cleanList, 2);
+
+		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
 		for (int i = 0; i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
@@ -108,7 +108,7 @@ public class GenerateCompareDoc {
 			sb.append("\n");
 		}
 
-		System.out.println("Different items in total: " + cleanList.size() + ".");
+		System.out.println("Different items in total: " + contrastList.size() + ".");
 		System.out.println("Lines generated: " + compactList.size() + ".");
 		int nRow = compactList.size() + 1;
 		XWPFDocument document = new XWPFDocument();
@@ -187,33 +187,33 @@ public class GenerateCompareDoc {
 			cell2.removeParagraph(0);
 			XWPFParagraph p2 = cell2.addParagraph();
 			p2.setAlignment(ParagraphAlignment.LEFT);
-			
+
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
 				List<Integer> partIndex = firstItem.getPartIndex();
-				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
-					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
-					
+				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {
+					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
+
 					XWPFRun r2 = p2.createRun();
 					r2.setText(templateDoc.getPartTitle(tmpIndex));
 					r2.addBreak();
 				}
 			}
-			
+
 			/// 3rd column
 			XWPFTableCell cell3 = tableRow.getCell(TABLE_COLUMN_3);
 			cell3.removeParagraph(0);
 			XWPFParagraph p3 = cell3.addParagraph();
 			p3.setAlignment(ParagraphAlignment.LEFT);
-			
+
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
 				List<Integer> partIndex = firstItem.getPartIndex();
-				for(int idx = 1; idx < partIndex.size() - 1; ++idx) {
-					List<Integer> tmpIndex = partIndex.subList(0, idx+1);
-					
+				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {
+					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
+
 					XWPFRun r3 = p3.createRun();
 					r3.setText(sampleDoc.getPartTitle(tmpIndex));
 					r3.addBreak();
@@ -242,11 +242,11 @@ public class GenerateCompareDoc {
 				if (changeType.equalsIgnoreCase("add")) {
 					/// Column 2
 					// Do nothing
-					
+
 					/// Column 3
 					XWPFParagraph paragraph3 = cell3.addParagraph();
 					paragraph3.setAlignment(ParagraphAlignment.LEFT);
-	
+
 					String addText = contrastItem.getRevisedDto().getRevisedText();
 					XWPFRun run = paragraph3.createRun();
 					addEffect(run, EFFECT_ADD_BOLD_UNDERLINE);
@@ -263,7 +263,7 @@ public class GenerateCompareDoc {
 					/// Only delete. No add.
 					if (rdt.getDeleteData() != null && rdt.getAddData() == null) {
 						Set deleteSet = rdt.getDeleteData().keySet();
-	
+
 						XWPFParagraph c2Para = cell2.addParagraph();
 						c2Para.setAlignment(ParagraphAlignment.LEFT);
 						for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
@@ -272,7 +272,7 @@ public class GenerateCompareDoc {
 								letterRun.addBreak();
 								continue;
 							}
-	
+
 							String currentLetter = Character.toString(contrastItem.getOrignalText().charAt(j));
 							if (deleteSet.contains(j)) {
 								deleteEffect(letterRun, EFFECT_DELETE_BOLD_STRIKE);
@@ -280,7 +280,7 @@ public class GenerateCompareDoc {
 							letterRun.setText(currentLetter);
 						}
 						c2Para.createRun().addBreak();
-	
+
 						XWPFParagraph c3Para = cell3.addParagraph();
 						c3Para.setAlignment(ParagraphAlignment.LEFT);
 						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
@@ -297,17 +297,17 @@ public class GenerateCompareDoc {
 						}
 						c3Para.createRun().addBreak();
 					}
-					
+
 					/// Only add. No delete.
 					if (rdt.getRevisedText() != null && rdt.getAddData() != null && rdt.getDeleteData() == null) {
 						Set addSet = rdt.getAddData().keySet();
-	
+
 						XWPFParagraph c2Para = cell2.addParagraph();
 						c2Para.setAlignment(ParagraphAlignment.LEFT);
 						XWPFRun run = c2Para.createRun();
 						run.setText(contrastItem.getOrignalText());
 						run.addBreak();
-	
+
 						XWPFParagraph c3Para = cell3.addParagraph();
 						c3Para.setAlignment(ParagraphAlignment.LEFT);
 						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
@@ -324,11 +324,11 @@ public class GenerateCompareDoc {
 						}
 						c3Para.createRun().addBreak();
 					}
-					
+
 					/// change: add + delete
 					if (rdt.getDeleteData() != null && rdt.getAddData() != null) {
 						Set deleteSet = rdt.getDeleteData().keySet();
-	
+
 						XWPFParagraph c2Para = cell2.addParagraph();
 						c2Para.setAlignment(ParagraphAlignment.LEFT);
 						for (int j = 0; j < contrastItem.getOrignalText().length(); j++) {
@@ -344,9 +344,9 @@ public class GenerateCompareDoc {
 							letterRun.setText(currentLetter);
 						}
 						c2Para.createRun().addBreak();
-	
+
 						Set addSet = rdt.getAddData().keySet();
-	
+
 						XWPFParagraph c3Para = cell3.addParagraph();
 						c3Para.setAlignment(ParagraphAlignment.LEFT);
 						for (int j = 0; j < rdt.getRevisedText().length(); j++) {
@@ -374,15 +374,6 @@ public class GenerateCompareDoc {
 
 		System.out.println("Finish contrast document generation");
 		return 0;
-	}
-
-	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
-		List<PatchDto> cleanList = new LinkedList<PatchDto>();
-		for(int i = 0; i < contrastList.size(); ++i) {
-			PatchDto pdt = contrastList.get(i);
-			cleanList.add(pdt);
-		}
-		return cleanList;
 	}
 
 	/**

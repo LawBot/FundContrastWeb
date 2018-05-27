@@ -112,7 +112,9 @@ public class CompareUtils {
 		}
 
 		Collections.sort(patchDtoList);
-		return patchDtoList;
+		
+		List<PatchDto> cleanList = cleanListEntries(patchDtoList);
+		return cleanList;
 	}
 
 	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
@@ -260,6 +262,84 @@ public class CompareUtils {
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, tPart, sPart);
 		}
+	}
+	
+	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
+		List<String> excludeIndex = new ArrayList<String>();
+		excludeIndex.add("1-0");
+		excludeIndex.add("1-1");
+		excludeIndex.add("1-2");
+		excludeIndex.add("1-3");
+		excludeIndex.add("1-4");
+		excludeIndex.add("1-5");
+		excludeIndex.add("1-6");
+		excludeIndex.add("1-23");
+		excludeIndex.add("1-28");
+		excludeIndex.add("1-42");
+
+		excludeIndex.add("2-2");
+		excludeIndex.add("2-3");
+
+		excludeIndex.add("6-0-0");
+		excludeIndex.add("6-1-0");
+
+		excludeIndex.add("10-0");
+
+		List<String> excludeSection = new ArrayList<String>();
+		excludeSection.add("10-2");
+		excludeSection.add("10-4");
+		excludeSection.add("10-5");
+		excludeSection.add("22");
+		excludeSection.add("23");
+
+		List<String> deleteSection = new ArrayList<String>();
+		deleteSection.add("1-51");
+		deleteSection.add("2-7");
+		deleteSection.add("3-2-3");
+		deleteSection.add("3-5-6");
+		deleteSection.add("13-4");
+
+		List<PatchDto> cleanList = new LinkedList<PatchDto>();
+		for (int i = 0; i < contrastList.size(); ++i) {
+			boolean isAdd = true;
+			PatchDto pdt = contrastList.get(i);
+			String indexInStr = pdt.partIndexInStr();
+
+			boolean isDelete = pdt.getChangeType().equalsIgnoreCase("delete");
+			if (isAdd && isDelete) {
+				for (int index = 0; index < deleteSection.size(); ++index) {
+					String dSection = deleteSection.get(index);
+					if (indexInStr.startsWith(dSection)) {
+						isAdd = false;
+						break;
+					}
+				}
+			}
+
+			if (isAdd) {
+				for (int index = 0; index < excludeSection.size(); ++index) {
+					String eSection = excludeSection.get(index);
+					if (indexInStr.startsWith(eSection)) {
+						isAdd = false;
+						break;
+					}
+				}
+			}
+
+			if (isAdd) {
+				for (int index = 0; index < excludeIndex.size(); ++index) {
+					String eIndex = excludeIndex.get(index);
+					if (indexInStr.equals(eIndex)) {
+						isAdd = false;
+						break;
+					}
+				}
+			}
+			if (isAdd) {
+				cleanList.add(pdt);
+			}
+		}
+		return cleanList;
 	}
 
 	public List<String> getSortIdList() {
