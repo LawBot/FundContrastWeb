@@ -92,7 +92,7 @@ public class GenerateCompareDoc {
 	 */
 	String headerContent = "条文对照表测试文本";
 
-	public int generate(String title, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
+	public int generate(String title, String headerText, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
 			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 
 		System.out.println("Start contrast document generation");
@@ -367,7 +367,7 @@ public class GenerateCompareDoc {
 			}
 		}
 
-		createHeader(document, headerContent);
+		createHeader(document, headerText);
 		createFooter(document);
 		document.write(out);
 		out.close();
@@ -530,7 +530,9 @@ public class GenerateCompareDoc {
 			List<Integer> curPdtIdx = curPdt.getPartIndex();
 			List<Integer> prePdtIdx = prePdt.getPartIndex();
 
-			if (getIndexDepth(curPdtIdx) <= endLevel || isIdxListIdentical(curPdtIdx, prePdtIdx)) {
+			if (
+					getIndexDepth(curPdtIdx) <= endLevel || 
+					isIdxListIdentical(curPdtIdx, prePdtIdx)) {
 				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
@@ -541,7 +543,10 @@ public class GenerateCompareDoc {
 				}
 				tmpList = new LinkedList<PatchDto>();
 			} else {
-				if (isIdxListIdentical(getParentIndex(curPdtIdx), getParentIndex(prePdtIdx))) {
+				if (isIdxListIdentical(getParentIndex(curPdtIdx), getParentIndex(prePdtIdx))
+//						|| isIdxListIdentical(getParentIndex(curPdtIdx), prePdtIdx)
+//						|| isIdxListIdentical(curPdtIdx, getParentIndex(prePdtIdx))
+						) {
 					tmpList.add(curPdt);
 				} else {
 					if (!tmpList.isEmpty()) {

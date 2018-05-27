@@ -105,14 +105,31 @@ public class FundDoc {
 		this.contractNameComplete = contractNameComplete;
 	}
 
-	public String getPartTitle(List<Integer> partIndex) {
+	public DocPart getPart(List<Integer> partIndex) {
 		if (partIndex == null || partIndex.isEmpty()) {
 			return null;
 		}
 		DocPart part = this.getParts().get(partIndex.get(0));
-		for (int i = 1; i < partIndex.size(); ++i) {
-			part = part.getChildPart().get(partIndex.get(i));
+		if (part == null) {
+			return null;
 		}
+		for (int i = 1; i < partIndex.size(); ++i) {
+			if (part == null || part.getChildPart() == null) {
+				return null;
+			}
+			try {
+				part = part.getChildPart().get(partIndex.get(i));
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		return part;
+	}
+
+	public String getPartTitle(List<Integer> partIndex) {
+		DocPart part = getPart(partIndex);
+		if (part == null)
+			return null;
 		return part.getIndex() + part.getTitle();
 	}
 
