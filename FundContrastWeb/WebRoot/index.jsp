@@ -19,7 +19,7 @@
          left: 0;
          */
          padding-top: 1em;
-         padding-bottom: 12em;
+         padding-bottom: 8em;
          background-image: url(images/bg.png);
          background-size: cover;
          background-position: center;
@@ -29,7 +29,7 @@
          .wrap {
          margin: 0 auto;
          max-width: 1096px;
-         margin-top: 12%;
+         margin-top: 10%;
          text-align: center;
          }
          .search {
@@ -166,6 +166,13 @@
          line-height: 30px;
          font-weight: 600;
          }
+         .tylogo{
+         display: inline-block;
+         width: 300px;
+         height: 45px;
+         text-align: center;
+         margin-left: 250px;
+         }
          .nav {
          display: inline-block;
          float: right;
@@ -173,6 +180,7 @@
          .nav_title {
          display: inline-block;
          cursor: pointer;
+         color: white;
          }
          .nav_title a {
          color: #c1cad1;
@@ -246,13 +254,14 @@
       </style>
       <div id="head">
          <div class="head_box">
-            <div class="logo" onclick="window.location.href=&#39;index.html&#39;">
+            <div class="logo" onclick="window.location.href=&#39;index.jsp&#39;">
                {LawBot}
                <p>小法博智能系统</p>
             </div>
+            <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a>
             <ul class="nav">
-               <li class="nav_title"><a href="https://" id="foundCompareId" style="color: rgb(255, 255, 255);"><span>基金条文对照</span></a></li>
-               <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li>
+               <li class="nav_title"><span>基金条文对照</span></li>
+               <!-- <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li> -->
                <li class="nav_title"><a href="https://www.v5kf.com/public/ailaw/about.html"" id="aboutId"><span>关于我们</span></a></li>
             </ul>
          </div>
@@ -380,8 +389,8 @@
 			<ul>
 				<li class="h_item logoText"><a href="index.html">{LawBot}</a></li>
 				<li style="font-size:16px;margin-bottom:8px;margin-top: -17px;">法律人工智能系统</li>
-				<li><img src="images/qcode.png" width="100" height="100"></li>
-				<li><span class="copyright">Copyright ©2016 ailaw.com. ALL Rights Reserved</span></li>
+				<li><img src="images/qcode.png" width="120" height="120"></li>
+				<li><span class="copyright">Copyright ©2018 xiaofabo.com.cn. ALL Rights Reserved</span></li>
 				<li style="margin-top: -3px;"><span class="copyright">粤ICP备05005391号</span></li>
 			</ul>
 		</li>
@@ -409,7 +418,7 @@
 				<li class="h_item">关于</li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">关于我们</a></li>
 				<li class="fhI"><a href="https://www.v5kf.com/public/ailaw/about.html">联系我们</a></li>
-				<li class="fhI">legallab@hotmail.com</li>
+				<li class="fhI">xiaofabo_at_xiaofabo_dot_com_dot_cn (replace "_at_" with "@" and "_dot_" with ".")</li>
 			</ul>
 		</li>
 	</ul>
