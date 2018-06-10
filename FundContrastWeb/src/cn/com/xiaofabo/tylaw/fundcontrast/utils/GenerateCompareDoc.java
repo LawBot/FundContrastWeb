@@ -92,14 +92,14 @@ public class GenerateCompareDoc {
 	 */
 	String headerContent = "条文对照表测试文本";
 
-	public int generate(String title, String headerText, String leadingText, List<PatchDto> contrastList, FundDoc templateDoc,
-			FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
+	public int generate(String title, String headerText, String leadingText, List<PatchDto> contrastList,
+			FundDoc templateDoc, FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 
 		System.out.println("Start contrast document generation");
 		StringBuilder sb = new StringBuilder();
 
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
-		for (int i = 0; i < compactList.size(); i++) {
+		for (int i = 0; compactList != null && i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
@@ -108,9 +108,18 @@ public class GenerateCompareDoc {
 			sb.append("\n");
 		}
 
-		System.out.println("Different items in total: " + contrastList.size() + ".");
-		System.out.println("Lines generated: " + compactList.size() + ".");
-		int nRow = compactList.size() + 1;
+		int contrastListSize = 0;
+		int compactListSize = 0;
+		if (contrastList != null && !contrastList.isEmpty()) {
+			contrastListSize = contrastList.size();
+			if (compactList != null || !compactList.isEmpty()) {
+				compactListSize = compactList.size();
+			}
+		}
+
+		System.out.println("Different items in total: " + contrastListSize + ".");
+		System.out.println("Lines generated: " + compactListSize + ".");
+		int nRow = compactListSize + 1;
 		XWPFDocument document = new XWPFDocument();
 		FileOutputStream out = new FileOutputStream(new File(outputPath));
 
@@ -169,7 +178,7 @@ public class GenerateCompareDoc {
 		}
 
 		/// Generate table content
-		for (int i = 0; i < compactList.size(); ++i) {
+		for (int i = 0; i < compactListSize; ++i) {
 			List<PatchDto> compactListItem = compactList.get(i);
 			XWPFTableRow tableRow = table.getRow(i + 1);
 			PatchDto firstItem = compactListItem.get(0);
@@ -518,6 +527,10 @@ public class GenerateCompareDoc {
 	}
 
 	private List<List<PatchDto>> combineListEntries(List<PatchDto> contrastList, int endLevel) {
+		if (contrastList == null || contrastList.isEmpty()) {
+			return null;
+		}
+
 		List<List<PatchDto>> compactList = new LinkedList<List<PatchDto>>();
 		List<PatchDto> tmpList = new LinkedList<PatchDto>();
 
@@ -530,9 +543,7 @@ public class GenerateCompareDoc {
 			List<Integer> curPdtIdx = curPdt.getPartIndex();
 			List<Integer> prePdtIdx = prePdt.getPartIndex();
 
-			if (
-					getIndexDepth(curPdtIdx) <= endLevel || 
-					isIdxListIdentical(curPdtIdx, prePdtIdx)) {
+			if (getIndexDepth(curPdtIdx) <= endLevel || isIdxListIdentical(curPdtIdx, prePdtIdx)) {
 				if (!tmpList.isEmpty()) {
 					compactList.add(tmpList);
 				}
@@ -544,9 +555,9 @@ public class GenerateCompareDoc {
 				tmpList = new LinkedList<PatchDto>();
 			} else {
 				if (isIdxListIdentical(getParentIndex(curPdtIdx), getParentIndex(prePdtIdx))
-//						|| isIdxListIdentical(getParentIndex(curPdtIdx), prePdtIdx)
-//						|| isIdxListIdentical(curPdtIdx, getParentIndex(prePdtIdx))
-						) {
+				// || isIdxListIdentical(getParentIndex(curPdtIdx), prePdtIdx)
+				// || isIdxListIdentical(curPdtIdx, getParentIndex(prePdtIdx))
+				) {
 					tmpList.add(curPdt);
 				} else {
 					if (!tmpList.isEmpty()) {
