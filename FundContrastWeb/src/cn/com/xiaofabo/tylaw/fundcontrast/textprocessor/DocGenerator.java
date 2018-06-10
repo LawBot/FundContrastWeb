@@ -73,9 +73,9 @@ public class DocGenerator {
      * @param outputDocPath
      * @return
      */
-    public static int generate(String inputSampleDocPath, String outputDocPath,String templatePathDir,String fundType, String reasonColumn) throws Exception {
+    public static int generate(String inputSampleDocPath, String inputOrignDocPath,String outputDocPath,String templatePathDir, String reasonColumn) throws Exception {
     	int statusCode = 0;
-    	int fType = Integer.parseInt(fundType);
+//    	int fType = Integer.parseInt(fundType);
     	int rColumn = Integer.parseInt(reasonColumn);
     	
     	System.out.println("Start generating process");
@@ -104,35 +104,35 @@ public class DocGenerator {
 
         String templateDocPath;
         
-        switch (fType) {
-            case 0:
-            	statusCode += 0;
-                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_STOCK_C;
-                break;
-            case 1:
-            	statusCode += 1;
-                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_INDEX;
-                break;
-            case 2:
-            	statusCode += 2;
-                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_BOND;
-                break;
-            case 3:
-            	statusCode += 3;
-                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_MONETARY;
-                break;
-            default:
-                templateDocPath = "";
-        }
+//        switch (fType) {
+//            case 0:
+//            	statusCode += 0;
+//                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_STOCK_C;
+//                break;
+//            case 1:
+//            	statusCode += 1;
+//                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_INDEX;
+//                break;
+//            case 2:
+//            	statusCode += 2;
+//                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_BOND;
+//                break;
+//            case 3:
+//            	statusCode += 3;
+//                templateDocPath = templatePathDir+DataUtils.STANDARD_TYPE_MONETARY;
+//                break;
+//            default:
+//                templateDocPath = "";
+//        }
 
         
-        if (templateDocPath.isEmpty()) {
-            return STATUS_ERROR_TEMPLATE_NOT_FOUND;
-        }
+//        if (templateDocPath.isEmpty()) {
+//            return STATUS_ERROR_TEMPLATE_NOT_FOUND;
+//        }
 
-        DocProcessor templateDocProcessor = new DocProcessor(templateDocPath);
+        DocProcessor templateDocProcessor = new DocProcessor(inputSampleDocPath);
         try {
-            templateDocProcessor.readText(templateDocPath);
+            templateDocProcessor.readText(inputSampleDocPath);
         } catch (IOException e) {
             /// Read input sample document IO error
             return STATUS_ERROR_TEMPLATE_IO_ERROR;
@@ -146,22 +146,22 @@ public class DocGenerator {
         leadingTextSB.append(sampleDoc.getContractName());
         leadingTextSB.append("募集申请材料之");
         leadingTextSB.append(outputFileTitle);
-        switch (fType) {
-            case 0:
-                leadingTextSB.append(LEADING_TEXT_STOCK);
-                break;
-            case 1:
-                leadingTextSB.append(LEADING_TEXT_INDEX);
-                break;
-            case 2:
-                leadingTextSB.append(LEADING_TEXT_BOND);
-                break;
-            case 3:
-                leadingTextSB.append(LEADING_TEXT_CURRENCY);
-                break;
-            default:
-                break;
-        }
+//        switch (fType) {
+//            case 0:
+//                leadingTextSB.append(LEADING_TEXT_STOCK);
+//                break;
+//            case 1:
+//                leadingTextSB.append(LEADING_TEXT_INDEX);
+//                break;
+//            case 2:
+//                leadingTextSB.append(LEADING_TEXT_BOND);
+//                break;
+//            case 3:
+//                leadingTextSB.append(LEADING_TEXT_CURRENCY);
+//                break;
+//            default:
+//                break;
+//        }
         String leadingText = leadingTextSB.toString();
         
         GenerateCompareDoc genDoc = new GenerateCompareDoc();
@@ -179,9 +179,9 @@ public class DocGenerator {
         String headerText = leadingHeader + sampleDoc.getContractName() + "的法律意见";
         
         try {
-        	System.out.println("TemplateDocPath: " + templateDocPath);
+//        	System.out.println("TemplateDocPath: " + templateDocPath);
         	System.out.println("InputSampleDocPath: " + inputSampleDocPath);
-            patchDtoList = compareUtils.getPatchDtoList(templateDocPath, inputSampleDocPath);
+            patchDtoList = compareUtils.getPatchDtoList(inputOrignDocPath, inputSampleDocPath);
         } catch (Exception e) {
             return STATUS_ERROR_UNKNOWN;
         }

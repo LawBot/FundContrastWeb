@@ -295,23 +295,26 @@
          <div class="wrap">
             <div class="search">
                <div>
-                  <input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged()" value="${uploadName}">
-                  <div class="btn" id="selectBtn" onclick= "openFileDialog()" >选择文件</div>
+               	  <span>模板文件</span><input type="text" id="orignFile" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged1()" value="${uploadName1}">
+               	  <div class="btn" id="selectBtn1" onclick= "openFileDialog1()" >选择文件</div>
+               	  <p><br> </p>
+                  <span>对照文件</span><input type="text" id="file" readonly="readonly" placeholder="请选择上传合同文件" class="file" onkeypress = "fileNameChanged2()" value="${uploadName2}">
+                  <div class="btn" id="selectBtn" onclick= "openFileDialog2()" >选择文件</div>
                   
                   <div class = "searchBtn">
-                  <form id="fileDataForm" enctype="multipart/form-data" method="post">
-                  <!-- <input class="btn mystyle" type="file"  name="targetFile1" id="targetFile1"> -->
-                  <input type="hidden" name="uploadName" id="uploadName">
-                  <input type="hidden" name="fundType" id="fundType"/> 
-                  <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/> 
-                  <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected(this)">
-                 
-                  
-                   </form>
+                  <form id="fileDataForm2" enctype="multipart/form-data" method="post" action="uploadFile2.do" onsubmit="return saveReport2();">
+	                  <input type="hidden" name="uploadName2" id="uploadName2">
+	                  <input type="file" id="targetFile2" name="targetFile2" style="display:none" onchange = "fileSelected2(this)">
+                  </form>
+                   
+                  <form id="fileDataForm1" enctype="multipart/form-data" method="post" action="uploadFile1.do" onsubmit="return saveReport1();">
+	                  <input type="hidden" name="uploadName1" id="uploadName1">
+	                  <input type="file" id="targetFile1" name="targetFile1" style="display:none" onchange = "fileSelected1(this)">
+                  </form>
                     </div>
                </div>
             </div>
-            <div class="circle1">
+           <!--  <div class="circle1">
             <ul>
                <li class="item a" id="foundType"><a ><span>基金类型</span></a></li>
                <li class="btn" id="btn_stockType" onclick="clickJijin('btn_stockType');" data-id="0"><a id="1"><span id="2">股票型</span></a></li>
@@ -321,7 +324,7 @@
             </ul>
             </div>
             <input type="hidden" id="jjSelect" >
-            <input type="hidden" id="fxSelect" >
+            <input type="hidden" id="fxSelect" > -->
             <div class="circle3">
             <ul>
                <li class="item a" id="updateReason"><a><span>修改理由</span></a></li>
@@ -334,8 +337,9 @@
              <div class="download">
                <div>
                	  <form action="download.do" id="downloadForm">
-                        <input type="hidden" name="fileName" id="fileName"/>
-                        <div class="btn c_grey" id="updateBtn" >生成对照表</div>
+                        <input type="hidden" name="reasonColumn" id="reasonColumn" value="1"/>
+                        
+                        <div class="btn c_grey" id="updateBtn" onclick = "downloadClicked();">生成对照表</div>
                         <!-- <button class="btn" type="button" id="downloadBtn"  onclick = "downloadClicked();">下载对照表</button> -->
                    </form>
                </div>
@@ -387,7 +391,7 @@
 		<li class="f_item" style="width:35%;"> 
   
 			<ul>
-				<li class="h_item logoText"><a href="index.html">{LawBot}</a></li>
+				<li class="h_item logoText"><a href="javaSctipt:void(0);">{LawBot}</a></li>
 				<li style="font-size:16px;margin-bottom:8px;margin-top: -17px;">法律人工智能系统</li>
 				<li><img src="images/qcode.png" width="120" height="120"></li>
 				<li><span class="copyright">Copyright ©2018 xiaofabo.com.cn. ALL Rights Reserved</span></li>
@@ -424,18 +428,63 @@
 	</ul>
 </div>
       <script type="text/javascript">
-      function openFileDialog()
+      function saveReport2() { 
+		// jquery 表单提交 
+		$("#fileDataForm2").ajaxSubmit(function(message) { 
+		// 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容 
+		}); 
+		
+		return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转 
+		} 
+		
+	  function saveReport1() { 
+		// jquery 表单提交 
+		$("#fileDataForm1").ajaxSubmit(function(message) { 
+		// 对于表单提交成功后处理，message为提交页面saveReport.htm的返回内容 
+		}); 
+		
+		return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转 
+		} 
+      
+      function openFileDialog1()
       {
-      document.getElementById("targetFile1").click();
+    	 $("#targetFile1").val("");  
+     	 document.getElementById("targetFile1").click();
+     
+      }
+      
+      function openFileDialog2()
+      {
+    	 $("#targetFile2").val("");  
+     	 document.getElementById("targetFile2").click();
+     
       }
 
-      function fileSelected(input){
-      var fileName = input.files[0].name;
-      var file = $("#targetFile1").val();
-	  var pos=file.lastIndexOf("\\");
-      document.getElementById('file').value = file.substring(pos+1);
-      checkFileName(fileName);
-      $("#updateBtn").attr("onclick","updateFile();");
+      function fileSelected2(input){
+	      var fileName = input.files[0].name;
+	      var file = $("#targetFile2").val();
+		  var pos=file.lastIndexOf("\\");
+	      document.getElementById('file').value = file.substring(pos+1);
+	      if ($("#file").val()!="" && $("#file").val()!=null && $("#orignFile").val()!="" && $("#orignFile").val()!=null) {
+	    	  checkFileName(fileName);
+	    	  //$("#updateBtn").attr("onclick","updateFile();");
+		  }
+	      $("#uploadName2").val($("#file").val());
+	      $("#fileDataForm2").submit();
+	     
+      }
+      
+      function fileSelected1(input){
+	      var fileName = input.files[0].name;
+	      var file = $("#targetFile1").val();
+		  var pos=file.lastIndexOf("\\");
+	      document.getElementById('orignFile').value = file.substring(pos+1);
+	      if ($("#file").val()!="" && $("#file").val()!=null && $("#orignFile").val()!="" && $("#orignFile").val()!=null) {
+		      checkFileName(fileName);
+		      //$("#updateBtn").attr("onclick","updateFile();");
+	      }
+	      $("#uploadName1").val($("#orignFile").val());
+	      $("#fileDataForm1").submit();
       }
 
       function checkFileName(input){
@@ -443,13 +492,22 @@
       document.getElementById('updateBtn').removeAttribute('disabled');
       document.getElementById('updateBtn').setAttribute('class','btn');
       }
-      function fileNameChanged(){
-      var str = document.getElementById('file').value;
-      if(str.length <= 3)
-      document.getElementById('updateBtn').setAttribute('class','btn_grey');
-      document.getElementById('updateBtn').setAttribute('disabled','disabled');
+      function fileNameChanged2(){
+    	  //alert(2);
+	      var str = document.getElementById('file').value;
+	      /* if(str.length <= 3)
+	      document.getElementById('updateBtn').setAttribute('class','btn_grey');
+	      document.getElementById('updateBtn').setAttribute('disabled','disabled'); */
+      }
+      function fileNameChanged1(){
+    	  //alert(1);
+	      var str = document.getElementById('orignFile').value;
+	      /* if(str.length <= 3)
+	      document.getElementById('updateBtn').setAttribute('class','btn_grey');
+	      document.getElementById('updateBtn').setAttribute('disabled','disabled'); */
       }
       function updateFile(){
+    	  
     	  if($("#targetFile1").val()==""){
     		  alert("请选择一个文件上传");
     		  $("#downloadBtn").removeAttr("onclick");//上传文件失败移除下载点击效果
@@ -457,7 +515,7 @@
     	  }
     	  $("#uploadName").val($("#file").val());
     	  //基金类型
-    	  $("#fundType").val($(".circle1").find(".btn").eq(0).attr('data-id'));
+    	  //$("#fundType").val($(".circle1").find(".btn").eq(0).attr('data-id'));
       	 $("#fileDataForm").submit();
 
       }
