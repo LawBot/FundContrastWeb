@@ -22,7 +22,7 @@ public class TextUtils {
     public static String REGEX_IDENTIFIER_LEVEL_3 = "^\\d+[、|\\.|．]";
     public static String REGEX_IDENTIFIER_LEVEL_4 = "^[（|(]\\d+[）|)]";
     
-    public static String REGEX_PUNCTUATIONS = "[，。；、]";
+    public static String REGEX_PUNCTUATIONS = "[，,。.；;、%%（(）)]";
     
 
     public static List removeAllEmptyLines(List strList) {

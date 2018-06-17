@@ -313,6 +313,7 @@ public class CompareUtils {
 	}
 
 	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
+		/// Define different exclude list for differnt change types
 		List<String> excludeIndex = new ArrayList<String>();
 		excludeIndex.add("1-0");
 		excludeIndex.add("1-1");
