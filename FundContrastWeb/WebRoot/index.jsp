@@ -258,7 +258,7 @@
                {LawBot}
                <p style="padding-left:6px;">小法博AI系统</p>
             </div>
-            <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a>
+            <!-- <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a> -->
             <ul class="nav">
                <li class="nav_title"><span>基金合同对照</span></li>
                <!-- <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li> -->
