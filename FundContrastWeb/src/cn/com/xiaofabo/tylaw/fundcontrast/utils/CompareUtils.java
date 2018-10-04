@@ -19,6 +19,7 @@ public class CompareUtils {
 	// sort patchDtoList
 	List<String> sortIdList = new ArrayList<>();
 
+	/// Core comparison method
 	public List<PatchDto> getPatchDtoList(String templatePath, String samplePath) throws Exception {
 		System.out.println("Start getPatchDtoList");
 
@@ -45,6 +46,7 @@ public class CompareUtils {
 			sampleTitles.add(title);
 		}
 
+		/// Finding which chapter is added or deleted.
 		PartMatch partMatch = StringSimUtils.findBestMatch(templateTitles, sampleTitles);
 		List addList = partMatch.getAddList();
 		List deleteList = partMatch.getDeleteList();
