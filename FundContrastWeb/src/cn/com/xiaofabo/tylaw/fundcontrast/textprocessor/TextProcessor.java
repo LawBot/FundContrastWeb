@@ -25,20 +25,22 @@ public class TextProcessor {
     private static final String LINE_BREAK = "\\r?\\n";
     private String docText;
     private List<String> textList;
+    public String docPath;
 
-    public TextProcessor() {
+    public TextProcessor(String docPath) {
+    	this.docPath = docPath;
     }
 
-    public boolean readText(String filePath) throws IOException {
+    public boolean readText() throws IOException {
         try {
-            FileInputStream fis = new FileInputStream(filePath);
+            FileInputStream fis = new FileInputStream(docPath);
             XWPFDocument docx = new XWPFDocument(fis);
             XWPFWordExtractor we = new XWPFWordExtractor(docx);
             // read text
             docText = we.getText();
         } /// Old version word documents
         catch (org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException e) {
-            HWPFDocument doc = new HWPFDocument(new FileInputStream(filePath));
+            HWPFDocument doc = new HWPFDocument(new FileInputStream(docPath));
             WordExtractor we = new WordExtractor(doc);
             docText = we.getText();
         } catch (IOException e) {

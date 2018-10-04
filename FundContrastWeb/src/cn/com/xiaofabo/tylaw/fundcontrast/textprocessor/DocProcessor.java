@@ -5,6 +5,7 @@
  */
 package cn.com.xiaofabo.tylaw.fundcontrast.textprocessor;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,8 +25,9 @@ public class DocProcessor extends TextProcessor {
     public String textOfGenDoc = "";
     private List<String> partIdentifiers;
 
-    public DocProcessor(String docName) {
-        this.fundDoc = new FundDoc(docName);
+    public DocProcessor(String docPath) {
+    	super(docPath);
+        this.fundDoc = new FundDoc(docPath);
         partIdentifiers = new LinkedList<String>();
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_0_TP);
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_1);
@@ -34,7 +36,8 @@ public class DocProcessor extends TextProcessor {
         partIdentifiers.add(TextUtils.REGEX_IDENTIFIER_LEVEL_4);
     }
 
-    public FundDoc process() {
+    public FundDoc process() throws IOException{
+    	super.readText();
         int currentLevel = -1;
         int lastPartLevel = -1;
         int lineIdx = 0;

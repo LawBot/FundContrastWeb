@@ -24,12 +24,12 @@ public class CompareUtils {
 
 		List<PatchDto> patchDtoList = new LinkedList();
 
+		
+		/// Read in and structure 2 files (template file and sample file)
 		DocProcessor templateProcessor = new DocProcessor(templatePath);
-		templateProcessor.readText(templatePath);
 		FundDoc templateDoc = templateProcessor.process();
 
 		DocProcessor sampleProcessor = new DocProcessor(samplePath);
-		sampleProcessor.readText(samplePath);
 		FundDoc sampleDoc = sampleProcessor.process();
 
 		/// Compare first level part

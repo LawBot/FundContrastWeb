@@ -80,14 +80,13 @@ public class DocGenerator {
     	
     	System.out.println("Start generating process");
         DocProcessor sampleDocProcessor = new DocProcessor(inputSampleDocPath);
+        FundDoc sampleDoc = null;
         try {
-            sampleDocProcessor.readText(inputSampleDocPath);
+        	sampleDoc = sampleDocProcessor.process();
         } catch (IOException e) {
             /// Read input sample document IO error
             return STATUS_ERROR_INPUT_IO_ERROR;
         }
-
-        FundDoc sampleDoc = sampleDocProcessor.process();
 
 //        if (sampleDoc.getType() == FundDoc.CONTRACT_TYPE_UNKNOWN) {
 //            return STATUS_ERROR_FUND_TYPE_UNKNOWN;
@@ -131,13 +130,14 @@ public class DocGenerator {
 //        }
 
         DocProcessor templateDocProcessor = new DocProcessor(inputSampleDocPath);
+        FundDoc templateDoc = null;
         try {
-            templateDocProcessor.readText(inputSampleDocPath);
+        	templateDoc = templateDocProcessor.process();
         } catch (IOException e) {
             /// Read input sample document IO error
             return STATUS_ERROR_TEMPLATE_IO_ERROR;
         }
-        FundDoc templateDoc = templateDocProcessor.process();
+         
         
 
         String outputFileTitle = "《" + sampleDoc.getContractNameComplete() + "》";
