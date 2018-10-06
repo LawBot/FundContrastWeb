@@ -165,7 +165,7 @@ public class FundDoc {
 					// compareDtoList.add(compareDto);
 				}
 				compareDtoList.add(compareDto);
-				if (lvl1Part.hasPart()) {
+				if (lvl1Part.hasChildParts()) {
 					for (int j = 0; j < lvl1Part.getChildPart().size(); ++j) {
 						DocPart lvl2Part = (DocPart) lvl1Part.getChildPart().get(j);
 						if (lvl2Part != null) {
@@ -188,7 +188,7 @@ public class FundDoc {
 								compareDto.setText(lvl2Part.getPoint());
 							}
 							compareDtoList.add(compareDto);
-							if (lvl2Part.hasPart()) {
+							if (lvl2Part.hasChildParts()) {
 								for (int k = 0; k < lvl2Part.getChildPart().size(); ++k) {
 									DocPart lvl3Part = (DocPart) lvl2Part.getChildPart().get(k);
 									if (lvl3Part != null) {
@@ -218,7 +218,7 @@ public class FundDoc {
 											// compareDtoList.add(compareDto);
 										}
 										compareDtoList.add(compareDto);
-										if (lvl3Part.hasPart()) {
+										if (lvl3Part.hasChildParts()) {
 											for (int l = 0; l < lvl3Part.getChildPart().size(); ++l) {
 												DocPart lvl4Part = (DocPart) lvl3Part.getChildPart().get(l);
 												if (lvl4Part != null) {
@@ -253,7 +253,7 @@ public class FundDoc {
 														// compareDtoList.add(compareDto);
 													}
 													compareDtoList.add(compareDto);
-													if (lvl4Part.hasPart()) {
+													if (lvl4Part.hasChildParts()) {
 														for (int m = 0; m < lvl4Part.getChildPart().size(); ++m) {
 															DocPart lvl5Part = (DocPart) lvl4Part.getChildPart().get(m);
 															if (lvl5Part != null) {

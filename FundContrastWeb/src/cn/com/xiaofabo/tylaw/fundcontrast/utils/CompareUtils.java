@@ -32,6 +32,8 @@ public class CompareUtils {
 
 		DocProcessor sampleProcessor = new DocProcessor(samplePath);
 		FundDoc sampleDoc = sampleProcessor.process();
+		
+//		System.out.println(sampleProcessor.getText());
 
 		/// Compare first level part
 		List<String> templateTitles = new LinkedList<String>();
@@ -51,74 +53,20 @@ public class CompareUtils {
 		List addList = partMatch.getAddList();
 		List deleteList = partMatch.getDeleteList();
 		Map matchList = partMatch.getMatchList();
+		
 
 		for (int i = 0; i < deleteList.size(); ++i) {
 			int chapterIndex = (int) deleteList.get(i);
-			PatchDto pdt = new PatchDto();
-			// pdt.setChapterIndex(chapterIndex);
-			pdt.setChangeType("delete");
-			/// TODO: should be recursive
 			/// Delete means exists in template but not in sample
-			DocPart dp = templateDoc.getParts().get(chapterIndex);
-			String pointText = dp.getWholePoint();
-			pdt.setOrignalText(pointText);
-			RevisedDto rdt = new RevisedDto();
-			for (int j = 0; j < pointText.length(); ++j) {
-				Character c = pointText.charAt(j);
-				rdt.deleteData(j, c);
-			}
-			pdt.setPartId(dp.getPartCount());
-			pdt.setPartIndex(dp.getPartIndex());
-			pdt.setChapterTitle(templateDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
-			pdt.setRevisedDto(rdt);
-			patchDtoList.add(pdt);
+			DocPart part = templateDoc.getParts().get(chapterIndex);
+			deletePartRecursive(patchDtoList, part);
 		}
 
 		for (int i = 0; i < addList.size(); ++i) {
 			int chapterIndex = (int) addList.get(i);
-			PatchDto pdt = new PatchDto();
-			// pdt.setChapterIndex(chapterIndex);
-			pdt.setChangeType("add");
-			/// TODO: should be recursive
 			/// Add means exists in sample but not in template
-			DocPart dp = sampleDoc.getParts().get(chapterIndex);
-
-			String pointText = dp.getWholePoint();
-			RevisedDto rdt = new RevisedDto();
-			rdt.setRevisedText(pointText);
-			for (int j = 0; j < pointText.length(); ++j) {
-				Character c = pointText.charAt(j);
-				rdt.addData(j, c);
-			}
-			// pdt.setPartId(dp.getPartCount());
-			pdt.setPartIndex(dp.getPartIndex());
-			pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
-			pdt.setRevisedDto(rdt);
-			patchDtoList.add(pdt);
-
-			int childIndex = 0;
-			while (true) {
-				List<Integer> childPartIndex = new ArrayList<Integer>(dp.getPartIndex());
-				childPartIndex.add(childIndex++);
-				DocPart cp = sampleDoc.getPart(childPartIndex);
-				if (cp != null) {
-					PatchDto cdt = new PatchDto();
-					cdt.setChangeType("add");
-					String cpText = cp.getWholePoint();
-					RevisedDto crdt = new RevisedDto();
-					crdt.setRevisedText(cpText);
-					for(int j = 0; j < cpText.length(); ++j) {
-						Character c = cpText.charAt(j);
-						crdt.addData(j, c);
-					}
-					cdt.setPartIndex(childPartIndex);
-					cdt.setChapterTitle(sampleDoc.getParts().get(childPartIndex.get(0)).getTitle());
-					cdt.setRevisedDto(crdt);
-					patchDtoList.add(cdt);
-				} else {
-					break;
-				}
-			}
+			DocPart part = sampleDoc.getParts().get(chapterIndex);
+			addPartRecursive(patchDtoList, part);
 		}
 
 		Iterator it = matchList.keySet().iterator();
@@ -127,12 +75,12 @@ public class CompareUtils {
 			int sampleIndex = (int) matchList.get(templateIndex);
 			PatchDto pdt = new PatchDto();
 			// pdt.setChapterIndex(sampleIndex);
-			pdt.setChangeType("change");
+//			pdt.setChangeType("change");
 			DocPart templatePart = templateDoc.getParts().get(templateIndex);
 			DocPart samplePart = sampleDoc.getParts().get(sampleIndex);
-			pdt.setPartId(samplePart.getPartCount());
-			pdt.setPartIndex(samplePart.getPartIndex());
-			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
+//			pdt.setPartId(samplePart.getPartCount());
+//			pdt.setPartIndex(samplePart.getPartIndex());
+//			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
 
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, templatePart, samplePart);
@@ -207,18 +155,19 @@ public class CompareUtils {
 			patchDtoList.add(pdt);
 		}
 
-		if (!templatePart.hasPart() && !samplePart.hasPart()) {
+		/// Neither template nor sample part has child parts, stop comparing
+		if (!templatePart.hasChildParts() && !samplePart.hasChildParts()) {
 			return;
 		}
 
 		List templateTitles = new LinkedList();
 		List sampleTitles = new LinkedList();
 
-		for (int i = 0; templatePart.hasPart() && i < templatePart.getChildPart().size(); ++i) {
+		for (int i = 0; templatePart.hasChildParts() && i < templatePart.getChildPart().size(); ++i) {
 			String title = ((DocPart) templatePart.getChildPart().get(i)).getTitle();
 			templateTitles.add(title);
 		}
-		for (int i = 0; samplePart.hasPart() && i < samplePart.getChildPart().size(); ++i) {
+		for (int i = 0; samplePart.hasChildParts() && i < samplePart.getChildPart().size(); ++i) {
 			String title = ((DocPart) samplePart.getChildPart().get(i)).getTitle();
 			sampleTitles.add(title);
 		}
@@ -230,70 +179,16 @@ public class CompareUtils {
 
 		for (int i = 0; i < deleteList.size(); ++i) {
 			int chapterIndex = (int) deleteList.get(i);
-			PatchDto pdt = new PatchDto();
-			// pdt.setChapterIndex(chapterIndex);
-			pdt.setChangeType("delete");
-			/// TODO: should be recursive
 			/// Delete means exists in template but not in sample
-			DocPart dp = templatePart.getChildPart().get(chapterIndex);
-			String pointText = dp.getWholePoint();
-			pdt.setOrignalText(pointText);
-			RevisedDto rdt = new RevisedDto();
-			for (int j = 0; j < pointText.length(); ++j) {
-				Character c = pointText.charAt(j);
-				rdt.deleteData(j, c);
-			}
-			pdt.setPartId(dp.getPartCount());
-			pdt.setPartIndex(dp.getPartIndex());
-			pdt.setChapterTitle(templateDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
-			pdt.setRevisedDto(rdt);
-			patchDtoList.add(pdt);
+			DocPart part = templatePart.getChildPart().get(chapterIndex);
+			deletePartRecursive(patchDtoList, part);
 		}
 
 		for (int i = 0; i < addList.size(); ++i) {
 			int chapterIndex = (int) addList.get(i);
-			PatchDto pdt = new PatchDto();
-			// pdt.setChapterIndex(chapterIndex);
-			pdt.setChangeType("add");
-			/// TODO: should be recursive
-			/// Add means exists in sample but not in template
-			DocPart dp = samplePart.getChildPart().get(chapterIndex);
-			String pointText = dp.getWholePoint();
-			RevisedDto rdt = new RevisedDto();
-			rdt.setRevisedText(pointText);
-			for (int j = 0; j < pointText.length(); ++j) {
-				Character c = pointText.charAt(j);
-				rdt.addData(j, c);
-			}
-			pdt.setRevisedDto(rdt);
-			pdt.setPartId(dp.getPartCount());
-			pdt.setPartIndex(dp.getPartIndex());
-			pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
-			patchDtoList.add(pdt);
-			
-			int childIndex = 0;
-			while (true) {
-				List<Integer> childPartIndex = new ArrayList<Integer>(dp.getPartIndex());
-				childPartIndex.add(childIndex++);
-				DocPart cp = sampleDoc.getPart(childPartIndex);
-				if (cp != null) {
-					PatchDto cdt = new PatchDto();
-					cdt.setChangeType("add");
-					String cpText = cp.getWholePoint();
-					RevisedDto crdt = new RevisedDto();
-					crdt.setRevisedText(cpText);
-					for(int j = 0; j < cpText.length(); ++j) {
-						Character c = cpText.charAt(j);
-						crdt.addData(j, c);
-					}
-					cdt.setPartIndex(childPartIndex);
-					cdt.setChapterTitle(sampleDoc.getParts().get(childPartIndex.get(0)).getTitle());
-					cdt.setRevisedDto(crdt);
-					patchDtoList.add(cdt);
-				} else {
-					break;
-				}
-			}
+			/// add means exists in sample but not in template
+			DocPart part = samplePart.getChildPart().get(chapterIndex);
+			addPartRecursive(patchDtoList, part);
 		}
 
 		Iterator it = matchList.keySet().iterator();
@@ -313,6 +208,70 @@ public class CompareUtils {
 			compareParts(patchDtoList, templateDoc, sampleDoc, tPart, sPart);
 		}
 	}
+	
+	private boolean deletePartRecursive(List<PatchDto> patchDtoList, DocPart part) {
+		deletePart(patchDtoList, part);
+		if(part.hasChildParts()) {
+			for(int index = 0; index < part.getChildPart().size(); ++index) {
+				DocPart childPart = part.getChildPart().get(index);
+				deletePartRecursive(patchDtoList, childPart);
+			}
+		}
+		return true;
+	}
+	
+	private boolean addPartRecursive(List<PatchDto> patchDtoList, DocPart part) {
+		addPart(patchDtoList, part);
+		if(part.hasChildParts()) {
+			for(int index = 0; index < part.getChildPart().size(); ++index) {
+				DocPart childPart = part.getChildPart().get(index);
+				addPartRecursive(patchDtoList, childPart);
+			}
+		}
+		return true;
+	}
+	
+	private boolean deletePart(List<PatchDto> patchDtoList, DocPart part) {
+		System.out.println("Delete part " + part.getPartIndexStr() + ": " + part.getTitle());
+		PatchDto pdt = new PatchDto();
+		pdt.setChangeType("delete");
+		String pointText = part.getWholePoint();
+		pdt.setOrignalText(pointText);
+		RevisedDto rdt = new RevisedDto();
+		for (int j = 0; j < pointText.length(); ++j) {
+			Character c = pointText.charAt(j);
+			rdt.deleteData(j, c);
+		}
+		pdt.setPartId(part.getPartCount());
+		pdt.setPartIndex(part.getPartIndex());
+		// pdt.setChapterTitle(templateDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
+		pdt.setChapterTitle(part.getTitle());
+		pdt.setRevisedDto(rdt);
+		patchDtoList.add(pdt);
+		return true;
+	}
+	
+	private boolean addPart(List<PatchDto> patchDtoList, DocPart part) {
+		System.out.println("Add part " + part.getPartIndexStr() + ": " + part.getTitle());
+		PatchDto pdt = new PatchDto();
+		pdt.setChangeType("add");
+		String pointText = part.getWholePoint();
+		RevisedDto rdt = new RevisedDto();
+		rdt.setRevisedText(pointText);
+		for (int j = 0; j < pointText.length(); ++j) {
+			Character c = pointText.charAt(j);
+			rdt.addData(j, c);
+		}
+		pdt.setRevisedDto(rdt);
+		pdt.setPartId(part.getPartCount());
+		pdt.setPartIndex(part.getPartIndex());
+//		pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
+		pdt.setChapterTitle(part.getTitle());
+		patchDtoList.add(pdt);
+		return true;
+	}
+	
+	
 
 	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
 		/// Define different exclude list for differnt change types
@@ -326,10 +285,14 @@ public class CompareUtils {
 		excludeIndex.add("1-6");
 		excludeIndex.add("1-23");
 		excludeIndex.add("1-28");
+		excludeIndex.add("1-35");
 		excludeIndex.add("1-42");
 
-		excludeIndex.add("2-2");
-		excludeIndex.add("2-3");
+		excludeIndex.add("2-0");
+//		excludeIndex.add("2-2");
+//		excludeIndex.add("2-3");
+		excludeIndex.add("2-4");
+		excludeIndex.add("2-5");
 
 		excludeIndex.add("6-0-0");
 		excludeIndex.add("6-1-0");

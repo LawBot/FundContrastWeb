@@ -17,7 +17,7 @@ public class DocPart implements Comparable<DocPart> {
     String text;
     String index;
     String partCount;
-    List<DocPart> childPart;
+    List<DocPart> childParts;
     List<Integer> partId;
     List<Integer> partIndex;
 
@@ -58,10 +58,10 @@ public class DocPart implements Comparable<DocPart> {
     }
 
     public boolean addPart(DocPart part) {
-        if (childPart == null) {
-            childPart = new LinkedList();
+        if (childParts == null) {
+            childParts = new LinkedList();
         }
-        return childPart.add(part);
+        return childParts.add(part);
     }
 
     public String getPartCount() {
@@ -83,25 +83,36 @@ public class DocPart implements Comparable<DocPart> {
     public List<Integer> getPartIndex() {
         return partIndex;
     }
+    
+    public String getPartIndexStr() {
+    	if(partIndex == null)
+    		return null;
+    	String indexStr = "";
+    	for(int index = 0; index < partIndex.size() - 1; ++index) {
+    		indexStr += partIndex.get(index) + "-";
+    	}
+    	indexStr += partIndex.get(partIndex.size()-1);
+    	return indexStr;
+    }
 
     public void setPartIndex(List<Integer> partIndex) {
         this.partIndex = partIndex;
     }
 
     public List<DocPart> getChildPart() {
-        return childPart;
+        return childParts;
     }
 
     public void setChildPart(List<DocPart> childPart) {
-        this.childPart = childPart;
+        this.childParts = childPart;
     }
 
-    //鏄惁鏄彾瀛愯妭鐐�
-    public boolean hasPart() {
-        if (childPart == null) {
+    /// This doc part has child part
+    public boolean hasChildParts() {
+        if (childParts == null) {
             return false;
         }
-        if (childPart.isEmpty()) {
+        if (childParts.isEmpty()) {
             return false;
         }
         return true;
@@ -112,9 +123,9 @@ public class DocPart implements Comparable<DocPart> {
         StringBuilder toReturn = new StringBuilder();
         toReturn.append("Title: ").append(title).append("\n");
         toReturn.append("Text: ").append(text).append("\n");
-        if (childPart != null) {
-        	for(int i = 0; i < childPart.size(); ++i) {
-        		toReturn.append(childPart.get(i).toString());
+        if (childParts != null) {
+        	for(int i = 0; i < childParts.size(); ++i) {
+        		toReturn.append(childParts.get(i).toString());
         	}
         }
         return toReturn.toString();
