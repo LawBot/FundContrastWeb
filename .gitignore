@@ -1,6 +1,7 @@
 /.metadata/
 /.recommenders/
 FundContrastWeb/WebRoot/data/Sample
+FundContrastWeb/WebRoot/data/StandardDoc
 .metadata
 *.tmp
 *.bak
