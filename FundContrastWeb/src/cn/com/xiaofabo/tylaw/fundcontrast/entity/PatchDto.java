@@ -106,7 +106,7 @@ public class PatchDto implements Comparable<PatchDto> {
 		}
 		return sb.toString();
 	}
-	
+
 	public String samplePartIndexStr() {
 		if (samplePartIndex == null)
 			return null;
@@ -123,7 +123,7 @@ public class PatchDto implements Comparable<PatchDto> {
 
 	@Override
 	public int compareTo(PatchDto pdt) {
-		
+
 		/// Should never happen
 		if (this.templatePartIndex == null && this.samplePartIndex == null) {
 			return 0;
@@ -132,7 +132,7 @@ public class PatchDto implements Comparable<PatchDto> {
 		if (pdt.getTemplatePartIndex() == null && pdt.getSamplePartIndex() == null) {
 			return 0;
 		}
-		
+
 		if (this.templatePartIndex != null && pdt.getTemplatePartIndex() != null) {
 			for (int i = 0; i < this.templatePartIndex.size(); ++i) {
 				if (i > pdt.getTemplatePartIndex().size() - 1) {
@@ -146,7 +146,7 @@ public class PatchDto implements Comparable<PatchDto> {
 				}
 			}
 		}
-		
+
 		if (this.templatePartIndex != null && pdt.getTemplatePartIndex() == null) {
 			for (int i = 0; i < this.templatePartIndex.size(); ++i) {
 				if (i > pdt.getSamplePartIndex().size() - 1) {
@@ -160,8 +160,8 @@ public class PatchDto implements Comparable<PatchDto> {
 				}
 			}
 		}
-		
-		if(this.templatePartIndex == null && pdt.getTemplatePartIndex() != null) {
+
+		if (this.templatePartIndex == null && pdt.getTemplatePartIndex() != null) {
 			for (int i = 0; i < this.samplePartIndex.size(); ++i) {
 				if (i > pdt.getTemplatePartIndex().size() - 1) {
 					return 1;
@@ -174,8 +174,8 @@ public class PatchDto implements Comparable<PatchDto> {
 				}
 			}
 		}
-		
-		if(this.templatePartIndex == null && pdt.getTemplatePartIndex() == null) {
+
+		if (this.templatePartIndex == null && pdt.getTemplatePartIndex() == null) {
 			for (int i = 0; i < this.samplePartIndex.size(); ++i) {
 				if (i > pdt.getSamplePartIndex().size() - 1) {
 					return 1;

@@ -219,7 +219,7 @@ public class GenerateCompareDoc {
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
 				List<Integer> partIndex = firstItem.getTemplatePartIndex();
-				if(firstItem.getSamplePartIndex() != null) {
+				if (firstItem.getSamplePartIndex() != null) {
 					partIndex = firstItem.getSamplePartIndex();
 				}
 				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {

@@ -194,6 +194,6 @@ public class DocGenerator {
         }
 
         System.out.println("Finish generating process");
-        return statusCode;
-    }
+		return statusCode;
+	}
 }
