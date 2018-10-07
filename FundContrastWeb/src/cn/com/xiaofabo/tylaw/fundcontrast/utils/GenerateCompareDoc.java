@@ -200,7 +200,7 @@ public class GenerateCompareDoc {
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
-				List<Integer> partIndex = firstItem.getPartIndex();
+				List<Integer> partIndex = firstItem.getTemplatePartIndex();
 				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
 
@@ -219,7 +219,7 @@ public class GenerateCompareDoc {
 			/// If index depth >= 3, then parent title should be displayed
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
-				List<Integer> partIndex = firstItem.getPartIndex();
+				List<Integer> partIndex = firstItem.getTemplatePartIndex();
 				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
 
@@ -231,7 +231,7 @@ public class GenerateCompareDoc {
 
 			for (int itemIdx = 0; itemIdx < compactListItem.size(); ++itemIdx) {
 				PatchDto contrastItem = compactListItem.get(itemIdx);
-				List<Integer> partIndex = contrastItem.getPartIndex();
+				List<Integer> partIndex = contrastItem.getTemplatePartIndex();
 				List<Integer> samplePartIndex = contrastItem.getSamplePartIndex();
 				String changeType = contrastItem.getChangeType();
 
@@ -540,8 +540,8 @@ public class GenerateCompareDoc {
 			PatchDto curPdt = contrastList.get(i);
 			PatchDto prePdt = contrastList.get(i - 1);
 
-			List<Integer> curPdtIdx = curPdt.getPartIndex();
-			List<Integer> prePdtIdx = prePdt.getPartIndex();
+			List<Integer> curPdtIdx = curPdt.getTemplatePartIndex();
+			List<Integer> prePdtIdx = prePdt.getTemplatePartIndex();
 
 			if (getIndexDepth(curPdtIdx) <= endLevel || isIdxListIdentical(curPdtIdx, prePdtIdx)) {
 				if (!tmpList.isEmpty()) {

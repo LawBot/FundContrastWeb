@@ -85,11 +85,20 @@ public class CompareUtils {
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, templatePart, samplePart);
 		}
+		
+		System.out.println("1");
+		System.out.println(pdtList2Str(patchDtoList));
+		System.out.println("2");
 
 		Collections.sort(patchDtoList);
+		System.out.println("3");
+		
+		
 
 		List<PatchDto> cleanList = cleanListEntries(patchDtoList);
-		return cleanList;
+		
+		System.out.println("Finish getPatchDtoList");
+		return null;
 	}
 
 	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
@@ -149,7 +158,7 @@ public class CompareUtils {
 			pdt.setIndexType("orginal");
 			pdt.setChangeType("change");
 			pdt.setPartId(templatePart.getPartCount());
-			pdt.setPartIndex(templatePart.getPartIndex());
+			pdt.setTempaltePartIndex(templatePart.getPartIndex());
 			pdt.setSamplePartIndex(samplePart.getPartIndex());
 			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
 			patchDtoList.add(pdt);
@@ -196,13 +205,13 @@ public class CompareUtils {
 		while (it.hasNext()) {
 			int templateIndex = (int) it.next();
 			int sampleIndex = (int) matchList.get(templateIndex);
-			PatchDto pdt = new PatchDto();
-			// pdt.setChapterIndex(sampleIndex);
-			pdt.setChangeType("change");
+//			PatchDto pdt = new PatchDto();
+//			// pdt.setChapterIndex(sampleIndex);
+//			pdt.setChangeType("change");
 			DocPart tPart = templatePart.getChildPart().get(templateIndex);
 			DocPart sPart = samplePart.getChildPart().get(sampleIndex);
-			pdt.setPartId(tPart.getPartCount());
-			pdt.setPartIndex(tPart.getPartIndex());
+//			pdt.setPartId(tPart.getPartCount());
+//			pdt.setPartIndex(tPart.getPartIndex());
 
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, tPart, sPart);
@@ -232,7 +241,7 @@ public class CompareUtils {
 	}
 	
 	private boolean deletePart(List<PatchDto> patchDtoList, DocPart part) {
-		System.out.println("Delete part " + part.getPartIndexStr() + ": " + part.getTitle());
+//		System.out.println("Delete part " + part.getPartIndexStr() + ": " + part.getTitle());
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("delete");
 		String pointText = part.getWholePoint();
@@ -243,7 +252,7 @@ public class CompareUtils {
 			rdt.deleteData(j, c);
 		}
 		pdt.setPartId(part.getPartCount());
-		pdt.setPartIndex(part.getPartIndex());
+		pdt.setTempaltePartIndex(part.getPartIndex());
 		// pdt.setChapterTitle(templateDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
 		pdt.setChapterTitle(part.getTitle());
 		pdt.setRevisedDto(rdt);
@@ -252,7 +261,7 @@ public class CompareUtils {
 	}
 	
 	private boolean addPart(List<PatchDto> patchDtoList, DocPart part) {
-		System.out.println("Add part " + part.getPartIndexStr() + ": " + part.getTitle());
+//		System.out.println("Add part " + part.getPartIndexStr() + ": " + part.getTitle());
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("add");
 		String pointText = part.getWholePoint();
@@ -264,17 +273,30 @@ public class CompareUtils {
 		}
 		pdt.setRevisedDto(rdt);
 		pdt.setPartId(part.getPartCount());
-		pdt.setPartIndex(part.getPartIndex());
+		pdt.setSamplePartIndex(part.getPartIndex());
 //		pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
 		pdt.setChapterTitle(part.getTitle());
 		patchDtoList.add(pdt);
 		return true;
 	}
 	
+	/// Helper function
+	private String pdtList2Str(List<PatchDto> contrastList) {
+		StringBuilder sb = new StringBuilder();
+		for(int index = 0; index < contrastList.size(); ++index) {
+			PatchDto pdt = contrastList.get(index);
+			sb.append(index + ": ");
+			sb.append("[" + pdt.getTemplatePartIndex() + "]");
+			sb.append("[" + pdt.getSamplePartIndex() + "]");
+			sb.append("[" + pdt.getChangeType() + "]");
+			sb.append("\n");
+		}
+		System.out.println("Done");
+		return sb.toString();
+	}
 	
-
 	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
-		/// Define different exclude list for differnt change types
+		/// Define different exclude list for different change types
 		List<String> excludeIndex = new ArrayList<String>();
 		excludeIndex.add("1-0");
 		excludeIndex.add("1-1");
@@ -355,9 +377,5 @@ public class CompareUtils {
 			}
 		}
 		return cleanList;
-	}
-
-	public List<String> getSortIdList() {
-		return sortIdList;
 	}
 }
