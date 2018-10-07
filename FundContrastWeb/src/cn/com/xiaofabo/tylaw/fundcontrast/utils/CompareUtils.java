@@ -25,15 +25,14 @@ public class CompareUtils {
 
 		List<PatchDto> patchDtoList = new LinkedList();
 
-		
 		/// Read in and structure 2 files (template file and sample file)
 		DocProcessor templateProcessor = new DocProcessor(templatePath);
 		FundDoc templateDoc = templateProcessor.process();
 
 		DocProcessor sampleProcessor = new DocProcessor(samplePath);
 		FundDoc sampleDoc = sampleProcessor.process();
-		
-//		System.out.println(sampleProcessor.getText());
+
+		// System.out.println(sampleProcessor.getText());
 
 		/// Compare first level part
 		List<String> templateTitles = new LinkedList<String>();
@@ -53,7 +52,6 @@ public class CompareUtils {
 		List addList = partMatch.getAddList();
 		List deleteList = partMatch.getDeleteList();
 		Map matchList = partMatch.getMatchList();
-		
 
 		for (int i = 0; i < deleteList.size(); ++i) {
 			int chapterIndex = (int) deleteList.get(i);
@@ -75,30 +73,29 @@ public class CompareUtils {
 			int sampleIndex = (int) matchList.get(templateIndex);
 			PatchDto pdt = new PatchDto();
 			// pdt.setChapterIndex(sampleIndex);
-//			pdt.setChangeType("change");
+			// pdt.setChangeType("change");
 			DocPart templatePart = templateDoc.getParts().get(templateIndex);
 			DocPart samplePart = sampleDoc.getParts().get(sampleIndex);
-//			pdt.setPartId(samplePart.getPartCount());
-//			pdt.setPartIndex(samplePart.getPartIndex());
-//			pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
+			// pdt.setPartId(samplePart.getPartCount());
+			// pdt.setPartIndex(samplePart.getPartIndex());
+			// pdt.setChapterTitle(templateDoc.getParts().get(templatePart.getPartIndex().get(0)).getTitle());
 
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, templatePart, samplePart);
 		}
-		
-		System.out.println("1");
-		System.out.println(pdtList2Str(patchDtoList));
-		System.out.println("2");
+
+		// System.out.println(pdtList2Str(patchDtoList));
 
 		Collections.sort(patchDtoList);
-		System.out.println("3");
-		
-		
+
+		// System.out.println(pdtList2Str(patchDtoList));
 
 		List<PatchDto> cleanList = cleanListEntries(patchDtoList);
-		
+
+		System.out.println(pdtList2Str(cleanList));
+
 		System.out.println("Finish getPatchDtoList");
-		return null;
+		return cleanList;
 	}
 
 	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
@@ -205,43 +202,44 @@ public class CompareUtils {
 		while (it.hasNext()) {
 			int templateIndex = (int) it.next();
 			int sampleIndex = (int) matchList.get(templateIndex);
-//			PatchDto pdt = new PatchDto();
-//			// pdt.setChapterIndex(sampleIndex);
-//			pdt.setChangeType("change");
+			// PatchDto pdt = new PatchDto();
+			// // pdt.setChapterIndex(sampleIndex);
+			// pdt.setChangeType("change");
 			DocPart tPart = templatePart.getChildPart().get(templateIndex);
 			DocPart sPart = samplePart.getChildPart().get(sampleIndex);
-//			pdt.setPartId(tPart.getPartCount());
-//			pdt.setPartIndex(tPart.getPartIndex());
+			// pdt.setPartId(tPart.getPartCount());
+			// pdt.setPartIndex(tPart.getPartIndex());
 
 			/// Then compare children parts
 			compareParts(patchDtoList, templateDoc, sampleDoc, tPart, sPart);
 		}
 	}
-	
+
 	private boolean deletePartRecursive(List<PatchDto> patchDtoList, DocPart part) {
 		deletePart(patchDtoList, part);
-		if(part.hasChildParts()) {
-			for(int index = 0; index < part.getChildPart().size(); ++index) {
+		if (part.hasChildParts()) {
+			for (int index = 0; index < part.getChildPart().size(); ++index) {
 				DocPart childPart = part.getChildPart().get(index);
 				deletePartRecursive(patchDtoList, childPart);
 			}
 		}
 		return true;
 	}
-	
+
 	private boolean addPartRecursive(List<PatchDto> patchDtoList, DocPart part) {
 		addPart(patchDtoList, part);
-		if(part.hasChildParts()) {
-			for(int index = 0; index < part.getChildPart().size(); ++index) {
+		if (part.hasChildParts()) {
+			for (int index = 0; index < part.getChildPart().size(); ++index) {
 				DocPart childPart = part.getChildPart().get(index);
 				addPartRecursive(patchDtoList, childPart);
 			}
 		}
 		return true;
 	}
-	
+
 	private boolean deletePart(List<PatchDto> patchDtoList, DocPart part) {
-//		System.out.println("Delete part " + part.getPartIndexStr() + ": " + part.getTitle());
+		// System.out.println("Delete part " + part.getPartIndexStr() + ": " +
+		// part.getTitle());
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("delete");
 		String pointText = part.getWholePoint();
@@ -259,9 +257,10 @@ public class CompareUtils {
 		patchDtoList.add(pdt);
 		return true;
 	}
-	
+
 	private boolean addPart(List<PatchDto> patchDtoList, DocPart part) {
-//		System.out.println("Add part " + part.getPartIndexStr() + ": " + part.getTitle());
+		// System.out.println("Add part " + part.getPartIndexStr() + ": " +
+		// part.getTitle());
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("add");
 		String pointText = part.getWholePoint();
@@ -274,16 +273,16 @@ public class CompareUtils {
 		pdt.setRevisedDto(rdt);
 		pdt.setPartId(part.getPartCount());
 		pdt.setSamplePartIndex(part.getPartIndex());
-//		pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
+		// pdt.setChapterTitle(sampleDoc.getParts().get(dp.getPartIndex().get(0)).getTitle());
 		pdt.setChapterTitle(part.getTitle());
 		patchDtoList.add(pdt);
 		return true;
 	}
-	
+
 	/// Helper function
 	private String pdtList2Str(List<PatchDto> contrastList) {
 		StringBuilder sb = new StringBuilder();
-		for(int index = 0; index < contrastList.size(); ++index) {
+		for (int index = 0; index < contrastList.size(); ++index) {
 			PatchDto pdt = contrastList.get(index);
 			sb.append(index + ": ");
 			sb.append("[" + pdt.getTemplatePartIndex() + "]");
@@ -291,10 +290,9 @@ public class CompareUtils {
 			sb.append("[" + pdt.getChangeType() + "]");
 			sb.append("\n");
 		}
-		System.out.println("Done");
 		return sb.toString();
 	}
-	
+
 	private List<PatchDto> cleanListEntries(List<PatchDto> contrastList) {
 		/// Define different exclude list for different change types
 		List<String> excludeIndex = new ArrayList<String>();
@@ -311,8 +309,8 @@ public class CompareUtils {
 		excludeIndex.add("1-42");
 
 		excludeIndex.add("2-0");
-//		excludeIndex.add("2-2");
-//		excludeIndex.add("2-3");
+		// excludeIndex.add("2-2");
+		// excludeIndex.add("2-3");
 		excludeIndex.add("2-4");
 		excludeIndex.add("2-5");
 
@@ -338,43 +336,36 @@ public class CompareUtils {
 
 		List<PatchDto> cleanList = new LinkedList<PatchDto>();
 		for (int i = 0; i < contrastList.size(); ++i) {
-			boolean isAdd = true;
 			PatchDto pdt = contrastList.get(i);
-			String indexInStr = pdt.partIndexInStr();
+			String templateIndexStr = pdt.templatePartIndexStr();
 
-			boolean isDelete = pdt.getChangeType().equalsIgnoreCase("delete");
-			if (isAdd && isDelete) {
-				for (int index = 0; index < deleteSection.size(); ++index) {
-					String dSection = deleteSection.get(index);
-					if (indexInStr.startsWith(dSection)) {
-						isAdd = false;
-						break;
-					}
-				}
-			}
-
-			if (isAdd) {
-				for (int index = 0; index < excludeSection.size(); ++index) {
-					String eSection = excludeSection.get(index);
-					if (indexInStr.startsWith(eSection)) {
-						isAdd = false;
-						break;
-					}
-				}
-			}
-
-			if (isAdd) {
-				for (int index = 0; index < excludeIndex.size(); ++index) {
-					String eIndex = excludeIndex.get(index);
-					if (indexInStr.equals(eIndex)) {
-						isAdd = false;
-						break;
-					}
-				}
-			}
-			if (isAdd) {
+			if (pdt.getChangeType().equals("add")) {
 				cleanList.add(pdt);
+				continue;
 			}
+			
+			/// Exclude section should be checked first!
+			boolean shouldClean = false;
+			for(int index = 0; index < excludeSection.size(); ++index) {
+				String exSecIndex = excludeSection.get(index);
+				if(templateIndexStr.startsWith(exSecIndex)) {
+					System.out.println("Exclude section: " + exSecIndex);
+					System.out.println("Template section: " + templateIndexStr);
+					shouldClean = true;
+					break;
+				}
+			}
+			if(shouldClean) {
+				continue;
+			}
+
+			/// Exclude index should be checked last!
+			if (excludeIndex.contains(templateIndexStr)) {
+				continue;
+			}
+			
+			cleanList.add(pdt);
+
 		}
 		return cleanList;
 	}

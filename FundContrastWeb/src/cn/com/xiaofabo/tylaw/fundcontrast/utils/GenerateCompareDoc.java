@@ -99,11 +99,12 @@ public class GenerateCompareDoc {
 		StringBuilder sb = new StringBuilder();
 
 		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
+		
 		for (int i = 0; compactList != null && i < compactList.size(); i++) {
 			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
 			for (int j = 0; j < pdtList.size(); j++) {
 				PatchDto pdt = (PatchDto) pdtList.get(j);
-				sb.append(pdt.partIndexInStr() + "(" + pdt.getChangeType() + ");");
+				sb.append(pdt.templatePartIndexStr() + "(" + pdt.getChangeType() + ");");
 			}
 			sb.append("\n");
 		}
