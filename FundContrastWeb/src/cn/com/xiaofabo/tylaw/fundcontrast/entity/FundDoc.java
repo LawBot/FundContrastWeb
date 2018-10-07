@@ -126,11 +126,18 @@ public class FundDoc {
 		return part;
 	}
 
-	public String getPartTitle(List<Integer> partIndex) {
+	public String getPartWholeTitle(List<Integer> partIndex) {
 		DocPart part = getPart(partIndex);
 		if (part == null)
 			return null;
 		return part.getIndex() + part.getTitle();
+	}
+
+	public String getPartTitle(List<Integer> partIndex) {
+		DocPart part = getPart(partIndex);
+		if (part == null)
+			return null;
+		return part.getTitle();
 	}
 
 	// @Override

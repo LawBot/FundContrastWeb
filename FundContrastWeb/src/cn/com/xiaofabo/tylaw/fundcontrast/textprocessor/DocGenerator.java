@@ -165,7 +165,7 @@ public class DocGenerator {
         String leadingText = leadingTextSB.toString();
         
         GenerateCompareDoc genDoc = new GenerateCompareDoc();
-        List<PatchDto> patchDtoList;
+        List<List<PatchDto>> presentableList;
         CompareUtils compareUtils = new CompareUtils();
         
         String leadingHeader = "";
@@ -181,13 +181,13 @@ public class DocGenerator {
         try {
 //        	System.out.println("TemplateDocPath: " + templateDocPath);
         	System.out.println("InputSampleDocPath: " + inputSampleDocPath);
-            patchDtoList = compareUtils.getPatchDtoList(inputOrignDocPath, inputSampleDocPath);
+        	presentableList = compareUtils.getPresentableList(inputOrignDocPath, inputSampleDocPath);
         } catch (Exception e) {
             return STATUS_ERROR_UNKNOWN;
         }
 
         try {
-            genDoc.generate(outputFileTitle, headerText, leadingText, patchDtoList, templateDoc, sampleDoc, outputDocPath, rColumn);
+            genDoc.generate(outputFileTitle, headerText, leadingText, presentableList, templateDoc, sampleDoc, outputDocPath, rColumn);
         } catch (IOException e) {
             e.printStackTrace();
             return STATUS_ERROR_OUTPUT_IO_ERROR;

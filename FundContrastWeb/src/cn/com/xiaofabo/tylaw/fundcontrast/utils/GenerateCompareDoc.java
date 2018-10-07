@@ -40,6 +40,8 @@ import cn.com.xiaofabo.tylaw.fundcontrast.entity.RevisedDto;
  * @author 杨敏 email ddl-15 at outlook.com
  *
  *         Modified on 2018-02-14 by G. Chen
+ * 
+ *         Modified on 2018-10-07 by G. Chen
  */
 public class GenerateCompareDoc {
 
@@ -92,33 +94,23 @@ public class GenerateCompareDoc {
 	 */
 	String headerContent = "条文对照表测试文本";
 
-	public int generate(String title, String headerText, String leadingText, List<PatchDto> contrastList,
+	public int generate(String title, String headerText, String leadingText, List<List<PatchDto>> compactList,
 			FundDoc templateDoc, FundDoc sampleDoc, String outputPath, int reasonColumn) throws IOException {
 
 		System.out.println("Start contrast document generation");
-		StringBuilder sb = new StringBuilder();
+		// StringBuilder sb = new StringBuilder();
+		//
+		// for (int i = 0; compactList != null && i < compactList.size(); i++) {
+		// List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
+		// for (int j = 0; j < pdtList.size(); j++) {
+		// PatchDto pdt = (PatchDto) pdtList.get(j);
+		// sb.append(pdt.templatePartIndexStr() + "(" + pdt.getChangeType() + ");");
+		// }
+		// sb.append("\n");
+		// }
 
-		List<List<PatchDto>> compactList = combineListEntries(contrastList, 2);
-		
-		for (int i = 0; compactList != null && i < compactList.size(); i++) {
-			List<PatchDto> pdtList = (List<PatchDto>) compactList.get(i);
-			for (int j = 0; j < pdtList.size(); j++) {
-				PatchDto pdt = (PatchDto) pdtList.get(j);
-				sb.append(pdt.templatePartIndexStr() + "(" + pdt.getChangeType() + ");");
-			}
-			sb.append("\n");
-		}
+		int compactListSize = compactList.size();
 
-		int contrastListSize = 0;
-		int compactListSize = 0;
-		if (contrastList != null && !contrastList.isEmpty()) {
-			contrastListSize = contrastList.size();
-			if (compactList != null || !compactList.isEmpty()) {
-				compactListSize = compactList.size();
-			}
-		}
-
-		System.out.println("Different items in total: " + contrastListSize + ".");
 		System.out.println("Lines generated: " + compactListSize + ".");
 		int nRow = compactListSize + 1;
 		XWPFDocument document = new XWPFDocument();
@@ -185,7 +177,13 @@ public class GenerateCompareDoc {
 			PatchDto firstItem = compactListItem.get(0);
 
 			/// 1st column
-			String chapterTitle = compactListItem.get(0).getChapterTitle();
+			int chapterNumber = (firstItem.getTemplatePartIndex() != null) ? firstItem.getTemplatePartIndex().get(0)
+					: firstItem.getSamplePartIndex().get(0);
+			List<Integer> tempIndexList = new LinkedList<Integer>();
+			tempIndexList.add(chapterNumber);
+			String chapterTitle = templateDoc.getPartTitle(tempIndexList);
+			// String chapterTitle = compactListItem.get(0).getChapterTitle();
+
 			tableRow.getCell(TABLE_COLUMN_1).removeParagraph(0);
 			XWPFParagraph p1 = tableRow.getCell(TABLE_COLUMN_1).addParagraph();
 			XWPFRun r1 = p1.createRun();
@@ -206,7 +204,7 @@ public class GenerateCompareDoc {
 					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
 
 					XWPFRun r2 = p2.createRun();
-					r2.setText(templateDoc.getPartTitle(tmpIndex));
+					r2.setText(templateDoc.getPartWholeTitle(tmpIndex));
 					r2.addBreak();
 				}
 			}
@@ -221,11 +219,14 @@ public class GenerateCompareDoc {
 			if (firstItem.getPartIndexDepth() > 2) {
 				/// Get title from 2nd level until 2nd last level and display
 				List<Integer> partIndex = firstItem.getTemplatePartIndex();
+				if(firstItem.getSamplePartIndex() != null) {
+					partIndex = firstItem.getSamplePartIndex();
+				}
 				for (int idx = 1; idx < partIndex.size() - 1; ++idx) {
 					List<Integer> tmpIndex = partIndex.subList(0, idx + 1);
 
 					XWPFRun r3 = p3.createRun();
-					r3.setText(sampleDoc.getPartTitle(tmpIndex));
+					r3.setText(sampleDoc.getPartWholeTitle(tmpIndex));
 					r3.addBreak();
 				}
 			}

@@ -19,6 +19,13 @@ public class CompareUtils {
 	// sort patchDtoList
 	List<String> sortIdList = new ArrayList<>();
 
+	public List<List<PatchDto>> getPresentableList(String templatePath, String samplePath) throws Exception {
+		List<PatchDto> patchDtoList = getPatchDtoList(templatePath, samplePath);
+		List<PatchDto> cleanList = cleanListEntries(patchDtoList);
+		List<List<PatchDto>> compactList = combineList(cleanList, 3);
+		return compactList;
+	}
+
 	/// Core comparison method
 	public List<PatchDto> getPatchDtoList(String templatePath, String samplePath) throws Exception {
 		System.out.println("Start getPatchDtoList");
@@ -84,18 +91,10 @@ public class CompareUtils {
 			compareParts(patchDtoList, templateDoc, sampleDoc, templatePart, samplePart);
 		}
 
-		// System.out.println(pdtList2Str(patchDtoList));
-
 		Collections.sort(patchDtoList);
 
-		// System.out.println(pdtList2Str(patchDtoList));
-
-		List<PatchDto> cleanList = cleanListEntries(patchDtoList);
-
-		System.out.println(pdtList2Str(cleanList));
-
 		System.out.println("Finish getPatchDtoList");
-		return cleanList;
+		return patchDtoList;
 	}
 
 	private void compareParts(List<PatchDto> patchDtoList, FundDoc templateDoc, FundDoc sampleDoc, DocPart templatePart,
@@ -113,6 +112,18 @@ public class CompareUtils {
 		/// Compare templateText and sampleText
 		/// In case they are different, patchDtoList.add
 		if (!TextUtils.getPureText(tPoint).equalsIgnoreCase(TextUtils.getPureText(sPoint))) {
+
+			if (templatePart.getPartIndex().size() == 1) {
+				tIndex = "";
+				tPoint = templatePart.getText();
+				tText = templatePart.getText();
+			}
+
+			if (samplePart.getPartIndex().size() == 1) {
+				sIndex = "";
+				sPoint = samplePart.getText();
+				sText = samplePart.getText();
+			}
 
 			Patch<String> patch = DiffUtils.diffInline(tPoint, sPoint);
 
@@ -243,6 +254,9 @@ public class CompareUtils {
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("delete");
 		String pointText = part.getWholePoint();
+		if (part.getPartIndex().size() == 1) {
+			pointText = part.getText();
+		}
 		pdt.setOrignalText(pointText);
 		RevisedDto rdt = new RevisedDto();
 		for (int j = 0; j < pointText.length(); ++j) {
@@ -263,7 +277,11 @@ public class CompareUtils {
 		// part.getTitle());
 		PatchDto pdt = new PatchDto();
 		pdt.setChangeType("add");
+
 		String pointText = part.getWholePoint();
+		if (part.getPartIndex().size() == 1) {
+			pointText = part.getText();
+		}
 		RevisedDto rdt = new RevisedDto();
 		rdt.setRevisedText(pointText);
 		for (int j = 0; j < pointText.length(); ++j) {
@@ -280,7 +298,7 @@ public class CompareUtils {
 	}
 
 	/// Helper function
-	private String pdtList2Str(List<PatchDto> contrastList) {
+	private String pdtList2Str(List<PatchDto> contrastList, List<Boolean> markList) {
 		StringBuilder sb = new StringBuilder();
 		for (int index = 0; index < contrastList.size(); ++index) {
 			PatchDto pdt = contrastList.get(index);
@@ -288,6 +306,7 @@ public class CompareUtils {
 			sb.append("[" + pdt.getTemplatePartIndex() + "]");
 			sb.append("[" + pdt.getSamplePartIndex() + "]");
 			sb.append("[" + pdt.getChangeType() + "]");
+			sb.append("[" + markList.get(index) + "]");
 			sb.append("\n");
 		}
 		return sb.toString();
@@ -299,20 +318,20 @@ public class CompareUtils {
 		excludeIndex.add("1-0");
 		excludeIndex.add("1-1");
 		excludeIndex.add("1-2");
-		excludeIndex.add("1-3");
-		excludeIndex.add("1-4");
-		excludeIndex.add("1-5");
-		excludeIndex.add("1-6");
+		// excludeIndex.add("1-3");
+		// excludeIndex.add("1-4");
+		// excludeIndex.add("1-5");
+		// excludeIndex.add("1-6");
 		excludeIndex.add("1-23");
 		excludeIndex.add("1-28");
 		excludeIndex.add("1-35");
 		excludeIndex.add("1-42");
 
-		excludeIndex.add("2-0");
+		// excludeIndex.add("2-0");
 		// excludeIndex.add("2-2");
 		// excludeIndex.add("2-3");
-		excludeIndex.add("2-4");
-		excludeIndex.add("2-5");
+		// excludeIndex.add("2-4");
+		// excludeIndex.add("2-5");
 
 		excludeIndex.add("6-0-0");
 		excludeIndex.add("6-1-0");
@@ -343,19 +362,19 @@ public class CompareUtils {
 				cleanList.add(pdt);
 				continue;
 			}
-			
+
 			/// Exclude section should be checked first!
 			boolean shouldClean = false;
-			for(int index = 0; index < excludeSection.size(); ++index) {
+			for (int index = 0; index < excludeSection.size(); ++index) {
 				String exSecIndex = excludeSection.get(index);
-				if(templateIndexStr.startsWith(exSecIndex)) {
-					System.out.println("Exclude section: " + exSecIndex);
-					System.out.println("Template section: " + templateIndexStr);
+				if (templateIndexStr.startsWith(exSecIndex)) {
+					// System.out.println("Exclude section: " + exSecIndex);
+					// System.out.println("Template section: " + templateIndexStr);
 					shouldClean = true;
 					break;
 				}
 			}
-			if(shouldClean) {
+			if (shouldClean) {
 				continue;
 			}
 
@@ -363,10 +382,151 @@ public class CompareUtils {
 			if (excludeIndex.contains(templateIndexStr)) {
 				continue;
 			}
-			
+
 			cleanList.add(pdt);
 
 		}
 		return cleanList;
+	}
+
+	private List<List<PatchDto>> combineList(List<PatchDto> contrastList, int level) {
+		List<List<PatchDto>> compactList = new LinkedList<List<PatchDto>>();
+		List<PatchDto> tmpList = new LinkedList<PatchDto>();
+		List<Boolean> markList = new LinkedList<Boolean>();
+		Boolean mark = new Boolean(true);
+		int toggle = 1;
+
+		markList.add(mark);
+		tmpList.add(contrastList.get(0));
+		for (int index = 1; index < contrastList.size(); ++index) {
+			PatchDto prevPdt = contrastList.get(index - 1);
+			List<Integer> prevTemplateIndex = prevPdt.getTemplatePartIndex();
+			List<Integer> prevSampleIndex = prevPdt.getSamplePartIndex();
+			List<Integer> prevIndex = (prevTemplateIndex != null) ? prevTemplateIndex : prevSampleIndex;
+			int prevIndexLevel = (prevTemplateIndex != null) ? prevTemplateIndex.size() : prevSampleIndex.size();
+
+			PatchDto currentPdt = contrastList.get(index);
+			List<Integer> currentTemplateIndex = currentPdt.getTemplatePartIndex();
+			List<Integer> currentSampleIndex = currentPdt.getSamplePartIndex();
+			List<Integer> currentIndex = (currentTemplateIndex != null) ? currentTemplateIndex : currentSampleIndex;
+			int currentIndexLevel = (currentTemplateIndex != null) ? currentTemplateIndex.size()
+					: currentSampleIndex.size();
+
+			if (currentIndexLevel < level && prevIndexLevel < level) {
+				toggle++;
+				mark = !mark;
+				markList.add(mark);
+
+				compactList.add(tmpList);
+				tmpList = new LinkedList<PatchDto>();
+				tmpList.add(currentPdt);
+
+				continue;
+			}
+
+			// if (prevIndexLevel > currentIndexLevel) {
+			// toggle++;
+			// mark = !mark;
+			// markList.add(mark);
+			//
+			// compactList.add(tmpList);
+			// tmpList = new LinkedList<PatchDto>();
+			// tmpList.add(currentPdt);
+			//
+			// continue;
+			// }
+
+			if (currentIndexLevel >= level && currentIndexLevel == prevIndexLevel) {
+				boolean sameGroup = true;
+				for (int i = 0; i < currentIndexLevel - 1; ++i) {
+					if (currentIndex.get(i) != prevIndex.get(i)) {
+						sameGroup = false;
+						break;
+					}
+				}
+
+				if (!sameGroup) {
+					toggle++;
+					mark = !mark;
+
+					compactList.add(tmpList);
+					tmpList = new LinkedList<PatchDto>();
+				}
+
+				markList.add(mark);
+
+				tmpList.add(currentPdt);
+
+				continue;
+			}
+
+			if (currentIndexLevel >= level && currentIndexLevel > prevIndexLevel) {
+				boolean sameGroup = true;
+
+				if (currentIndexLevel - 1 > prevIndexLevel) {
+					sameGroup = false;
+				} else {
+					for (int i = 0; i < prevIndexLevel; ++i) {
+						if (currentIndex.get(i) != prevIndex.get(i)) {
+							sameGroup = false;
+							break;
+						}
+					}
+				}
+
+				if (!sameGroup) {
+					toggle++;
+					mark = !mark;
+
+					compactList.add(tmpList);
+					tmpList = new LinkedList<PatchDto>();
+				}
+
+				markList.add(mark);
+
+				tmpList.add(currentPdt);
+
+				continue;
+			}
+
+			if (currentIndexLevel >= level && currentIndexLevel < prevIndexLevel) {
+				boolean sameGroup = true;
+				for (int i = 0; i < currentIndexLevel - 1; ++i) {
+					if (currentIndex.get(i) != prevIndex.get(i)) {
+						sameGroup = false;
+						break;
+					}
+				}
+
+				if (!sameGroup) {
+					toggle++;
+					mark = !mark;
+
+					compactList.add(tmpList);
+					tmpList = new LinkedList<PatchDto>();
+				}
+
+				markList.add(mark);
+
+				tmpList.add(currentPdt);
+
+				continue;
+			}
+
+			toggle++;
+			mark = !mark;
+			markList.add(mark);
+
+			compactList.add(tmpList);
+			tmpList = new LinkedList<PatchDto>();
+			tmpList.add(currentPdt);
+
+			continue;
+		}
+		compactList.add(tmpList);
+
+		// System.out.println(pdtList2Str(contrastList, markList));
+
+		return compactList;
 	}
 }
