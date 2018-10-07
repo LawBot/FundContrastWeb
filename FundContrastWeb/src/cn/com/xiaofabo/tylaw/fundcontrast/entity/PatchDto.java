@@ -10,7 +10,7 @@ public class PatchDto implements Comparable<PatchDto> {
     private String indexType;//(代表原文的序号则为“orginal”,代表新条文的序号则为"revised"，当新增加原文没有的条文，则类型为"revised")
     private String changeType;//(add:新增 delete:删减 change:更改)
     private String partId;
-    private List<Integer> partIndex;
+    private List<Integer> templatePartIndex;
     private List<Integer> samplePartIndex;
     private String chapterTitle;
 
@@ -62,19 +62,19 @@ public class PatchDto implements Comparable<PatchDto> {
         this.changeType = changeType;
     }
 
-    public List<Integer> getPartIndex() {
-        return partIndex;
+    public List<Integer> getTemplatePartIndex() {
+        return templatePartIndex;
     }
 
-    public void setPartIndex(List<Integer> partIndex) {
-        this.partIndex = partIndex;
+    public void setTempaltePartIndex(List<Integer> partIndex) {
+        this.templatePartIndex = partIndex;
     }
     
     public int getPartIndexDepth() {
-    	if(partIndex == null || partIndex.isEmpty()) {
+    	if(templatePartIndex == null || templatePartIndex.isEmpty()) {
     		return 0;
     	}
-    	return partIndex.size();
+    	return templatePartIndex.size();
     }
     
     public List<Integer> getSamplePartIndex(){
@@ -94,14 +94,14 @@ public class PatchDto implements Comparable<PatchDto> {
     }
     
     public String partIndexInStr() {
-    	if(partIndex == null)
+    	if(templatePartIndex == null)
     		return null;
     	StringBuilder sb = new StringBuilder();
-    	for(int i = 0; i < partIndex.size(); ++i) {
-    		if(i != partIndex.size() - 1) {
-    			sb.append(partIndex.get(i)).append("-");
+    	for(int i = 0; i < templatePartIndex.size(); ++i) {
+    		if(i != templatePartIndex.size() - 1) {
+    			sb.append(templatePartIndex.get(i)).append("-");
     		}else {
-    			sb.append(partIndex.get(i));
+    			sb.append(templatePartIndex.get(i));
     		}
     	}
     	return sb.toString();
@@ -109,12 +109,12 @@ public class PatchDto implements Comparable<PatchDto> {
 
     @Override
     public int compareTo(PatchDto pdt) {
-        for (int i = 0; i < partIndex.size(); ++i) {
-            if (i > pdt.getPartIndex().size() - 1) {
+        for (int i = 0; i < templatePartIndex.size(); ++i) {
+            if (i > pdt.getTemplatePartIndex().size() - 1) {
                 return 1;
             }
-            int thisIndex = partIndex.get(i);
-            int compareIndex = pdt.getPartIndex().get(i);
+            int thisIndex = templatePartIndex.get(i);
+            int compareIndex = pdt.getTemplatePartIndex().get(i);
             int diff = thisIndex - compareIndex;
             if (diff != 0) {
                 return diff;
