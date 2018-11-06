@@ -2,6 +2,7 @@ package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import com.sun.xml.internal.fastinfoset.sax.Properties;
 
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.FileParam;
 import cn.com.xiaofabo.tylaw.fundcontrast.textprocessor.DocGenerator;
+import cn.com.xiaofabo.tylaw.fundcontrast.utils.SystemCommandExecutor;
 
 @Controller
 public class FileController {
@@ -145,16 +147,30 @@ public class FileController {
     		String docPath = (String) request.getSession().getAttribute("docPath");
             String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
             String reasonColumn = request.getParameter("reasonColumn");
-            int errorCode = DocGenerator.generate(docPath,orignDocPath, request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx",request.getSession().getServletContext().getRealPath("/"),reasonColumn);
             
-            String downloadfFileName = "条文对照表.docx";
+            System.out.println("Doc 1 path: " + docPath);
+            System.out.println("Doc 2 path: " + orignDocPath);
+            
+            System.out.println("Session path: " + request.getSession().getServletContext().getRealPath("/"));
+            
+            List<String> command = new ArrayList<String>();
+            command.add("python");
+            command.add(request.getSession().getServletContext().getRealPath("/") + "data/word-diff/bin/diff_word_v2.py");
+            SystemCommandExecutor commandExecutor = new SystemCommandExecutor(command);
+            int result = commandExecutor.executeCommand();
+            System.out.println("Python execution result: " + result);
+            
+            StringBuilder stdout = commandExecutor.getStandardOutputFromCommand();
+            System.out.println(stdout);
+            
+            String downloadfFileName = request.getSession().getServletContext().getRealPath("/") + "data/word-diff/data/diff_result.docx";
 //            downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
 //            String fileName = downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
             String userAgent = request.getHeader("User-Agent").toLowerCase();
             byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? downloadfFileName.getBytes() : downloadfFileName.getBytes("UTF-8");
             downloadfFileName = new String(bytes, "ISO-8859-1");
             response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", downloadfFileName));
-            fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/output"+"/条文对照表.docx", response.getOutputStream());
+            fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/word-diff/data"+"/diff_result.docx", response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
 //            return "1";
