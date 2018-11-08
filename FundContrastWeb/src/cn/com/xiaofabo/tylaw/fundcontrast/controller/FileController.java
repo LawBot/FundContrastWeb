@@ -146,6 +146,7 @@ public class FileController {
     		//对比
     		String docPath = (String) request.getSession().getAttribute("docPath");
             String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
+            String outputFile = request.getSession().getServletContext().getRealPath("/") + "data/output/diff_result.docx";
             String reasonColumn = request.getParameter("reasonColumn");
             
             System.out.println("Doc 1 path: " + docPath);
@@ -153,24 +154,28 @@ public class FileController {
             
             System.out.println("Session path: " + request.getSession().getServletContext().getRealPath("/"));
             
+            ///Execute python diff-word
             List<String> command = new ArrayList<String>();
             command.add("python");
-            command.add(request.getSession().getServletContext().getRealPath("/") + "data/word-diff/bin/diff_word_v2.py");
+            command.add(request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/diff_word_v2.py");
+            command.add(docPath);
+            command.add(orignDocPath);
+            command.add(outputFile);
+            
             SystemCommandExecutor commandExecutor = new SystemCommandExecutor(command);
             int result = commandExecutor.executeCommand();
             System.out.println("Python execution result: " + result);
-            
             StringBuilder stdout = commandExecutor.getStandardOutputFromCommand();
             System.out.println(stdout);
             
-            String downloadfFileName = request.getSession().getServletContext().getRealPath("/") + "data/word-diff/data/diff_result.docx";
+            
 //            downloadfFileName = new String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
 //            String fileName = downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
             String userAgent = request.getHeader("User-Agent").toLowerCase();
-            byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? downloadfFileName.getBytes() : downloadfFileName.getBytes("UTF-8");
-            downloadfFileName = new String(bytes, "ISO-8859-1");
-            response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", downloadfFileName));
-            fileUtil.download(request.getSession().getServletContext().getRealPath("/") +"data/word-diff/data"+"/diff_result.docx", response.getOutputStream());
+            byte[] bytes = (userAgent.contains("msie")||userAgent.contains("like gecko")) ? outputFile.getBytes() : outputFile.getBytes("UTF-8");
+            outputFile = new String(bytes, "ISO-8859-1");
+            response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", "对照表.docx"));
+            fileUtil.download(outputFile, response.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
 //            return "1";
