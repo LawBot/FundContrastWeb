@@ -12,13 +12,6 @@ body {
 }
 
 .main {
-	/*
-         * 	position: fixed;
-         top: 60px;
-         right: 0;
-         bottom: 0;
-         left: 0;
-         */
 	padding-top: 1em;
 	padding-bottom: 8em;
 	background-image: url(images/bg.png);
@@ -290,32 +283,119 @@ ul li {
 	position: relative;
 }
 
-.mystyle {
-	width: 250px;
-	height: 250px;
+.navbar {
+	display: inline-block;
 	position: relative;
+	left: 500px;
+	background-color: #3b4348;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+	float: left;
+	font-size: 16px;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+.dropdown {
+	float: left;
+	overflow: hidden;
+}
+
+.dropdown .dropbtn {
+	font-size: 16px;
+	border: none;
+	outline: none;
+	color: white;
+	padding: 14px 16px;
+	background-color: inherit;
+	font-family: inherit;
+	margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
 	cursor: pointer;
-	outline: medium none;
-	filter: alpha(opacity = 0);
-	-moz-opacity: 0;
-	opacity: 0;
-	top: -80%;
-	left: 10px;
+	background-color: #ddd;
+	color: black;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #ddd;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	float: none;
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+
+.dropdown-content a:hover {
+	background-color: #aaa;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
 }
 </style>
 	<div id="head">
 		<div class="head_box">
 			<div class="logo" onclick="window.location.href=&#39;index.jsp&#39;">
 				{LawBot}
-				<p style="padding-left: 6px;">小法博AI系统</p>
+				<p style="padding-left: 28px;">小法博</p>
 			</div>
 			<!-- <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a> -->
+			<!-- 
 			<ul class="nav">
-				<li class="nav_title"><span>基金合同对照</span></li>
-				<!-- <li class="nav_title"><a href="https://" id="legalId"><span>法律意见书</span></a></li> -->
+				<li class="nav_title"><span>并购合同比对</span></li>
+				<li class="nav_title"><span>思维导图</span></li>
+				<li class="nav_title"><span>关键因子</span></li>
 				<li class="nav_title"><a
 					href="https://www.v5kf.com/public/ailaw/about.html" " id="aboutId"><span>关于我们</span></a></li>
 			</ul>
+			 -->
+			<div class="navbar">
+				<div class="dropdown">
+					<button class="dropbtn">并购合同比对
+						<i class="fa fa-caret-down"></i>
+					</button>
+					<div class="dropdown-content">
+						<a href="#">投资协议</a>
+						<a href="#">股东协议</a>
+						<a href="#">其他</a>
+					</div>
+				</div>
+				<div class="dropdown">
+					<button class="dropbtn">思维导图
+						<i class="fa fa-caret-down"></i>
+					</button>
+					<div class="dropdown-content">
+						<a href="#">投资协议</a>
+						<a href="#">股东协议</a>
+						<a href="#">并购流程</a>
+					</div>
+				</div>
+				<div class="dropdown">
+					<button class="dropbtn">关键因子
+						<i class="fa fa-caret-down"></i>
+					</button>
+					<div class="dropdown-content">
+						<a href="#">关键因子1</a>
+						<a href="#">关键因子2</a>
+						<a href="#">关键因子3</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script src="./files/jquery-2.1.1.min.js.Download"></script>
@@ -467,11 +547,10 @@ ul li {
 	<div id="footer">
 		<ul class="fUl">
 			<li class="f_item" style="width: 35%;">
-
 				<ul>
 					<li class="h_item logoText"><a href="javaSctipt:void(0);">{LawBot}</a></li>
 					<li
-						style="font-size: 16px; margin-bottom: 8px; margin-top: -17px; padding-left: 10px">小法博AI系统</li>
+						style="font-size: 16px; margin-bottom: 8px; margin-top: -17px; padding-left: 10px">小法博</li>
 					<li><img src="images/qcode.png" width="120" height="120"></li>
 					<li><span class="copyright">Copyright ©2018
 							xiaofabo.com.cn. ALL Rights Reserved</span></li>
