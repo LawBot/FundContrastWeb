@@ -366,35 +366,44 @@ ul li {
 			 -->
 			<div class="navbar">
 				<div class="dropdown">
-					<button class="dropbtn">并购合同比对
-						<i class="fa fa-caret-down"></i>
+					<button class="dropbtn">
+						并购机器人 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
-						<a href="#">投资协议</a>
-						<a href="#">股东协议</a>
-						<a href="#">其他</a>
+						<a href="#">投资协议</a> <a href="#">股东协议</a> <a href="#">其他</a> <a
+							href="#">文档编辑错误检查</a>
 					</div>
 				</div>
 				<div class="dropdown">
-					<button class="dropbtn">思维导图
-						<i class="fa fa-caret-down"></i>
+					<button class="dropbtn">
+						思维导图 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
+						<a href="#">投资协议</a> <a href="shareholderagreement.html"
+							target="_blank">股东协议</a> <a href="#">并购流程</a>
+					</div>
+				</div>
+				<div class="dropdown">
+					<button class="dropbtn">
+						法律、法规 <i class="fa fa-caret-down"></i>
+					</button>
+					<!-- 
+					<div class="dropdown-content">
 						<a href="#">投资协议</a>
-						<a href="#">股东协议</a>
+						<a href="shareholderagreement.html" target="_blank">股东协议</a>
 						<a href="#">并购流程</a>
 					</div>
+					 -->
 				</div>
 				<div class="dropdown">
-					<button class="dropbtn">关键因子
-						<i class="fa fa-caret-down"></i>
+					<button class="dropbtn">
+						关键因子 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
-						<a href="#">关键因子1</a>
-						<a href="#">关键因子2</a>
-						<a href="#">关键因子3</a>
+						<a href="#">关键因子1</a> <a href="#">关键因子2</a> <a href="#">关键因子3</a>
 					</div>
 				</div>
+				<a href="http://118.24.36.115:8080/QA/">机器人问答</a>
 			</div>
 		</div>
 	</div>
@@ -711,10 +720,6 @@ ul li {
           /** 
           * 请求成功后的操作 
           */  
-         
-          
-    
-        	 
         	  //alert("上传成功");  
         	  downloadClicked ();
         
@@ -726,9 +731,16 @@ ul li {
       }     
   }  
       
-      function downloadClicked (){  
-    	  var file = $("#targetFile1").val();
-    	  var pos=file.lastIndexOf("\\");
+      function downloadClicked (){
+    	  
+    	  var file1 = $("#targetFile1").val();
+    	  var file2 = $("#targetFile2").val();
+    	  if(file1=="" || file2==""){
+    		  alert("模板文件和对照文件不能为空！");
+    		  return;
+    	  }
+    	  
+    	  var pos=file1.lastIndexOf("\\");
     	  $("#fileName").val($("#file").val());
     	  //alert($("#jjSelect").val() +$("#fxSelect").val());
     	 
@@ -738,40 +750,6 @@ ul li {
     	  document.getElementById('file').value = "请选择上传合同文件";
     	  document.getElementById('orignFile').value = "请选择上传合同文件";
       } 
-      
-      
-     /*  $(".wrap .circle1 li").click(function() {
-    	  alert($("this").attr('id'));
-			$("this").removeClass("c_grey");
-    	  
-	  })  */
-	  
-	   function clickJijin(id){
-		   /* $(".circle1 li").each(function(){
-			   alert($("this").html());
-		   }) */
-		// alert($("#"+id).removeClass("c_grey"));
-		   $("#"+id).parent().find(".item").addClass('c_grey');
-		  // $("#"+id).parent().find(".a").attr('class','btn');
-		   //$("#"+id).parent().find(".a").eq(0).removeClass('btn');
-		   $("#"+id).parent().find(".a").removeClass('c_grey');
-		   $("#"+id).removeClass("c_grey");
-		   $("#"+id).parent().find(".btn").attr('class','item c_grey');
-		   $("#"+id).attr('class','btn');
-		   $("#jjSelect").val($("#"+id).attr('data-id'));
-      } 
-     
-     function clickFaxing(id){
-    	   $("#"+id).parent().find(".item").addClass('c_grey');
-		 // $("#"+id).parent().find(".a").attr('class','btn');
-		   //$("#"+id).parent().find(".a").eq(0).removeClass('btn');
-		   $("#"+id).parent().find(".a").removeClass('c_grey');
-		   $("#"+id).removeClass("c_grey");
-		   $("#"+id).parent().find(".btn").attr('class','item c_grey');
-		   $("#"+id).attr('class','btn');
-		   $("#fxSelect").val($("#"+id).attr('data-id'));
-    	 
-     }
      
      function clickReason(reasonColumn){
     	 if(reasonColumn == '1'){
