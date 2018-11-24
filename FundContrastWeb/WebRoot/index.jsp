@@ -370,8 +370,10 @@ ul li {
 						并购机器人 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
-						<a href="#">投资协议</a> <a href="#">股东协议</a> <a href="#">其他</a> <a
-							href="#">文档编辑错误检查</a>
+						<a href="#">投资协议</a>
+						<a href="#">股东协议</a>  
+						<a href="#">文档编辑错误检查</a>
+						<a href="#">其他</a>
 					</div>
 				</div>
 				<div class="dropdown">
@@ -403,7 +405,7 @@ ul li {
 						<a href="#">关键因子1</a> <a href="#">关键因子2</a> <a href="#">关键因子3</a>
 					</div>
 				</div>
-				<a href="http://118.24.36.115:8080/QA/">机器人问答</a>
+				<a href="http://118.24.36.115:8080/QA/" target="_blank">机器人问答</a>
 			</div>
 		</div>
 	</div>
