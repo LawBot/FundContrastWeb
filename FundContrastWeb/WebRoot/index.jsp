@@ -365,9 +365,10 @@ ul li {
 			</ul>
 			 -->
 			<div class="navbar">
+				<a href="acquisitionbot.html" target="_blank">并购机器人</a>
 				<div class="dropdown">
 					<button class="dropbtn">
-						并购机器人 <i class="fa fa-caret-down"></i>
+						AI比对 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
 						<a href="#">投资协议</a>
@@ -381,8 +382,9 @@ ul li {
 						思维导图 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
-						<a href="#">投资协议</a> <a href="shareholderagreement.html"
-							target="_blank">股东协议</a> <a href="#">并购流程</a>
+						<a href="#">投资协议</a>
+						<a href="shareholderagreement.html" target="_blank">股东协议</a>
+						<a href="acquisitionbot.html" target="_blank">并购流程</a>
 					</div>
 				</div>
 				<div class="dropdown">

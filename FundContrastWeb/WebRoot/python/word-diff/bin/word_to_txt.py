@@ -18,7 +18,6 @@ def doc2txt(doc_name, txt_name):
         return True
     except Exception as e:
         print(e)
-        print("word转化txt失败!")
         return False
     finally:
         worddoc.Close(False)

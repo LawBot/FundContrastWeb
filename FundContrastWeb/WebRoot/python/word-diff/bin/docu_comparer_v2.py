@@ -3,7 +3,6 @@ import sys
 import docx
 sys.path.append("../reference_code/")
 from docx import Document
-from docx.shared import Cm
 from docx.oxml.ns import qn
 from mydifflib import ndiff
 from docx.shared import RGBColor
@@ -96,32 +95,38 @@ def filter_page(diff_res):
     return final_changes
 
 
+# 单元格设置文字居中
 def set_cell_v_alignment(cell):
     cell.vertical_alignment = docx.enum.table.WD_CELL_VERTICAL_ALIGNMENT.CENTER
     cell.paragraphs[0].alignment = docx.enum.text.WD_ALIGN_PARAGRAPH.CENTER
 
 
+# 表格行设置居中
 def set_row_v_alignment(row):
     for cell in row.cells:
         set_cell_v_alignment(cell)
 
 
+# 设置列宽
 def set_column_width(column, width):
     for cell in column.cells:
         cell.width = width
 
 
+# 调整改动部分颜色 RGB(85,142,213)即 16进制(0x55,0x8E,0xD5) //张老师颜色
 def render_run_by_charmask(run, charmask):
     if charmask == " ":
         return run
     if charmask == "+":
         run.bold = True
         run.underline = True
-        run.font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
+        # run.font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
+        run.font.color.rgb = RGBColor(0x55, 0x8E, 0xD5)
     if charmask == "-":
         run.bold = True
         run.font.strike = True
-        run.font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
+        # run.font.color.rgb = RGBColor(0x42, 0x24, 0xE9)
+        run.font.color.rgb = RGBColor(0x55, 0x8E, 0xD5)
 
 
 def get_segments(mask):
@@ -155,6 +160,7 @@ def get_comment(change):
     return ""
 
 
+# 设置字体
 def set_document_font(document, font):
     document.styles['Normal'].font.name = font
     document.styles['Normal']._element.rPr.rFonts.set(qn('w:eastAsia'), font)
@@ -168,8 +174,8 @@ def create_changes_docx(changes, source_file, target_file):
     document.sections[0].page_width = new_width
     document.sections[0].page_height = new_height
     # 对比文件信息说明
-    source_txt = "修改前文件名：%s  文件大小：%d字节" % (os.path.basename(source_file), os.path.getsize(source_file))
-    target_text = "修改后文件名：%s  文件大小：%d字节" % (os.path.basename(target_file), os.path.getsize(target_file))
+    source_txt = "修改前文件名：%s  文件大小：%d KB" % (os.path.basename(source_file), os.path.getsize(source_file)/1024)
+    target_text = "修改后文件名：%s  文件大小：%d KB" % (os.path.basename(target_file), os.path.getsize(target_file)/1024)
     document.add_paragraph(source_txt, style='List Bullet')
     document.add_paragraph(target_text, style='List Bullet')
     # 表格内容书写
