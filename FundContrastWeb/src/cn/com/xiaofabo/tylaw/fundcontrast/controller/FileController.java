@@ -157,8 +157,46 @@ public class FileController {
 	 */
 	@RequestMapping(value = "/errorCheck")
 	@ResponseBody
-	public void errorCheck(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("I am checking errors!");
+	public void errorCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
+		String outputFile = request.getSession().getServletContext().getRealPath("/")
+				+ "data/output/errorcheck_result.docx";
+		System.out.println("Original doc path: " + orignDocPath);
+		List<String> command = new ArrayList<String>();
+		command.add("python");
+		command.add(
+				request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/check_doc.py");
+		command.add(orignDocPath);
+		command.add(outputFile);
+		
+		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(command);
+		int result = commandExecutor.executeCommand();
+		System.out.println("Python execution result: " + result);
+		StringBuilder stdout = commandExecutor.getStandardOutputFromCommand();
+		String[] outStrList = stdout.toString().split("\n");
+		String lastLine = "";
+		for (int i = outStrList.length - 1; i >= 0; --i) {
+			if (!outStrList[i].isEmpty()) {
+				lastLine = outStrList[i];
+				break;
+			}
+		}
+		System.out.println("Last line output: " + lastLine);
+		String errorMessage = "";
+		if (lastLine!= null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
+			errorMessage = lastLine.substring(lastLine.indexOf(":")).trim();
+		}
+
+		// downloadfFileName = new
+		// String(downloadfFileName.getBytes("iso-8859-1"),"utf-8");
+		// String fileName =
+		// downloadfFileName.substring(downloadfFileName.indexOf("_")+1);
+		String userAgent = request.getHeader("User-Agent").toLowerCase();
+		byte[] bytes = (userAgent.contains("msie") || userAgent.contains("like gecko")) ? outputFile.getBytes()
+				: outputFile.getBytes("UTF-8");
+		outputFile = new String(bytes, "ISO-8859-1");
+		response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", "errorcheck_result.docx"));
+		fileUtil.download(outputFile, response.getOutputStream());
 	}
 
 	/**
@@ -177,7 +215,6 @@ public class FileController {
 			String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
 			String outputFile = request.getSession().getServletContext().getRealPath("/")
 					+ "data/output/diff_result.docx";
-			String reasonColumn = request.getParameter("reasonColumn");
 
 			System.out.println("Doc 1 path: " + docPath);
 			System.out.println("Doc 2 path: " + orignDocPath);
@@ -207,7 +244,7 @@ public class FileController {
 			}
 			System.out.println("Last line output: " + lastLine);
 			String errorMessage = "";
-			if (!lastLine.equalsIgnoreCase("0")) {
+			if (lastLine!= null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
 				errorMessage = lastLine.substring(lastLine.indexOf(":")).trim();
 			}
 
@@ -219,7 +256,7 @@ public class FileController {
 			byte[] bytes = (userAgent.contains("msie") || userAgent.contains("like gecko")) ? outputFile.getBytes()
 					: outputFile.getBytes("UTF-8");
 			outputFile = new String(bytes, "ISO-8859-1");
-			response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", "output.docx"));
+			response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", "diff_result.docx"));
 			fileUtil.download(outputFile, response.getOutputStream());
 
 			File doc1 = new File(docPath);
