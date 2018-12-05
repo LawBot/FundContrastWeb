@@ -17,11 +17,11 @@ def find_sn(txt_file):
             if obj:
                 exp_lines.append([obj[0], line])
         match_result.append(exp_lines)
-    return find_exp(match_result)
+    return find_sn_exp(match_result)
 
 
 # 检查编号顺序
-def find_exp(match_result):
+def find_sn_exp(match_result):
     level = 0
     exp_result = []
     for pat_result in match_result:
@@ -40,4 +40,4 @@ def find_exp(match_result):
 
 
 if __name__ == '__main__':
-    print(find_sn("C:\\Users\\huangzhouzhou\\Documents\\GitHub\\word-diff\\tmp\\e14.txt"))
+    print(find_sn(r"C:\Users\huangzhouzhou\Documents\GitHub\word-diff\tmp\e15.txt"))

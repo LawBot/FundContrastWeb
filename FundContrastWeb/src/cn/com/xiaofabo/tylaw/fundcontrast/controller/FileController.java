@@ -147,6 +147,19 @@ public class FileController {
 		List<FileParam> fileList = fileUtil.listFiles(FileUtil.FILEDIR);
 		return fileList;
 	}
+	
+	/**
+	 * Check file syntax errors
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/errorCheck")
+	@ResponseBody
+	public void errorCheck(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("I am checking errors!");
+	}
 
 	/**
 	 * 下载

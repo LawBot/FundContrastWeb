@@ -2,6 +2,8 @@ import os
 import win32com.client as win32
 
 
+# 将word文档接受修订后转化为txt文档（接受doc,docx文件）
+# 主要用于读取word纯文本内容，防止docx,win32com直接读取时序号、超链接等内容丢失的情况发生
 def doc2txt(doc_name, txt_name):
     try:
         word = win32.gencache.EnsureDispatch('Word.Application')

@@ -1,13 +1,13 @@
 import os
 import sys
 import docx
-sys.path.append("../reference_code/")
 from docx import Document
 from docx.oxml.ns import qn
 from mydifflib import ndiff
 from docx.shared import RGBColor
 
 
+# 获取文档内容及内容编号
 def get_content_page(text, sep="!@#$%^"):
     temp = text.split(sep)
     content = temp[0][2:]
@@ -15,6 +15,7 @@ def get_content_page(text, sep="!@#$%^"):
     return (content, page_number)
 
 
+# 获取文档变更内容
 def real_change_content(change):
     if "+" in change.keys() and "-" in change.keys():
         if change["+"][0] != change["-"][0]:
@@ -67,6 +68,7 @@ def real_change_content(change):
         return res
 
 
+# 过滤文档比对结果
 def filter_page(diff_res):
     changes = []
     change = {}
@@ -129,6 +131,7 @@ def render_run_by_charmask(run, charmask):
         run.font.color.rgb = RGBColor(0x55, 0x8E, 0xD5)
 
 
+# 标明文档修改段落起始位置
 def get_segments(mask):
     segments = []
     for i, mark in enumerate(mask):
@@ -142,6 +145,7 @@ def get_segments(mask):
     return segments
 
 
+# 对段落变更添加标记
 def add_masked_to_paragraph(text, mask, pg):
     segments = get_segments(mask)
     for segment in segments:
@@ -167,6 +171,7 @@ def set_document_font(document, font):
     return document
 
 
+# 保存变更结果至文档
 def create_changes_docx(changes, source_file, target_file):
     document = Document()
     document.sections[0].orientation = docx.enum.section.WD_ORIENT.LANDSCAPE

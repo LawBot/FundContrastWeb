@@ -1,5 +1,4 @@
 import sys
-sys.path.append("../reference_code/")
 import time
 from mydifflib import ndiff
 from read_word_v2 import read_word_with_txt as read_word

@@ -1,27 +1,45 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+import string
+# import pprint
 import win32com.client as win32
+from zhon.hanzi import punctuation
+from read_config import getConfig
 
 
 # 英文标点符号识别警报
-def find_en_punctuation(line):
+def find_en_punctuation(line, limit):
     p_list = []
     for word in line:
-        if word in ",!?:;'\"":
+        # if word in string.punctuation:
+        if word in limit:
             p_list.append(word)
     if p_list:
-        return [line, p_list]
+        return p_list
     else:
         return None
 
 
 # 全角字符报警
-def find_q_str(line):
-    q_list = []
+# def find_q_str(line):
+#     q_list = []
+#     for word in line:
+#         inside_code = ord(word)
+#         if inside_code >= 65281 and inside_code <= 65374 and word not in punctuation:
+#             q_list.append(word)
+#     if q_list:
+#         return q_list
+#     else:
+#         return None
+# 全角字符报警
+def find_q_str(line, limit):
+    p_list = []
     for word in line:
-        inside_code = ord(word)
-        if inside_code >= 65281 and inside_code <= 65374:
-            q_list.append(word)
-    if q_list:
-        return [line, q_list]
+        if word in limit:
+            p_list.append(word)
+    if p_list:
+        return p_list
     else:
         return None
 
@@ -43,29 +61,36 @@ def is_alphabet(uchar):
 
 
 # 字体检查
-def find_font_exp(doc_path):
+def find_font_exp(doc_path, allow_fonts):
     try:
         word = win32.gencache.EnsureDispatch('Word.Application')
         document = word.Documents.Open(doc_path)
-        allow_fonts = [r"宋体", r"Times New Roman"]
+        font_exps = []
         for para in document.Paragraphs:
-            exp_word = []
-            for word in para.Range.Words:
-                word_font = word.Font.Name
-                word_str = str(word).strip()
-                if word_str == "":
-                    continue
-                if is_Chinese(word_str) and word_font != allow_fonts[0] and word_font != "":
-                    exp_word.append(word_str)
-                elif is_alphabet(word_str) and word_font != allow_fonts[1] and word_font != "":
-                    exp_word.append(word_str)
-            if exp_word:
-                print([para.Range.Text, ",".join(exp_word)])
+            # pprint.pprint("段落==>%s(%s)" % (para.Range.Text, para.Range.Font.Name))
+            para_exp = []
+            is_exp = False
+            for char in para.Range.Characters:
+                char_font = char.Font.Name
+                char_str = str(char)
+                # pprint.pprint("字======>%s:%s" % (char_str, char_font))
+                char_isExp = False
+                if is_Chinese(char_str) and char_font not in allow_fonts[0] and char_font != "":
+                    is_exp = True
+                    char_isExp = True
+                elif is_alphabet(char_str) and char_font not in allow_fonts[1] and char_font != "":
+                    is_exp = True
+                    char_isExp = True
+                para_exp.append([char_str, char_font, char_isExp])
+            if is_exp:
+                font_exps.append(para_exp)
+        return font_exps
     except Exception as e:
         print(e)
     finally:
         document.Close(False)
 
 
-if __name__ == '__main__':
-    find_font_exp(r"C:\Users\huangzhouzhou\Documents\GitHub\word-diff\tmp\e14.docx")
+# if __name__ == '__main__':
+#     print(find_font_exp(r"C:\Users\huangzhouzhou\Documents\GitHub\word-diff\tmp\e14.docx", [r"宋体", r"Times New Roman"]))
+#     print(find_q_str("ＯＫ，。来个全角字符啊"))

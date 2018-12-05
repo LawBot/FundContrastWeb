@@ -373,7 +373,7 @@ ul li {
 					<div class="dropdown-content">
 						<a href="#">投资协议</a>
 						<a href="#">股东协议</a>  
-						<a href="#">文档编辑错误检查</a>
+						<a href="errorcheck.jsp">文档编辑错误检查</a>
 						<a href="#">其他</a>
 					</div>
 				</div>
