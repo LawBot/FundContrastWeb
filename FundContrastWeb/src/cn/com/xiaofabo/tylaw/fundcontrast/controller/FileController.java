@@ -165,7 +165,7 @@ public class FileController {
 		List<String> command = new ArrayList<String>();
 		command.add("python");
 		command.add(
-				request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/check_doc.py");
+				request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/pack_tmp/distcheck_doc.py");
 		command.add(orignDocPath);
 		command.add(outputFile);
 		
@@ -223,9 +223,9 @@ public class FileController {
 
 			/// Execute python diff-word
 			List<String> command = new ArrayList<String>();
-			command.add("python");
+//			command.add("python");
 			command.add(
-					request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/diff_word_v2.py");
+					request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/pack_tmp/dist/diff_start.exe");
 			command.add(docPath);
 			command.add(orignDocPath);
 			command.add(outputFile);

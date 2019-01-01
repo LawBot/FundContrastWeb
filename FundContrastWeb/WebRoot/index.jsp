@@ -354,27 +354,15 @@ ul li {
 				{LawBot}
 				<p style="padding-left: 28px;">小法博</p>
 			</div>
-			<!-- <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a> -->
-			<!-- 
-			<ul class="nav">
-				<li class="nav_title"><span>并购合同比对</span></li>
-				<li class="nav_title"><span>思维导图</span></li>
-				<li class="nav_title"><span>关键因子</span></li>
-				<li class="nav_title"><a
-					href="https://www.v5kf.com/public/ailaw/about.html" " id="aboutId"><span>关于我们</span></a></li>
-			</ul>
-			 -->
 			<div class="navbar">
-				<a href="acquisitionbot.html" target="_blank">并购机器人</a>
 				<div class="dropdown">
 					<button class="dropbtn">
 						AI比对 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
 						<a href="#">投资协议</a>
-						<a href="#">股东协议</a>  
+						<a href="#">股东协议</a>
 						<a href="errorcheck.jsp">文档编辑错误检查</a>
-						<a href="#">其他</a>
 					</div>
 				</div>
 				<div class="dropdown">
@@ -382,31 +370,17 @@ ul li {
 						思维导图 <i class="fa fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content">
-						<a href="#">投资协议</a>
+						<a href="acquisitionbot.html" target="_blank">并购机器人</a>
+						<a href="#">投资协议</a> 
 						<a href="shareholderagreement.html" target="_blank">股东协议</a>
 						<a href="acquisitionbot.html" target="_blank">并购流程</a>
 					</div>
 				</div>
 				<div class="dropdown">
-					<button class="dropbtn">
-						法律、法规 <i class="fa fa-caret-down"></i>
+					<button class="dropbtn">相关法律、法规 <i class="fa fa-caret-down"></i>
 					</button>
-					<!-- 
-					<div class="dropdown-content">
-						<a href="#">投资协议</a>
-						<a href="shareholderagreement.html" target="_blank">股东协议</a>
-						<a href="#">并购流程</a>
-					</div>
-					 -->
 				</div>
-				<div class="dropdown">
-					<button class="dropbtn">
-						关键因子 <i class="fa fa-caret-down"></i>
-					</button>
-					<div class="dropdown-content">
-						<a href="#">关键因子1</a> <a href="#">关键因子2</a> <a href="#">关键因子3</a>
-					</div>
-				</div>
+				
 				<a href="http://118.24.36.115:8080/QA/" target="_blank">机器人问答</a>
 			</div>
 		</div>
