@@ -347,6 +347,89 @@ ul li {
 .dropdown:hover .dropdown-content {
 	display: block;
 }
+
+
+
+
+.third-level-menu
+{
+    position: absolute;
+    top: 0;
+    right: -150px;
+    width: 150px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+}
+
+.third-level-menu > li
+{
+    height: 30px;
+    background: #ddd;
+}
+.third-level-menu > li:hover {background-color: #aaa; }
+
+.second-level-menu
+{
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 150px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+}
+
+.second-level-menu > li
+{
+    position: relative;
+    height: 30px;
+    background: #ddd;
+}
+
+.second-level-menu >li a{
+	color: black;
+}
+
+.second-level-menu > li:hover {background-color: #aaa; }
+
+.top-level-menu
+{
+    list-style: none;
+}
+
+.top-level-menu > li
+{
+    position: relative;
+    float: left;
+    
+    height: 30px;
+}
+.top-level-menu > li:hover { background-color: #aaa;}
+
+.top-level-menu li:hover > ul
+{
+    /* On hover, display the next level's menu */
+    display: inline;
+}
+
+
+/* Menu Link Styles */
+
+.top-level-menu a /* Apply to all links inside the multi-level menu */
+{
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 0 0 0 0px;
+    min-width: 100px;
+
+    /* Make the link cover the entire list item-container */
+    display: block;
+    line-height: 30px;
+}
 </style>
 	<div id="head">
 		<div class="head_box">
@@ -355,10 +438,33 @@ ul li {
 				<p style="padding-left: 28px;">小法博</p>
 			</div>
 			<div class="navbar">
+				<ul class="top-level-menu">
+				    <li><a href="#">AI比对 </a></li>
+				    <li><a href="#">思维导图 </a></li>
+				    <li>
+				        <a href="#">相关法律、法规</a>
+				        <ul class="second-level-menu">
+				            <li><a href="#">Chicago</a></li>
+				            <li><a href="#">Los Angeles</a></li>
+				            <li>
+				                <a href="#">New York</a>
+				                <ul class="third-level-menu">
+				                    <li><a href="#">Information</a></li>
+				                    <li><a href="#">Book a Meeting</a></li>
+				                    <li><a href="#">Testimonials</a></li>
+				                    <li><a href="#">Jobs</a></li>
+				                </ul>
+				            </li>
+				            <li><a href="#">Seattle</a></li>
+				        </ul>
+				    </li>
+				    <li><a href="http://118.24.36.115:8080/QA/">机器人问答</a></li>
+				</ul>
+				
+				
+				<!-- 
 				<div class="dropdown">
-					<button class="dropbtn">
-						AI比对 <i class="fa fa-caret-down"></i>
-					</button>
+					<button class="dropbtn">AI比对 <i class="fa fa-caret-down"></i></button>
 					<div class="dropdown-content">
 						<a href="#">投资协议</a>
 						<a href="#">股东协议</a>
@@ -382,6 +488,7 @@ ul li {
 				</div>
 				
 				<a href="http://118.24.36.115:8080/QA/" target="_blank">机器人问答</a>
+				 -->
 			</div>
 		</div>
 	</div>
