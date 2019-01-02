@@ -214,7 +214,8 @@ public class FileController {
 			String docPath = (String) request.getSession().getAttribute("docPath");
 			String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
 			String outputFile = request.getSession().getServletContext().getRealPath("/")
-					+ "data/output/diff_result.docx";
+					+ "python/word-diff/bin/pack_tmp/dist/diff_result.docx";
+			
 
 			System.out.println("Doc 1 path: " + docPath);
 			System.out.println("Doc 2 path: " + orignDocPath);
