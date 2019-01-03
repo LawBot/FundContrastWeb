@@ -300,73 +300,29 @@ ul li {
 	text-decoration: none;
 }
 
-.dropdown {
-	float: left;
-	overflow: hidden;
-}
-
-.dropdown .dropbtn {
-	font-size: 16px;
-	border: none;
-	outline: none;
-	color: white;
-	padding: 14px 16px;
-	background-color: inherit;
-	font-family: inherit;
-	margin: 0;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-	cursor: pointer;
-	background-color: #ddd;
-	color: black;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #ddd;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-}
-
-.dropdown-content a {
-	float: none;
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-	text-align: left;
-}
-
-.dropdown-content a:hover {
-	background-color: #aaa;
-}
-
-.dropdown:hover .dropdown-content {
-	display: block;
-}
-
-
-
-
 .third-level-menu
 {
     position: absolute;
     top: 0;
-    right: -150px;
-    width: 150px;
+    min-width: 180px;
     list-style: none;
-    padding: 0;
+    padding: 0px;
     margin: 0;
     display: none;
+}
+
+.third-level-menu a
+{
+	
+	text-align: left;
 }
 
 .third-level-menu > li
 {
     height: 30px;
     background: #ddd;
+    padding-left: 10px;
+    
 }
 .third-level-menu > li:hover {background-color: #aaa; }
 
@@ -375,7 +331,6 @@ ul li {
     position: absolute;
     top: 30px;
     left: 0;
-    width: 150px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -393,10 +348,11 @@ ul li {
 	color: black;
 }
 
-.second-level-menu > li:hover {background-color: #aaa; }
+.second-level-menu > li a:hover {background-color: #aaa; }
 
 .top-level-menu
 {
+	
     list-style: none;
 }
 
@@ -404,10 +360,12 @@ ul li {
 {
     position: relative;
     float: left;
-    
+    min-width: 150px;
     height: 30px;
 }
+
 .top-level-menu > li:hover { background-color: #aaa;}
+.top-level-menu > li a:hover { background-color: #aaa;}
 
 .top-level-menu li:hover > ul
 {
@@ -424,13 +382,20 @@ ul li {
     color: white;
     text-decoration: none;
     padding: 0 0 0 0px;
-    min-width: 100px;
+    min-width: 150px;
 
     /* Make the link cover the entire list item-container */
     display: block;
     line-height: 30px;
 }
 </style>
+	
+	<div id="chatbot" style="width:100px;height:100px;background-color:red;position:fixed;margin-top:150px;right:0;">
+		<a href="http://118.24.36.115:8080/QA/" target="_blank">
+			<img src="images/icon/lawbot.jpg">
+		</a>
+	</div>
+
 	<div id="head">
 		<div class="head_box">
 			<div class="logo" onclick="window.location.href=&#39;index.jsp&#39;">
@@ -439,26 +404,61 @@ ul li {
 			</div>
 			<div class="navbar">
 				<ul class="top-level-menu">
-				    <li><a href="#">AI比对 </a></li>
-				    <li><a href="#">思维导图 </a></li>
 				    <li>
-				        <a href="#">相关法律、法规</a>
+				    	<a href="#">AI比对 </a>
+				    	<ul class="second-level-menu">
+				    		<li><a href="#">投资协议</a></li>
+				            <li><a href="#">股东协议</a></li>
+				            <li><a href="errorcheck.jsp">文档编辑错误检查</a></li>
+				    	</ul>
+				    </li>
+				    <li>
+				    	<a href="#">思维导图 </a>
+				    	<ul class="second-level-menu">
+				    		<li><a href="html/mindmap/acquisitionbot.html" target="_blank">并购机器人</a></li>
+				    		<li><a href="#" target="_blank">投资协议</a></li>
+				            <li><a href="html/mindmap/shareholderagreement.html" target="_blank">股东协议</a></li>
+				    	</ul>
+				    </li>
+				    <li>
+				        <a href="#">相关信息</a>
 				        <ul class="second-level-menu">
-				            <li><a href="#">Chicago</a></li>
-				            <li><a href="#">Los Angeles</a></li>
 				            <li>
-				                <a href="#">New York</a>
-				                <ul class="third-level-menu">
-				                    <li><a href="#">Information</a></li>
-				                    <li><a href="#">Book a Meeting</a></li>
-				                    <li><a href="#">Testimonials</a></li>
-				                    <li><a href="#">Jobs</a></li>
+				            	<a href="#">法律法规</a>
+				            	<ul class="third-level-menu">
+				                    <li><a href="html/law/law/company.html" target="_blank">公司法</a></li>
+				                    <li><a href="html/law/law/partnership.html" target="_blank">合伙企业法</a></li>
+				                    <li><a href="html/law/law/stateownedproperty.html" target="_blank">企业国有资产法</a></li>
+				                    <li><a href="html/law/law/stock.html" target="_blank">证券法</a></li>
+				                    <li><a href="html/law/law/stockinvest.html" target="_blank">投资基金法</a></li>
 				                </ul>
 				            </li>
-				            <li><a href="#">Seattle</a></li>
+				            <li>
+				            	<a href="#">管理办法</a>
+				            	<ul class="third-level-menu">
+				                    <li><a href="html/law/management/stateownedpropertytransfer.html" target="_blank">国有产权转让</a></li>
+				                    <li><a href="html/law/management/propertyevaluation.html" target="_blank">国有资产评估</a></li>
+				                    <li><a href="html/law/management/administration.html" target="_blank">行政国有资产管理</a></li>
+				                    <li><a href="html/law/management/enterprise.html" target="_blank">企业国有资产监督</a></li>
+				                    <li><a href="html/law/management/institution.html" target="_blank">事业国有资产管理</a></li>
+				                    <li><a href="html/law/management/registrationworkflow.html" target="_blank">私募登记和备案流程</a></li>
+				                    <li><a href="html/law/management/supervision.html" target="_blank">私募投资监督管理</a></li>
+				                    <li><a href="html/law/management/collectionmanagement.html" target="_blank">私募投资募集行为</a></li>
+				                    <li><a href="html/law/management/publication.html" target="_blank">私募基金信息披露</a></li>
+				                    <li><a href="html/law/management/managerregistration.html" target="_blank">私募基金管理人登记</a></li>
+				                </ul>
+				            </li>
+				            <li>
+				                <a href="#">指引文件</a>
+				                <ul class="third-level-menu">
+				                    <li><a href="html/law/guide/registration.html" target="_blank">管理人登记法律意见书</a></li>
+				                    <li><a href="html/law/guide/guide1.html" target="_blank">私募基金合同指引1号</a></li>
+				                    <li><a href="html/law/guide/guide3.html" target="_blank">私募基金合同指引2号</a></li>
+				                    <li><a href="html/law/guide/guide3.html" target="_blank">私募基金合同指引3号</a></li>
+				                </ul>
+				            </li>
 				        </ul>
 				    </li>
-				    <li><a href="http://118.24.36.115:8080/QA/">机器人问答</a></li>
 				</ul>
 				
 				
