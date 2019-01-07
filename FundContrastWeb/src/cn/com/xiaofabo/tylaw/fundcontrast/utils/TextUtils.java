@@ -5,8 +5,10 @@
  */
 package cn.com.xiaofabo.tylaw.fundcontrast.utils;
 
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,137 +16,159 @@ import java.util.regex.Pattern;
  * @author 陈光曦
  */
 public class TextUtils {
-    
-    public static String REGEX_IDENTIFIER_LEVEL_0 = "^第.*?部分";
-    public static String REGEX_IDENTIFIER_LEVEL_0_TP = "^第.*?部分.*?[^0-9]$";
-    public static String REGEX_IDENTIFIER_LEVEL_1 = "^[一|二|三|四|五|六|七|八|九|十]*?、";
-    public static String REGEX_IDENTIFIER_LEVEL_2 = "^[（|(][一|二|三|四|五|六|七|八|九|十]*[）|)]";
-    public static String REGEX_IDENTIFIER_LEVEL_3 = "^\\d+[、|\\.|．]";
-    public static String REGEX_IDENTIFIER_LEVEL_4 = "^[（|(]\\d+[）|)]";
-    
-    public static String REGEX_PUNCTUATIONS = "[，,。.；;、%%（(）)]";
-    
 
-    public static List removeAllEmptyLines(List strList) {
-        List toReturn = new LinkedList();
-        for (int i = 0; i < strList.size(); ++i) {
-            String str = (String) strList.get(i);
-            if (str != null && !str.trim().isEmpty()) {
-                toReturn.add(str);
-            }
-        }
-        return toReturn;
-    }
+	public static String REGEX_IDENTIFIER_LEVEL_0 = "^第.*?部分";
+	public static String REGEX_IDENTIFIER_LEVEL_0_TP = "^第.*?部分.*?[^0-9]$";
+	public static String REGEX_IDENTIFIER_LEVEL_1 = "^[一|二|三|四|五|六|七|八|九|十]*?、";
+	public static String REGEX_IDENTIFIER_LEVEL_2 = "^[（|(][一|二|三|四|五|六|七|八|九|十]*[）|)]";
+	public static String REGEX_IDENTIFIER_LEVEL_3 = "^\\d+[、|\\.|．]";
+	public static String REGEX_IDENTIFIER_LEVEL_4 = "^[（|(]\\d+[）|)]";
 
-    public static int getChapterIndex(String titleLine) {
-        int start = titleLine.indexOf("第") + 1;
-        int end = titleLine.indexOf("部分");
+	public static String REGEX_PUNCTUATIONS = "[，,。.；;、%%（(）)]";
 
-        if (start == 0 || end == -1 || end < start) {
-            return -1;  // error
-        }
+	public static List removeAllEmptyLines(List strList) {
+		List toReturn = new LinkedList();
+		for (int i = 0; i < strList.size(); ++i) {
+			String str = (String) strList.get(i);
+			if (str != null && !str.trim().isEmpty()) {
+				toReturn.add(str);
+			}
+		}
+		return toReturn;
+	}
 
-        String idxStr = titleLine.substring(start, end);
-        int idx = zhNum2Int(idxStr);
-        return idx;
-    }
+	public static int getChapterIndex(String titleLine) {
+		int start = titleLine.indexOf("第") + 1;
+		int end = titleLine.indexOf("部分");
 
-    public static String getChapterTitle(String titleLine) {
-        int start = titleLine.indexOf("部分") + "部分".length();
-        if (start == 0) {
-            return null;
-        }
+		if (start == 0 || end == -1 || end < start) {
+			return -1; // error
+		}
 
-        String title = titleLine.substring(start).trim();
-//        System.out.println(title);
-        return title;
-    }
+		String idxStr = titleLine.substring(start, end);
+		int idx = zhNum2Int(idxStr);
+		return idx;
+	}
 
-    public static String getSectionTitle(String titleLine) {
-        int start = titleLine.indexOf("、") + "、".length();
-        if (start == 0) {
-            return null;
-        }
+	public static String getChapterTitle(String titleLine) {
+		int start = titleLine.indexOf("部分") + "部分".length();
+		if (start == 0) {
+			return null;
+		}
 
-        String title = titleLine.substring(start).trim();
-        return title;
-    }
+		String title = titleLine.substring(start).trim();
+		// System.out.println(title);
+		return title;
+	}
 
-    public static String getSubSectionTitle(String titleLine) {
-        int start = titleLine.indexOf("、") + "、".length();
-        if (start == 0) {
-            return null;
-        }
+	public static String getSectionTitle(String titleLine) {
+		int start = titleLine.indexOf("、") + "、".length();
+		if (start == 0) {
+			return null;
+		}
 
-        String title = titleLine.substring(start).trim();
-        return title;
-    }
+		String title = titleLine.substring(start).trim();
+		return title;
+	}
 
-    public static String getType3SubSectionTitle(String titleLine) {
-        int start = titleLine.indexOf("）") + "）".length();
-        if (start == 0) {
-            return null;
-        }
-        String title = titleLine.substring(start).trim();
-        return title;
-    }
+	public static String getSubSectionTitle(String titleLine) {
+		int start = titleLine.indexOf("、") + "、".length();
+		if (start == 0) {
+			return null;
+		}
 
-    public static String getSubSubSectionTitle(String titleLine) {
-        int start = titleLine.indexOf("）") + "）".length();
-        if (start == 0) {
-            return null;
-        }
+		String title = titleLine.substring(start).trim();
+		return title;
+	}
 
-        String title = titleLine.substring(start).trim();
-        return title;
-    }
+	public static String getType3SubSectionTitle(String titleLine) {
+		int start = titleLine.indexOf("）") + "）".length();
+		if (start == 0) {
+			return null;
+		}
+		String title = titleLine.substring(start).trim();
+		return title;
+	}
 
-    public static String getPartTitle(String titleLine) {
-        String title = null;
-        List partIdentifiers = new LinkedList();
-        partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_0);
-        partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_1);
-        partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_2);
-        partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_3);
-        partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_4);
+	public static String getSubSubSectionTitle(String titleLine) {
+		int start = titleLine.indexOf("）") + "）".length();
+		if (start == 0) {
+			return null;
+		}
 
-        int identifierLevel = -1;
-        for (int i = 0; i < partIdentifiers.size(); ++i) {
-            String identifierStr = (String) partIdentifiers.get(i);
-            Pattern pattern = Pattern.compile(identifierStr);
-            Matcher matcher = pattern.matcher(titleLine);
-            if (matcher.find()) {
-                int start = matcher.start();
-                int end = matcher.end();
-//                System.out.println(titleLine); 
-                title = titleLine.substring(end).trim();
-                break;
-            }
-        }
-        return title;
-    }
-    
-    /// Remove all known punctuations
-    public static String getPureText(String input) {
-    	return input.replaceAll(REGEX_PUNCTUATIONS, "");
-    }
-    
-    public static String removeAllSpaces(String input) {
-        return input.replaceAll("\\s+", "");
-    }
+		String title = titleLine.substring(start).trim();
+		return title;
+	}
 
-    private static int zhNum2Int(String s) {
-        String x = " 一二三四五六七八九十百";
-        int l = s.length();
-        int i = x.indexOf(s.charAt(l - 1));
-        int j = x.indexOf(s.charAt(0));
-        int q = j * 100;
-        return l < 2
-                ? i : l < 3
-                        ? i == 10
-                                ? j * 10 : i > 10
-                                        ? q : 10 + i : l < 4
-                                ? j * 10 + i : l < 5
-                                        ? q + i : q + i + x.indexOf(s.charAt(2)) * 10;
-    }
+	public static String getPartTitle(String titleLine) {
+		String title = null;
+		List partIdentifiers = new LinkedList();
+		partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_0);
+		partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_1);
+		partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_2);
+		partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_3);
+		partIdentifiers.add(REGEX_IDENTIFIER_LEVEL_4);
+
+		int identifierLevel = -1;
+		for (int i = 0; i < partIdentifiers.size(); ++i) {
+			String identifierStr = (String) partIdentifiers.get(i);
+			Pattern pattern = Pattern.compile(identifierStr);
+			Matcher matcher = pattern.matcher(titleLine);
+			if (matcher.find()) {
+				int start = matcher.start();
+				int end = matcher.end();
+				// System.out.println(titleLine);
+				title = titleLine.substring(end).trim();
+				break;
+			}
+		}
+		return title;
+	}
+
+	/// Remove all known punctuations
+	public static String getPureText(String input) {
+		return input.replaceAll(REGEX_PUNCTUATIONS, "");
+	}
+
+	public static String removeAllSpaces(String input) {
+		return input.replaceAll("\\s+", "");
+	}
+
+	public static String getAlphaNumericString(int n) {
+		// length is bounded by 256 Character
+		byte[] array = new byte[256];
+		new Random().nextBytes(array);
+
+		String randomString = new String(array, Charset.forName("UTF-8"));
+
+		// Create a StringBuffer to store the result
+		StringBuffer r = new StringBuffer();
+
+		// Append first 20 alphanumeric characters
+		// from the generated random String into the result
+		for (int k = 0; k < randomString.length(); k++) {
+
+			char ch = randomString.charAt(k);
+
+			if (((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')) && (n > 0)) {
+
+				r.append(ch);
+				n--;
+			}
+		}
+
+		// return the resultant string
+		return r.toString();
+	}
+
+	private static int zhNum2Int(String s) {
+		String x = " 一二三四五六七八九十百";
+		int l = s.length();
+		int i = x.indexOf(s.charAt(l - 1));
+		int j = x.indexOf(s.charAt(0));
+		int q = j * 100;
+		return l < 2 ? i
+				: l < 3 ? i == 10 ? j * 10 : i > 10 ? q : 10 + i
+						: l < 4 ? j * 10 + i : l < 5 ? q + i : q + i + x.indexOf(s.charAt(2)) * 10;
+	}
 }

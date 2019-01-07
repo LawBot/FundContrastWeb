@@ -322,92 +322,165 @@ ul li {
 	color: black;
 }
 
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #ddd;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
+.third-level-menu
+{
+    position: absolute;
+    top: 0;
+    min-width: 180px;
+    list-style: none;
+    padding: 0px;
+    margin: 0;
+    display: none;
 }
 
-.dropdown-content a {
-	float: none;
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
+.third-level-menu a
+{
+	
 	text-align: left;
 }
 
-.dropdown-content a:hover {
-	background-color: #aaa;
+.third-level-menu > li
+{
+    height: 30px;
+    background: #ddd;
+    padding-left: 10px;
+    
+}
+.third-level-menu > li:hover {background-color: #aaa; }
+
+.second-level-menu
+{
+    position: absolute;
+    top: 30px;
+    left: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
 }
 
-.dropdown:hover .dropdown-content {
-	display: block;
+.second-level-menu > li
+{
+    position: relative;
+    height: 30px;
+    background: #ddd;
+}
+
+.second-level-menu >li a{
+	color: black;
+}
+
+.second-level-menu > li a:hover {background-color: #aaa; }
+
+.top-level-menu
+{
+	
+    list-style: none;
+}
+
+.top-level-menu > li
+{
+    position: relative;
+    float: left;
+    min-width: 150px;
+    height: 30px;
+}
+
+.top-level-menu > li:hover { background-color: #aaa;}
+.top-level-menu > li a:hover { background-color: #aaa;}
+
+.top-level-menu li:hover > ul
+{
+    /* On hover, display the next level's menu */
+    display: inline;
+}
+
+
+/* Menu Link Styles */
+
+.top-level-menu a /* Apply to all links inside the multi-level menu */
+{
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 0 0 0 0px;
+    min-width: 150px;
+
+    /* Make the link cover the entire list item-container */
+    display: block;
+    line-height: 30px;
 }
 </style>
+	<div id="chatbot" style="width:120px;height:120px;position:fixed;margin-top:150px;right:0;">
+		<a href="http://118.24.36.115:8080/QA/" target="_blank">
+			<img src="images/icon/lawbot.jpg" width="130" height="120">
+		</a>
+	</div>
+
 	<div id="head">
 		<div class="head_box">
 			<div class="logo" onclick="window.location.href=&#39;index.jsp&#39;">
 				{LawBot}
 				<p style="padding-left: 28px;">小法博</p>
 			</div>
-			<!-- <a href="http://www.tylaw.com.cn"><img class="tylogo" src="images/Logo.png"></a> -->
-			<!-- 
-			<ul class="nav">
-				<li class="nav_title"><span>并购合同比对</span></li>
-				<li class="nav_title"><span>思维导图</span></li>
-				<li class="nav_title"><span>关键因子</span></li>
-				<li class="nav_title"><a
-					href="https://www.v5kf.com/public/ailaw/about.html" " id="aboutId"><span>关于我们</span></a></li>
-			</ul>
-			 -->
 			<div class="navbar">
-				<a href="acquisitionbot.html" target="_blank">并购机器人</a>
-				<div class="dropdown">
-					<button class="dropbtn">
-						AI比对 <i class="fa fa-caret-down"></i>
-					</button>
-					<div class="dropdown-content">
-						<a href="#">投资协议</a>
-						<a href="#">股东协议</a>  
-						<a href="#">文档编辑错误检查</a>
-						<a href="#">其他</a>
-					</div>
-				</div>
-				<div class="dropdown">
-					<button class="dropbtn">
-						思维导图 <i class="fa fa-caret-down"></i>
-					</button>
-					<div class="dropdown-content">
-						<a href="#">投资协议</a>
-						<a href="shareholderagreement.html" target="_blank">股东协议</a>
-						<a href="acquisitionbot.html" target="_blank">并购流程</a>
-					</div>
-				</div>
-				<div class="dropdown">
-					<button class="dropbtn">
-						法律、法规 <i class="fa fa-caret-down"></i>
-					</button>
-					<!-- 
-					<div class="dropdown-content">
-						<a href="#">投资协议</a>
-						<a href="shareholderagreement.html" target="_blank">股东协议</a>
-						<a href="#">并购流程</a>
-					</div>
-					 -->
-				</div>
-				<div class="dropdown">
-					<button class="dropbtn">
-						关键因子 <i class="fa fa-caret-down"></i>
-					</button>
-					<div class="dropdown-content">
-						<a href="#">关键因子1</a> <a href="#">关键因子2</a> <a href="#">关键因子3</a>
-					</div>
-				</div>
-				<a href="http://118.24.36.115:8080/QA/" target="_blank">机器人问答</a>
+				<ul class="top-level-menu">
+				    <li>
+				    	<a href="#">AI比对 </a>
+				    	<ul class="second-level-menu">
+				    		<li><a href="index.jsp">投资协议</a></li>
+				            <li><a href="index.jsp">股东协议</a></li>
+				            <li><a href="errorcheck.jsp">文档编辑错误检查</a></li>
+				    	</ul>
+				    </li>
+				    <li>
+				    	<a href="#">思维导图 </a>
+				    	<ul class="second-level-menu">
+				    		<li><a href="html/mindmap/acquisitionbot.html" target="_blank">并购机器人</a></li>
+				    		<li><a href="html/mindmap/investmentagreement.html" target="_blank">投资协议</a></li>
+				            <li><a href="html/mindmap/shareholderagreement.html" target="_blank">股东协议</a></li>
+				    	</ul>
+				    </li>
+				    <li>
+				        <a href="#">相关信息</a>
+				        <ul class="second-level-menu">
+				            <li>
+				            	<a href="#">法律法规</a>
+				            	<ul class="third-level-menu">
+				                    <li><a href="html/law/law/company.html" target="_blank">公司法</a></li>
+				                    <li><a href="html/law/law/partnership.html" target="_blank">合伙企业法</a></li>
+				                    <li><a href="html/law/law/stateownedproperty.html" target="_blank">企业国有资产法</a></li>
+				                    <li><a href="html/law/law/stock.html" target="_blank">证券法</a></li>
+				                    <li><a href="html/law/law/stockinvest.html" target="_blank">投资基金法</a></li>
+				                </ul>
+				            </li>
+				            <li>
+				            	<a href="#">管理办法</a>
+				            	<ul class="third-level-menu">
+				                    <li><a href="html/law/management/stateownedpropertytransfer.html" target="_blank">国有产权转让</a></li>
+				                    <li><a href="html/law/management/propertyevaluation.html" target="_blank">国有资产评估</a></li>
+				                    <li><a href="html/law/management/administration.html" target="_blank">行政国有资产管理</a></li>
+				                    <li><a href="html/law/management/enterprise.html" target="_blank">企业国有资产监督</a></li>
+				                    <li><a href="html/law/management/institution.html" target="_blank">事业国有资产管理</a></li>
+				                    <li><a href="html/law/management/registrationworkflow.html" target="_blank">私募登记和备案流程</a></li>
+				                    <li><a href="html/law/management/supervision.html" target="_blank">私募投资监督管理</a></li>
+				                    <li><a href="html/law/management/collectionmanagement.html" target="_blank">私募投资募集行为</a></li>
+				                    <li><a href="html/law/management/publication.html" target="_blank">私募基金信息披露</a></li>
+				                    <li><a href="html/law/management/managerregistration.html" target="_blank">私募基金管理人登记</a></li>
+				                </ul>
+				            </li>
+				            <li>
+				                <a href="#">指引文件</a>
+				                <ul class="third-level-menu">
+				                    <li><a href="html/law/guide/registration.html" target="_blank">管理人登记法律意见书</a></li>
+				                    <li><a href="html/law/guide/guide1.html" target="_blank">私募基金合同指引1号</a></li>
+				                    <li><a href="html/law/guide/guide3.html" target="_blank">私募基金合同指引2号</a></li>
+				                    <li><a href="html/law/guide/guide3.html" target="_blank">私募基金合同指引3号</a></li>
+				                </ul>
+				            </li>
+				        </ul>
+				    </li>
+				</ul>
 			</div>
 		</div>
 	</div>

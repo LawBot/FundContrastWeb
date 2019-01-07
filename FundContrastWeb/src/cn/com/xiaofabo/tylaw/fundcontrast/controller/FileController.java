@@ -1,8 +1,15 @@
 package cn.com.xiaofabo.tylaw.fundcontrast.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +32,7 @@ import com.sun.xml.internal.fastinfoset.sax.Properties;
 import cn.com.xiaofabo.tylaw.fundcontrast.entity.FileParam;
 import cn.com.xiaofabo.tylaw.fundcontrast.textprocessor.DocGenerator;
 import cn.com.xiaofabo.tylaw.fundcontrast.utils.SystemCommandExecutor;
+import cn.com.xiaofabo.tylaw.fundcontrast.utils.TextUtils;
 
 @Controller
 public class FileController {
@@ -50,32 +58,17 @@ public class FileController {
 			request.setAttribute("map", getMap());
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(-1);
-			request.getSession().setAttribute("docPath", session.getServletContext().getRealPath("/")
-					+ "upload/document/" + request.getParameter("uploadName2"));
+			/// File move for case when user uploads 2 files with same name
+			String originalUploadDir = session.getServletContext().getRealPath("/") + "upload/document/";
+			String destUploadDir = originalUploadDir + "upload2/";
+			File destDir = new File(destUploadDir);
+			if (!destDir.exists()) {
+				destDir.mkdir();
+			}
+			Path tmp = Files.move(Paths.get(originalUploadDir + request.getParameter("uploadName2")),
+					Paths.get(destUploadDir + request.getParameter("uploadName2")));
+			request.getSession().setAttribute("docPath", destUploadDir + request.getParameter("uploadName2"));
 			System.out.println("Upload file 2: " + request.getSession().getAttribute("docPath"));
-			// 对比
-			// String fileName=request.getParameter("uploadName");
-			// String docPath= request.getSession().getServletContext().getRealPath("/") +
-			// "upload/document/"+fileName;
-			//
-			// System.out.println("Resource path: " +
-			// this.getClass().getClassLoader().getResource("/").getPath());
-			// String path = request.getSession().getServletContext().getRealPath("/");
-			// String fundType = request.getParameter("fundType");
-			// String reasonColumn = request.getParameter("reasonColumn");
-			//
-			// System.out.println("App path: " + path + "; Fund type: " + fundType + ";
-			// ReasonColumn: " + reasonColumn);
-			// int errorCode = DocGenerator.generate(docPath,
-			// request.getSession().getServletContext().getRealPath("/")
-			// +"data/output"+"/条文对照表.docx",path,fundType,reasonColumn);
-			// System.out.println("DocGenerator.generate return code: " + errorCode);
-			// map.put("errorCode", errorCode+"");
-			// init(request);
-			// ModelAndView modelAndView = new ModelAndView("index");
-			// modelAndView.addObject("errorCode",errorCode+"");
-			// request.setAttribute("errorCode", errorCode+"");
-			// return errorCode;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e);
@@ -93,8 +86,30 @@ public class FileController {
 			request.setAttribute("map", getMap());
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(-1);
-			request.getSession().setAttribute("orignDocPath", session.getServletContext().getRealPath("/")
-					+ "upload/document/" + request.getParameter("uploadName1"));
+
+			/// File move for case when user uploads 2 files with same name
+			String originalUploadDir = session.getServletContext().getRealPath("/") + "upload/document/";
+			String destUploadDir = originalUploadDir + "upload1/";
+			File destDir = new File(destUploadDir);
+			if (!destDir.exists()) {
+				destDir.mkdir();
+			}
+			Path tmp = Files.move(Paths.get(originalUploadDir + request.getParameter("uploadName1")),
+					Paths.get(destUploadDir + request.getParameter("uploadName1")));
+
+			// String filename = request.getParameter("uploadName1");
+			// String extension = "";
+			// if (filename.contains(".")) {
+			// extension = filename.substring(filename.lastIndexOf("."));
+			// }
+			// String genFileName = TextUtils.getAlphaNumericString(15) + extension;
+			// File beforeRename = new File(session.getServletContext().getRealPath("/") +
+			// "upload/document/" + filename);
+			// File afterRename = new File(
+			// session.getServletContext().getRealPath("/") + "upload/document/" +
+			// genFileName);
+			// boolean renameSuccess = beforeRename.renameTo(afterRename);
+			request.getSession().setAttribute("orignDocPath", destUploadDir + request.getParameter("uploadName1"));
 			System.out.println("Upload file 1: " + request.getSession().getAttribute("orignDocPath"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +162,7 @@ public class FileController {
 		List<FileParam> fileList = fileUtil.listFiles(FileUtil.FILEDIR);
 		return fileList;
 	}
-	
+
 	/**
 	 * Check file syntax errors
 	 * 
@@ -161,14 +176,16 @@ public class FileController {
 		String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
 		String outputFile = request.getSession().getServletContext().getRealPath("/")
 				+ "data/output/errorcheck_result.docx";
+		String usageCountLogFile = request.getSession().getServletContext().getRealPath("/") + "log/UsageCount.txt";
+
 		System.out.println("Original doc path: " + orignDocPath);
 		List<String> command = new ArrayList<String>();
 		command.add("python");
-		command.add(
-				request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/pack_tmp/distcheck_doc.py");
+		command.add(request.getSession().getServletContext().getRealPath("/")
+				+ "python/word-diff/bin/pack_tmp/distcheck_doc.py");
 		command.add(orignDocPath);
 		command.add(outputFile);
-		
+
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(command);
 		int result = commandExecutor.executeCommand();
 		System.out.println("Python execution result: " + result);
@@ -183,7 +200,7 @@ public class FileController {
 		}
 		System.out.println("Last line output: " + lastLine);
 		String errorMessage = "";
-		if (lastLine!= null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
+		if (lastLine != null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
 			errorMessage = lastLine.substring(lastLine.indexOf(":")).trim();
 		}
 
@@ -195,8 +212,30 @@ public class FileController {
 		byte[] bytes = (userAgent.contains("msie") || userAgent.contains("like gecko")) ? outputFile.getBytes()
 				: outputFile.getBytes("UTF-8");
 		outputFile = new String(bytes, "ISO-8859-1");
-		response.setHeader("Content-disposition", String.format("attachment; filename=\"%s\"", "errorcheck_result.docx"));
+		response.setHeader("Content-disposition",
+				String.format("attachment; filename=\"%s\"", "errorcheck_result.docx"));
 		fileUtil.download(outputFile, response.getOutputStream());
+
+		/// BEGIN: Usage count file creation/editing
+		File logDir = new File(request.getSession().getServletContext().getRealPath("/") + "log");
+		if (!logDir.exists()) {
+			logDir.mkdir();
+		}
+		File usageCountFile = new File(usageCountLogFile);
+		if (!usageCountFile.exists()) {
+			usageCountFile.createNewFile();
+		}
+
+		try {
+			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date now = new Date();
+			String strDate = sdfDate.format(now);
+			String usageStr = "[Error Check]@" + strDate;
+			Files.write(Paths.get(usageCountLogFile), usageStr.getBytes(), StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			System.out.println("ERROR: Cannot find usage count file.");
+		}
+		/// END: Usage count file creation/editing
 	}
 
 	/**
@@ -215,7 +254,7 @@ public class FileController {
 			String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
 			String outputFile = request.getSession().getServletContext().getRealPath("/")
 					+ "python/word-diff/bin/pack_tmp/dist/diff_result.docx";
-			
+			String usageCountLogFile = request.getSession().getServletContext().getRealPath("/") + "log/UsageCount.txt";
 
 			System.out.println("Doc 1 path: " + docPath);
 			System.out.println("Doc 2 path: " + orignDocPath);
@@ -224,9 +263,9 @@ public class FileController {
 
 			/// Execute python diff-word
 			List<String> command = new ArrayList<String>();
-//			command.add("python");
-			command.add(
-					request.getSession().getServletContext().getRealPath("/") + "python/word-diff/bin/pack_tmp/dist/diff_start.exe");
+			// command.add("python");
+			command.add(request.getSession().getServletContext().getRealPath("/")
+					+ "python/word-diff/bin/pack_tmp/dist/diff_start.exe");
 			command.add(docPath);
 			command.add(orignDocPath);
 			command.add(outputFile);
@@ -245,7 +284,7 @@ public class FileController {
 			}
 			System.out.println("Last line output: " + lastLine);
 			String errorMessage = "";
-			if (lastLine!= null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
+			if (lastLine != null && !lastLine.trim().isEmpty() && !lastLine.equalsIgnoreCase("0")) {
 				errorMessage = lastLine.substring(lastLine.indexOf(":")).trim();
 			}
 
@@ -274,6 +313,26 @@ public class FileController {
 				System.out.println("File deleted: " + outDoc);
 			}
 
+			/// BEGIN: Usage count file creation/editing
+			File logDir = new File(request.getSession().getServletContext().getRealPath("/") + "log");
+			if (!logDir.exists()) {
+				logDir.mkdir();
+			}
+			File usageCountFile = new File(usageCountLogFile);
+			if (!usageCountFile.exists()) {
+				usageCountFile.createNewFile();
+			}
+
+			try {
+				SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date now = new Date();
+				String strDate = sdfDate.format(now);
+				String usageStr = "[Fund Contrast]@" + strDate;
+				Files.write(Paths.get(usageCountLogFile), usageStr.getBytes(), StandardOpenOption.APPEND);
+			} catch (IOException e) {
+				System.out.println("ERROR: Cannot find usage count file.");
+			}
+			/// END: Usage count file creation/editing
 		} catch (Exception e) {
 			e.printStackTrace();
 			// return "1";

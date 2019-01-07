@@ -388,11 +388,12 @@ ul li {
     display: block;
     line-height: 30px;
 }
+
 </style>
 	
-	<div id="chatbot" style="width:100px;height:100px;background-color:red;position:fixed;margin-top:150px;right:0;">
+	<div id="chatbot" style="width:120px;height:120px;position:fixed;margin-top:150px;right:0;">
 		<a href="http://118.24.36.115:8080/QA/" target="_blank">
-			<img src="images/icon/lawbot.jpg">
+			<img src="images/icon/lawbot.jpg" width="130" height="120" style="opacity:1;">
 		</a>
 	</div>
 
@@ -407,8 +408,8 @@ ul li {
 				    <li>
 				    	<a href="#">AI比对 </a>
 				    	<ul class="second-level-menu">
-				    		<li><a href="#">投资协议</a></li>
-				            <li><a href="#">股东协议</a></li>
+				    		<li><a href="index.jsp">投资协议</a></li>
+				            <li><a href="index.jsp">股东协议</a></li>
 				            <li><a href="errorcheck.jsp">文档编辑错误检查</a></li>
 				    	</ul>
 				    </li>
@@ -416,7 +417,7 @@ ul li {
 				    	<a href="#">思维导图 </a>
 				    	<ul class="second-level-menu">
 				    		<li><a href="html/mindmap/acquisitionbot.html" target="_blank">并购机器人</a></li>
-				    		<li><a href="#" target="_blank">投资协议</a></li>
+				    		<li><a href="html/mindmap/investmentagreement.html" target="_blank">投资协议</a></li>
 				            <li><a href="html/mindmap/shareholderagreement.html" target="_blank">股东协议</a></li>
 				    	</ul>
 				    </li>
