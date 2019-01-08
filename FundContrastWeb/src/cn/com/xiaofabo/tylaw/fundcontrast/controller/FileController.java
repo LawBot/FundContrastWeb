@@ -173,17 +173,17 @@ public class FileController {
 	@RequestMapping(value = "/errorCheck")
 	@ResponseBody
 	public void errorCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String orignDocPath = (String) request.getSession().getAttribute("orignDocPath");
+		String originDocPath = (String) request.getSession().getAttribute("orignDocPath");
 		String outputFile = request.getSession().getServletContext().getRealPath("/")
-				+ "data/output/errorcheck_result.docx";
+				+ "python/word-diff/bin/pack_tmp/dist/check_result.docx";
 		String usageCountLogFile = request.getSession().getServletContext().getRealPath("/") + "log/UsageCount.txt";
 
-		System.out.println("Original doc path: " + orignDocPath);
+		System.out.println("Original doc path: " + originDocPath);
+		System.out.println("Output path:" + outputFile);
 		List<String> command = new ArrayList<String>();
-		command.add("python");
 		command.add(request.getSession().getServletContext().getRealPath("/")
-				+ "python/word-diff/bin/pack_tmp/distcheck_doc.py");
-		command.add(orignDocPath);
+				+ "python/word-diff/bin/pack_tmp/dist/check_start.exe");
+		command.add(originDocPath);
 		command.add(outputFile);
 
 		SystemCommandExecutor commandExecutor = new SystemCommandExecutor(command);
@@ -215,6 +215,16 @@ public class FileController {
 		response.setHeader("Content-disposition",
 				String.format("attachment; filename=\"%s\"", "errorcheck_result.docx"));
 		fileUtil.download(outputFile, response.getOutputStream());
+		
+		File inFile = new File(originDocPath);
+		File outFile = new File(outputFile);
+		
+		if (inFile.delete()) {
+			System.out.println("File deleted: " + originDocPath);
+		}
+		if (outFile.delete()) {
+			System.out.println("File deleted: " + outputFile);
+		}
 
 		/// BEGIN: Usage count file creation/editing
 		File logDir = new File(request.getSession().getServletContext().getRealPath("/") + "log");
