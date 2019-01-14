@@ -411,9 +411,9 @@ ul li {
     line-height: 30px;
 }
 </style>
-	<div id="chatbot" style="width:120px;height:120px;position:fixed;margin-top:150px;right:0;">
+	<div id="chatbot" style="width:120px;height:120px;position:fixed;margin-top:150px;">
 		<a href="http://118.24.36.115:8080/QA/" target="_blank">
-			<img src="images/icon/lawbot.jpg" width="130" height="120">
+			<img src="images/icon/lawbot.jpg" width="130" height="120" style="opacity:1;">
 		</a>
 	</div>
 
@@ -425,6 +425,9 @@ ul li {
 			</div>
 			<div class="navbar">
 				<ul class="top-level-menu">
+					<li>
+						<a href="html/mindmap/acquisitionbot.html" target="_blank">并购机器人</a>
+					</li>
 				    <li>
 				    	<a href="#">AI比对 </a>
 				    	<ul class="second-level-menu">
@@ -436,7 +439,6 @@ ul li {
 				    <li>
 				    	<a href="#">思维导图 </a>
 				    	<ul class="second-level-menu">
-				    		<li><a href="html/mindmap/acquisitionbot.html" target="_blank">并购机器人</a></li>
 				    		<li><a href="html/mindmap/investmentagreement.html" target="_blank">投资协议</a></li>
 				            <li><a href="html/mindmap/shareholderagreement.html" target="_blank">股东协议</a></li>
 				    	</ul>
@@ -754,6 +756,15 @@ ul li {
     		  alert("请选择需要被校对的原始文件！");
     		  return;
     	  }
+    	  
+    	  var currentDate = new Date();
+    	  var expireDate = new Date(2019,4,30,0,0,0);
+    	  
+    	  if(currentDate > expireDate){
+    		  alert("系统试用已结束。请联系小法博延长试用时间。xiaofabo@xiaofabo.com.cn");
+    		  return;
+    	  }
+    	  
     	  var pos=file1.lastIndexOf("\\");
     	  $("#fileName").val($("#file").val());
     	  //alert($("#jjSelect").val() +$("#fxSelect").val());

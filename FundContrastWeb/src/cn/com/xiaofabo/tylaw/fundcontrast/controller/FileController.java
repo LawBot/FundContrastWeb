@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -173,6 +174,15 @@ public class FileController {
 	@RequestMapping(value = "/errorCheck")
 	@ResponseBody
 	public void errorCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		/// Check expire date
+		Calendar currentTime = Calendar.getInstance();
+		Calendar expireTime = Calendar.getInstance();
+		expireTime.set(2019, 4, 30, 0, 0, 0);
+
+		if (currentTime.compareTo(expireTime) >= 0) {
+			return;
+		}
+		
 		String originDocPath = (String) request.getSession().getAttribute("orignDocPath");
 		String outputFile = request.getSession().getServletContext().getRealPath("/")
 				+ "python/word-diff/bin/pack_tmp/dist/check_result.docx";
@@ -215,10 +225,10 @@ public class FileController {
 		response.setHeader("Content-disposition",
 				String.format("attachment; filename=\"%s\"", "errorcheck_result.docx"));
 		fileUtil.download(outputFile, response.getOutputStream());
-		
+
 		File inFile = new File(originDocPath);
 		File outFile = new File(outputFile);
-		
+
 		if (inFile.delete()) {
 			System.out.println("File deleted: " + originDocPath);
 		}
@@ -258,6 +268,15 @@ public class FileController {
 	@RequestMapping(value = "/download")
 	@ResponseBody
 	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		/// Check expire date
+		Calendar currentTime = Calendar.getInstance();
+		Calendar expireTime = Calendar.getInstance();
+		expireTime.set(2019, 4, 30, 0, 0, 0);
+
+		if (currentTime.compareTo(expireTime) >= 0) {
+			return;
+		}
+
 		try {
 			// 对比
 			String docPath = (String) request.getSession().getAttribute("docPath");
